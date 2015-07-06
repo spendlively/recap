@@ -1,0 +1,609 @@
+//Загрузка MySQL
+dev.mysql.com/downloads
+
+//Включение/отключение лога MySQL
+mysql> \T c:/log.txt
+mysql> \t
+
+//Кодировка в Windows консоли cp866
+
+//Выполнение кода из файла
+mysql> \. filename.sql
+mysql> source filename.sql
+
+//Просмотр справки по консоли mysql
+mysql> help
+mysql> \h
+
+//Просмотр статуса сервера
+mysql> \s
+
+//Просмотр текущего пользователя
+mysql> SELECT user();
+
+//Просмотр текущего базы данных
+mysql> SELECT database();
+
+//Установка разделителя ";" (делимиттера) в консоли
+mysql> \d ;
+
+//Включение предупреждений в консоли после каждого выражения
+mysql> SHOW WARNINGS;
+mysql> \W;
+
+//ВЫключение предупреждений в консоли после каждого выражения
+mysql> \w;
+
+//Вывод описания таблицы
+mysql> describe user;
+mysql> desc user;
+
+//Установка кодировки в консоли
+mysql> SET NAMES cp866;
+
+//Нормализация базы данных - приведение базы к нормальной форме
+//Первая нормальная форма (1НФ)
+Каждый атрибут записи таблицы содержит только одно значение
+
+//2НФ
+1НФ + каждая сущность храница в отдельной таблице
+Каждый атрибут записи таблицы, не входящий в состав первичного ключа,
+функционально полно зависит от первичного ключа (значения атрибутов не повторяются)
+
+Проблема: транзитивная зависимость:
+city = Новосибирск -> Москва
+zip = 630901 (При смене города zipcode стал ошибочным)
+
+//3НФ
+2НФ + любой неключевой аттрибут зависит только от первичного ключа
+
+//Виды связей
+1. Один к одному
+2. Один ко многим
+3. Многие ко многим
+
+//ALTER TABLE Изменение столбца таблицы
+mysql> ALTER TABLE test 
+CHANGE col1 col2 varchar(10),
+MODIFY col2 int(11);
+
+//Изменение имени таблицы
+mysql> RENAME TABLE tbl1 TO users;
+
+//ИНДЕКСЫ (btree, rtree, hash)
+//Создание индекса
+mysql> create [unique|fulltext|spatial] index name [type] on table1 (col1(11)[, ...])
+
+//Индекс по одному столбцу name
+mysql> SELECT * FROM tbl WHERE name = 'ivan'; //Используется
+
+//Индекс по двум столбцам name, age
+mysql> SELECT * FROM tbl WHERE name = 'ivan'; //Используется
+mysql> SELECT * FROM tbl WHERE name = 'ivan' AND age = 55; //Используется
+mysql> SELECT * FROM tbl WHERE age = 55 AND name = 'ivan'; //НЕ Используется
+
+//Индекс по трем столбцам name, age, salary
+mysql> SELECT * FROM tbl WHERE name = 'ivan'; //Используется
+mysql> SELECT * FROM tbl WHERE name = 'ivan' AND age = 55; //Используется
+mysql> SELECT * FROM tbl WHERE name = 'ivan' AND age = 55 AND salary = 100000; //Используется
+mysql> SELECT * FROM tbl WHERE age = 55 AND name = 'ivan'; //НЕ Используется
+
+//Обычный индекс по текстовому полю индексирует максимум 32 символа
+//FULLTEXT (< 5.6 доступен только в Myisam) индексирует весь текст
+//Spatial - пространственный индекс для геоданных
+
+//Наличие индекса можно посмотреть командой desc
+//key: mul
+mysql> desc tbl1;
+
+//Добавление индекса командой ALTER TABLE
+mysql> ALTER TABLE tbl1 ADD INDEX (col1);
+
+//Удаление индекса
+mysql> DROP INDEX indexName ON tbl1;
+
+//Удаление первичного ключа
+mysql> ALTER TABLE tbl1 DROP PRIMARY KEY;
+
+//Перед масированной вставкой данных полезно выключить индекс, а потом включить
+mysql> ALTER TABLE tbl1 DISABLE KEYS;
+mysql> LOAD DATA INFILE 'data.csv' INTO TABLE tbl1;
+mysql> ALTER TABLE tbl1 ENABLE KEYS;
+
+//Создание внешнего ключа
+parent		child
+======		=====
+id -----------> parent_id
+		id
+
+mysql> CREATE TABLE child (
+id int(11),
+parent_id int(11),
+FOREIGN KEY (parent_id) REFERENCES parent(id) on delete cascade;
+
+//Вставка данных из другой таблицы
+mysql> INSERT INTO tbl1 [(id, name, age)]
+SELECT null, user, now()
+FROM mysql.user;
+
+//Прямая загрузка данных из файла
+//LOAD DATA INFILE
+mysql> SET NAMES utf8;
+mysql> LOAD DATA INFILE '/home/user/users' [replace|ignore]
+INTO TABLE tbl1
+FIELDS TERMINATED BY ';'
+LINES TERMINATED BY '\r\n';
+
+//Вывод текста Utf-8 в консоли
+mysql> SET NAMES cp866;
+mysql> SELECT * FROM tbl1;;
+
+//СОБЫТИЯ
+//Создание события
+mysql> USE TABLE baseName;
+mysql> CREATE EVENT IF NOT EXISTS eventName
+ON SCHEDULE 
+EVERY 10 second DO
+INSERT INTO tbl1 (name, dt)
+VALUES (RAND(), NOW());
+
+//Включение планировщика событий
+mysql> SHOW VARIABLES LIKE '%schedule%';
+ВЫВОД: event_scheduler	Off
+mysql> SET GLOBAL event_scheduler = 1;
+
+//Отключение сыбытия с помощью ALTER
+mysql> ALTER EVENT eventName DISABLE;
+
+//Получение запроса, создавшего таблицу
+mysql> SHOW CREATE TABLE tbl1;
+
+//Получение запроса, создавшего событие
+mysql> SHOW CREATE EVENT eventName;
+
+//Просмотреть события можно в таблице information_schema.events
+
+//Выгрузка данных из таблицы в текстовый файл
+
+//Получение запроса, создавшего таблицу
+mysql> SELECT * FROM tbl1 INTO OUTFILE '/home/user/tbl1.sql'
+
+//Двойная сортировка при выборке
+
+//Получение запроса, создавшего таблицу
+mysql> SELECT * FROM tbl1
+ORDER BY id DESC, name ASC;
+
+//Сортировка случайным образом (очень медленная)
+mysql> SELECT * FROM tbl1 ORDER BY RAND();
+
+//Сортировка по первому столбцу
+mysql> SELECT * FROM tbl1 ORDER BY 1;
+
+//Вывод с пагинацией
+LIMIT 10; //10 записей
+LIMIT 10 OFFSET 5; //C 5-ой 10 записей
+LIMIT 5, 10; //C 5-ой 10 записей (медленнее)
+
+//ПОДГОТОВЛЕННЫЕ ЗАПРОСЫ
+mysql> PREPARE test FROM 'SELECT * FROM tbl1 WHERE id = ?';
+mysql> SET @id = 3;
+mysql> EXECUTE test using @id;
+
+//Агрегирующие фукции avg, count, group_concat, min, max, std, sum
+//Вывод среднего значения из таблицы
+mysql> SELECT avg(id) FROM tbl1;
+
+//Подсчет количества записей
+//count(*) вместо count(id)
+//Записи, в которых id = null не будут учитываться
+mysql> SELECT count(*) FROM tbl1;
+
+//Вывод колонок через запятую
+mysql> SELECT group_concat(name) FROM tbl1;
+
+//Группировка агрегирующемому столбцу
+mysql> SELECT name, count(name) FROM tbl1 GROUP BY name;
+
+//Группировка агрегирующемому столбцу c подсчетом "ИТОГО"
+mysql> SELECT name, count(name) FROM tbl1 GROUP BY name WITH ROLLUP;
+
+//Фильтрация по агрегрующим функциям
+mysql> SELECT name, count(name) 
+FROM tbl1 
+GROUP BY name
+HAVING count(name) > 1;
+
+//Having можно  использовать и для прослых столбцов
+
+//ПОЛНОТЕКСТОВЫЙ ПОИСК
+mysql> CREATE FULLTEXT INDEX iName on tbl1 (name);
+mysql> SELECT * FROM tbl1
+WHERE match (name) against ('root');
+
+//Обязательно включение.исключение слова 
+against ('+root -admin');
+
+//Восстановление индексов
+mysql> REPAIR TABLE tbl1 QUICK;
+
+//JOIN'ы
+LEFT JOIN === LEFT OUTER JOIN
+FULL OUTER JOIN не поддерживается в MySQL
+
+//Ручное отключение кэша запросов
+SELECT SQL_NO_CACHE * FROM tbl1;
+
+//Объединения UNION
+//По умоланию MySQL использует UNION DISTINCT
+mysql> SELECT id, name FROM tbl1 WHERE id = 1
+UNION
+SELECT id, name FROM tbl1 WHERE id = 1;
+//Выведет строку один раз
+//Чтобы избежать:
+mysql> SELECT id, name FROM tbl1 WHERE id = 1
+UNION ALL
+SELECT id, name FROM tbl1 WHERE id = 1;
+//DISTINCT последнего union'а перебивает все предыдущие ALL
+
+//ПОДЗАПРОСЫ
+mysql> SELECT * FROM tbl1 WHERE id = (SELECT id FROM tbl1);
+//Подзапрос должет возвращать одну запись, иначе будет ошибка
+//Чтобы избежать:
+mysql> SELECT * FROM tbl1 WHERE id = (SELECT id FROM tbl1 LIMIT 1);
+
+//Предикат ANY (Алиас "SOME")
+mysql> SELECT id FROM tbl1 WHERE id = ANY (SELECT 1); //1
+mysql> SELECT id FROM tbl1 WHERE id > ANY (SELECT 3 UNION SELECT 4); //3,4,5,6,...
+mysql> SELECT id FROM tbl1 WHERE id < ANY (SELECT 3 UNION SELECT 4); //1,2
+
+//Предикат ALL
+mysql> SELECT id FROM tbl1 WHERE id > ALL (SELECT 3 UNION SELECT 4); //4,5,6,...
+mysql> SELECT id FROM tbl1 WHERE id < ANY (SELECT 3 UNION SELECT 4); //1
+
+//Предикат EXISTS (проверяет существование хотя бы одной записи)
+mysql> select * from users u where exists (select * from salary where user_id = u.id);
+
+//Временные таблицы
+mysql> CREATE TEMPORARY TABLE t1 (id int(11));
+mysql> DESC t1;
+mysql> DROP TEMPORARY TABLE t1;
+
+//Создание временной таблицы как копии существующей
+mysql> CREATE TEMPORARY TABLE t1 [AS] SELECT id FROM users;
+
+Примечание о временных таблицах:
+1. SHOW TABLES не показывает временные таблицы
+
+//Вьюшки (VIEWS)
+mysql> CREATE VIEW v1 AS SELECT * FROM users;
+
+Примечание о views
+1. Обновление вьюшки произойдет в исходной таблице
+2. Вьюшка видна в SHOW TABLES
+3. Вьюшку нельзя обновить если:
+	в создающем запросе есть агрегирующая функция
+	в создающем запросе есть: UNION, GROUP BY, DISTINCT
+	в создающем запросе есть некоторые виды join'ов
+	в создающем запросе есть несколько обраений к одному столбцу
+	он необновляемый (либо view лежащий в основе необновляем)
+	если в основе лежат литеральные значения
+	в основе лежит временная таблица
+	
+//Получение исходного запроса view
+mysql> SHOW CREATE VIEW v1;
+
+//ПРОЦЕДУРЫ
+//Создание процедуры
+mysql> DROP PROCEDURE IF EXISTS p1;
+DELIMITER |
+CREATE PROCEDURE p1 (IN i int(11))
+BEGIN
+SELECT * FROM users WHERE id = i;
+END |
+DELIMITER ;
+
+mysql> CALL p1(3);
+
+//Процедура хранится вместе с данными в базе
+
+//Инициализация переменных в процедуре
+mysql> DROP PROCEDURE IF EXISTS p1;
+DELIMITER |
+CREATE PROCEDURE p1 ()
+BEGIN
+DECLARE i int(11) DEFAULT 4;
+SELECT * FROM users WHERE id = i;
+END |
+DELIMITER ;
+
+mysql> CALL p1();
+
+//ТРАНЗАКЦИИ
+//Транзакция начинается с предиката START или BEGIN
+mysql> START TRANSACTION;
+mysql> DELETE FROM t1;
+mysql> ROLLBACK; /*COMMIT; */
+mysql> SHOW WARNINGS;
+
+//В innoDB даждая операция является транзакцией (autocommit)
+
+//Уровни изоляции транзакций
+0 - READ UNCOMMITED - другие транзакции видят незакоммиченный результат, который может быть отменен
+1 - READ COMMITED - другие транзакции не видят незакоммиченных изменений
+2 - REPEATABLE READ - (по умолчанию) транзакции видят данные на момент старта
+3 - SERIALIZABLE - не реализовано
+
+//Изменение уровня изоляции
+mysql> SHOW VARIABLES LIKE '%ISO%'; //tx_isolation = repeatable_read
+mysql> SET SESSION TRANSACTION LEVEL READ COMMITED;
+
+//ТИПЫ ХРАНИЛИЩ
+mysql> SHOW ENGINES;
+
+//Отличия INNODB от MYISAM
+1. Наличие внешних ключей и транзакций
+2. Блокировки на уровне записей
+3. Скорость выполнения
+4. Каждая операция - транзакция
+
+//Проверка состояния таблицы
+mysql> CHECK TABLE users;
+
+//Восстановление таблицы
+mysql> REPAIR TABLE users [QUICK - только индексы];
+
+//Оптимизация таблицы (не все поддерживают)
+mysql> OPTIMIZE TABLE users;
+
+//ВОССТАНОВЛЕНИЯ ПАРОЛЯ ROOT
+1. Остановить службу 
+2. Запустить сервер с флагом: sudo mysqld --skip-grant-tables
+3. Войти в MySQL: mysql -u root
+4. Обновить пароль: UPDATE mysql.user SET password = PASSWORD('123') WHERE user = 'root' ;
+5. Остановить сервер
+6. Запустить службу
+7. Проверить
+
+//Создание пользователя
+mysql> CREATE USER 'vasya'@'localhost';
+mysql> SET PASSWORD FOR 'vasya'@'localhost' = POSSWORD('pass');
+//либо
+mysql> CREATE USER 'vasya'@'localhost' IDENTIFIED BY 'pass';
+mysql> SELECT user();
+
+//Назначение прав пользователю
+mysql> GRANT ALL PRIVILEGES ON db.* TO 'vasya'@'localhost';
+mysql> GRANT ALL PRIVILEGES ON db.* TO 'vasya'@'localhost' IDENTIFIED BY 'pass' WITH GRANT OPTION;
+
+//Удалить права пользователя
+mysql> REVOKE UPDARE PRIVILEGES ON db.* TO 'vasya'@'localhost';
+
+//СОЗДАНИЕ ПОЛЬЗОВАТЕЛЯ СО ВСЕМИ ПРИВИЛЕГИЯМИ
+mysql> GRANT ALL PRIVILEGES ON db_name.* TO user_name@'any' IDENTIFIED BY 'passme' WITH GRANT OPTION;
+
+//СОЗДАНИЕ БД с кодировкой utf8
+mysql> CREATE DATABASE db_name CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+//EXPLAIN
+mysql> EXPLAIN SELECT * FROM users WHERE id = 4;
+id: 1 - 
+select_type: simple - 
+table: users - 
+type: all - 
+possible_keys: null - 
+key: null - 
+key_len: null - 
+ref: null - 
+rows: 10 - 
+extra: using where with pushed condition - 
+
+//Оптимизация
+- оптимизация запросов
+- типы минимальной длины
+- использование агругирующих таблиц
+- рапликация
+- шардинг
+- оптимизация конфига сервера
+
+//Экспорт в формате XML/HTML
+mysqldump -u root -ppassme testdb -X > file.xml
+mysqldump -u root -ppassme testdb -H > file.html
+
+//Указание таблицы users
+mysqldump -u root -ppassme test -e 'users' -H > file.html
+
+//ОБРАБОТЧИКИ СОБЫТИЙ
+События: CONTINUE (продолжить), EXIT (игнорировать), UNDO (отменить - не реализовано)
+
+//Раздел поиска ошибок
+dev.mysql.com -> Documentation -> Выбор версии mysql -> B Errors Error codes -> B3 Ошибки сервера
+
+//Создание обработчика
+mysql> DROP PROCEDURE IF EXISTS p1;
+DELIMITER |
+CREATE PROCEDURE p1 ()
+BEGIN
+DECLARE CONTINUE HANDLER FOR SQLSTATE '23000' SET @x2 = 1;
+SET @x = 1;
+INSERT INTO users VALUES (20, 'user');
+SET @x = 2;
+INSERT INTO users VALUES (20, 'user');
+SET @x = 3;
+END |
+DELIMITER ;
+
+CALL p1();
+SELECT @x;
+SELECT @x2;
+
+//ПРЕДИКАТ IF
+//Синтаксис
+IF search_condition_1 THEN statement_list_1
+ELSE IF search_condition_2 THEN statement_list_2
+ELSE statement_list_3
+END IF;
+
+//Использование IF при обновлении таблицы
+UPDATE users SET name = IF(id = 20, 'user20', IF(id = 21, 'user21', name));
+
+//ПРЕДИКАТ CASE
+CASE value
+WHEN condition1 THEN statement1
+WHEN condition2 THEN statement2
+ELSE statement3
+END CASE;
+
+//или
+CASE
+WHEN condition1 THEN statement1
+WHEN condition2 THEN statement2
+ELSE statement3
+END CASE;
+
+//Использование CASE при обновлении таблицы
+UPDATE users
+SET name = CASE
+WHEN id = 20 THEN 'user120'
+WHEN id = 21 THEN 'user121'
+ELSE name
+END
+
+//ЦИКЛ REPEAT
+DROP PROCEDURE IF EXISTS p1;
+DELIMITER |
+CREATE PROCEDURE p1 ()
+BEGIN
+DECLARE done int(11) DEFAULT 0;
+
+REPEAT
+SET done = done + 1;
+UNTIL done >= 10 END REPEAT;
+
+SELECT done;
+
+END |
+DELIMITER ;
+
+CALL p1;
+
+
+//КУРСОРЫ
+DROP PROCEDURE IF EXISTS p1;
+DELIMITER |
+CREATE PROCEDURE p1 ()
+BEGIN
+DECLARE done int(11) DEFAULT 0;
+DECLARE n varchar(128);
+DECLARE ns varchar(1024) DEFAULT 'all names: ';
+DECLARE cur CURSOR FOR SELECT name FROM users;
+DECLARE CONTINUE HANDLER FOR sqlstate '02000' SET done = 1;
+
+OPEN cur;
+
+REPEAT
+FETCH cur INTO n;
+SET ns = CONCAT(ns, n, ', ');
+UNTIL done END REPEAT;
+
+CLOSE cur;
+
+SELECT ns;
+
+END |
+DELIMITER ;
+
+CALL p1;
+
+//ЦИКЛ WHILE
+DROP PROCEDURE IF EXISTS p1;
+DELIMITER |
+CREATE PROCEDURE p1 ()
+BEGIN
+DECLARE done int(11) DEFAULT 0;
+
+WHILE done < 5 DO
+SET done = done + 1;
+END WHILE;
+
+SELECT done;
+
+END |
+DELIMITER ;
+
+CALL p1;
+
+//ВСТРОЕННЫЕ ФУНКЦИИ
+//Округление
+SELECT CEILING(1.4); /* 2 "Потолок" - огругление в большую сторону*/
+SELECT FLOOR(1.4); /* 1 "Пол" - огругление в меньшую сторону*/
+SELECT ROUND( 1 ); /* 1 Математическое огругление*/
+SELECT ROUND( 1.5 ); /* 2 Математическое огругление*/
+SELECT ROUND( 1.4635, 1 ); /* 1.5 Математическое огругление*/
+
+//Случайные значения
+SELECT RAND(); /* 0..1 */
+SELECT RAND() * 4000; /* 0..4000 */
+
+//Возведение в степень
+SELECT POW(2, 3); /* 8 */
+
+//Дата и время
+SELECT NOW();
+SELECT YEAR(NOW());
+SELECT UNIX_TIMESTAMP(NOW());
+
+//ФУНКЦИИ
+DROP FUNCTION IF EXISTS hello;
+DELIMITER |
+CREATE FUNCTION hello (s CHAR(20)) RETURNS CHAR(50)
+RETURN CONCAT('Hello, ',s,'!') |
+DELIMITER ;
+SELECT hello('Ivan');
+
+//ТРИГГЕРЫ (TRIGGERS)
+Триггер - хранимая процедура особого типа,
+кот. запускается при попытке изменить данные в твблице,
+к которой привязан
+
+Триггер можно повестить только на insert, update и delete,
+соответственно на одну таблицу можно повесть только 3 триггера.
+
+Из триггера нельзя возвращать данные 
+
+//Создание триггера (BEFORE - до, AFTER - после изменения данных)
+mysql> CREATE TEMPORARY TABLE tusers AS SELECT * FROM users;
+DELIMITER |
+CREATE TRIGGER tr1 AFTER INSERT ON users
+FOR EACH row BEGIN
+INSERT INTO tusers (id, name) VALUES (NEW.id, NEW.name);/* OLD.name */
+END;
+|
+DELIMITER ;
+
+//БЛОКИРОВКИ
+Ьлокировки таблиц:
+	- read
+	- write
+	- read local
+	- low_priority write
+
+После перезагрузки сервера (сессии) блокировка исчезнет
+
+Ьлокировки записей:
+	- select get_lock('aaa', 5);
+	- select release_lock('aaa', 5);
+
+//Создание блокировки таблицы
+mysql> LOCK tABLES users READ, salary WRITE;
+/* Внутри блоке нальзя работать с незаблокированный таблицей */
+SELECT count(*) FROM salary; /*Можно*/
+SELECT count(*) FROM users; /*Можно*/
+INSERT INTO users (id, name) VALUES (null, 'KOSTYA'); /*Нельзя*/
+INSERT INTO salary (id, user_id, salary) VALUES (null, 1, 10000); /*Можно*/
+UNLOCK tables;
+
+//Создание блокировки записи
+mysql> SELECT get_lock('lockName', 10); /* через 10 секунд ждущий пользователь отвалится */
+SELECT release_lock('lockName');
+

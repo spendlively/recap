@@ -1,0 +1,58 @@
+//Клонирование репозитория
+hg init
+hg clone ssh://repo@192.168.20.7//repo/repoName.hg repoName
+cd iSMS 
+hg update tip
+
+//BRANCHES - ВЕТКИ
+//Создание ветки, коммит с закрытием ветки
+hg pull
+hg update tip
+hg branch branchName
+hg commit -m "Описание изменений"
+
+//Просмотр только закрытых веток
+hg branches --closed
+
+//MERGE - СЛИЯНИЯ
+//Заливаю изменения из ветки в develop
+//hg merge ИМЯ_ВЕТКИ - вливает изменение ИЗ ветки ИМЯ_ВЕТКИ в текущую ветку
+hg update develop
+hg merge branchName
+hg commit -m "Залил изменения из ветки branchName"
+hg push --new-branch
+
+//Закрытие ветки
+hg commit --close-branch -m "Закрываю ветку"
+
+//REBASE - РЕБЕЙЗ
+//Ребейз с указанием ревизии
+//hg rebase -b (мой коммит) номер_ревизии_которую_сливаем -d номер_ревизии_куда_сливаем
+hg rebase -b 281 -d 285
+hg update tip
+
+//Ребейз ветки без указания номеров коммитов
+hg rebase -b . -d tip
+
+//ОТМЕНА
+//Отмена последнего незапушенного коммита
+hg rollback
+//Отмена изменений до коммита
+hg update -C -r .
+
+//ЭКСПОРТ/ИМПОРТ имзенений из одной ветки в другую 
+//(develop -> branchName)
+hg update develop
+hg export -o ~/patch
+hg update develop
+hg import ~/patch
+
+//Просмотр имени удаленного репоза
+cat .hg/hgrc
+
+//Получение файлов с различиями двух ревизий
+hg status --rev . --rev 1010
+
+//Сравнить файлы
+hg diff -r . -r 1010
+

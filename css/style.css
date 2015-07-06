@@ -1,0 +1,77 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #eeeeee;
+}
+
+div#wrapper {
+    margin: 50px auto;
+    width: 960px;
+}
+
+div#wrapper a {
+    text-decoration: none;
+}
+
+div.div-logo {
+    margin: 10px;
+    width: 150px;
+    height: 150px;
+    border-radius: 100%;
+    overflow: hidden;
+    display: inline-block;
+}
+
+div.div-logo:hover{
+}
+
+div.div-logo img {
+    width: 125px;
+    display: block;
+    margin: 15px auto;
+}
+
+/*Стили VK для панельки слева "Наверк"*/
+#stl_left {
+    left: 0px;
+    width: 218px;
+    height: 1000px;
+    display: block;
+    opacity: 1;
+
+    /*display: none;*/
+    z-index: 3;
+    top: 0px;
+
+    cursor: pointer;
+    position: fixed;
+}
+#stl_bg {
+    height: 100%;
+    width: 100px;
+    padding: 13px 0 13px;
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+    -webkit-transition: background-color 200ms linear;
+    -moz-transition: background-color 200ms linear;
+    /* -o-transition: background-color 200ms linear; */
+    transition: background-color 200ms linear;
+    -webkit-transition: opacity 200ms linear;
+    -moz-transition: opacity 200ms linear;
+    /* -o-transition: opacity 200ms linear; */
+    transition: opacity 200ms linear;
+    background-color: #e1e7ed;
+}
+#stl_text {
+    height: 14px;
+    display: block;
+    padding: 0px 20px;
+    margin: 0 31px 0 15px;
+    font-weight: bold;
+    color: #45688E;
+    background: url(/images/toplink.gif?3) no-repeat left 3px;
+}
+/*END Стили VK для панельки слева "Наверк"*/

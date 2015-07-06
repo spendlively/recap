@@ -1,0 +1,51 @@
+//Клонирование репозитория
+mkdir -m 777 GIT
+cd GIT/
+git config --global user.name "ivan.ivanov"
+git config --global user.email "ivan.ivanov@company.ru"
+git init
+git clone git@192.168.0.2:/git-repo/repoName.git
+cd iSMS/
+git checkout -b dev origin/dev
+
+//Получение информации
+git remote
+git branch
+git branch -a
+git glog
+git status
+
+//Коммит в ветку dev
+git checkout dev
+git pull
+git add Ajax.js
+git commit -m 'Сообщение'
+git remote
+git push origin dev
+
+//Коммит в ветку dev с ребейзом
+git pull
+git commit -a -m 'Сообщение'
+git glog --all
+git rebase origin/dev
+git glog --all
+git fetch
+git glog --all
+git push origin dev
+git glog --all
+gitk
+
+//Экспорт
+git clone git@git.oper.ema:/git-repo/iSMS.git
+cd iSMS/
+git archive origin/dev src/ | tar -x -C /home/spendlively/tmp/
+
+//Экспорт в одну строку
+git archive dev | tar -x --strip-components=1 -C /home/spendlively/tmp/ src
+git archive --remote=git@192.168.20.7:/git-repo/iSMS.git dev | tar -x --strip-components=1 -C ./ src
+
+//Создание ветки
+git checkout -b feature/desc
+commit ...
+git checkout dev
+git merge --no-ff feature/desc
