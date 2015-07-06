@@ -1,4 +1,4 @@
-//Создания процесса php с помощью расширения pcntl
+//Созданиe дочернего процесса php с помощью расширения pcntl
 $pid = pcntl_fork();
 if($pid !== 0){
     pcntl_setpriority(10);
