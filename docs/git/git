@@ -1,3 +1,17 @@
+//Установка git
+sudo apt-get update
+sudo apt-get install git
+git config --global user.name "spendlively"
+git config --global user.email "spendlively@mail.ru"
+
+//Создание репозитория на github
+git init
+git add *
+git status
+git commit -m "Коммичу первый коммит"
+git remote add origin origin https://github.com/spendlively/recap.git
+git push -u origin master
+
 //Клонирование репозитория
 mkdir -m 777 GIT
 cd GIT/
