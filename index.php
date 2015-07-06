@@ -19,7 +19,7 @@
                 <img src="logo/linux.png" />
             </div>
         </a>
-        <a href="#">
+        <a href="doc.php?path=php">
             <div class="div-logo" style="border: 4px dotted #8ba9d9;">
                 <img src="logo/php.png" />
             </div>
