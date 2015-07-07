@@ -9,7 +9,7 @@ git init
 git add *
 git status
 git commit -m "Коммичу первый коммит"
-git remote add origin origin https://github.com/spendlively/recap.git
+git remote add origin https://github.com/spendlively/recap.git
 git push -u origin master
 
 //Клонирование репозитория
