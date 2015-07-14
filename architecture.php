@@ -14,17 +14,17 @@
         </div>
     </div>
     <div id="wrapper">
-        <a href="doc.php?path=architecture">
+        <a href="doc.php?path=architecture" title="Архитектурные шаблоны Мартина Фаулера">
             <div class="div-logo" style="border: 4px dotted #004b62;">
                 <img src="logo/arc.png" />
             </div>
         </a>
-        <a href="doc.php?path=patterns">
+        <a href="doc.php?path=patterns" title="ООП Шаблоны проектирования">
             <div class="div-logo" style="border: 4px dotted #004b62;">
                 <img src="logo/mvc.png" />
             </div>
         </a>
-        <a href="doc.php?path=algorithms">
+        <a href="doc.php?path=algorithms" title="Алгоритмы">
             <div class="div-logo" style="border: 4px dotted #004b62;">
                 <img src="logo/algorithms.png" />
             </div>
