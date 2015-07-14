@@ -14,14 +14,19 @@
         </div>
     </div>
     <div id="wrapper">
-<!--        <a href="doc.php?path=js">-->
-<!--            <div class="div-logo" style="border: 4px dotted #3dade9;">-->
-<!--                <img src="logo/javascript.png" />-->
-<!--            </div>-->
-<!--        </a>-->
         <a href="doc.php?path=architecture">
             <div class="div-logo" style="border: 4px dotted #004b62;">
                 <img src="logo/arc.png" />
+            </div>
+        </a>
+        <a href="doc.php?path=patterns">
+            <div class="div-logo" style="border: 4px dotted #004b62;">
+                <img src="logo/mvc.png" />
+            </div>
+        </a>
+        <a href="doc.php?path=algorithms">
+            <div class="div-logo" style="border: 4px dotted #004b62;">
+                <img src="logo/algorithms.png" />
             </div>
         </a>
     </div>

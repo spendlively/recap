@@ -29,6 +29,11 @@
                 <img src="logo/mysql.png" />
             </div>
         </a>
+        <a href="architecture.php">
+            <div class="div-logo" style="border: 4px dotted #004b62;">
+                <img src="logo/design.png" />
+            </div>
+        </a>
         <a href="#">
             <div class="div-logo" style="border: 4px dotted #000000;">
                 <img src="logo/htmlcss.png" />

@@ -9,6 +9,9 @@ $docs = array(
     'hg' => 'docs/hg/hg',
     'js' => 'docs/js/js',
     'php' => 'docs/php/php',
+    'architecture' => 'docs/architecture/architecture',
+    'patterns' => 'docs/architecture/patterns',
+    'algorithms' => 'docs/architecture/algorithms',
 );
 $content = array();
 
