@@ -1,1 +1,3529 @@
-//НИЗКОУРОВНЕВУЕ ШАБЛОНЫ
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+///////////////////////////////ПОРОЖДАЮЩИЕ//////////////////////////
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////
+///////////////////////////Одиночка (Singleton)/////////////////////
+////////////////////////////////////////////////////////////////////
+
+Гарантирует создание только одного экземпляра класса и предоставляет к нему глобальную точку доступа.
+Предоставляет класс, которому разрешается создавать только один объект
+(конструктор класса объявляется private или protected, а метод, в котором создается объект объявляется статическим).
+
+Область применения:
+Альтернатива глобальным переменным.
+Хранение дескриптора для подключения к бд, файлам....
+Любой случай создания объекта с глобальным доступом в единственном числе.
+
+class Singleton {
+
+  protected static $obj = null;
+  protected function __construct(){}
+  public static function getInstance(){
+
+    if(self::$obj === null){
+      self::$obj = new Singleton();
+    }
+
+    return self::$obj;
+  }
+}
+
+$obj = Singleton::getInstance();
+$result = $obj->doSomeThing();
+
+////////////////////////////////////////////////////////////////////
+///////////////////////////Строитель (builder)//////////////////////
+////////////////////////////////////////////////////////////////////
+Определение: Паттерн Строитель инкапсулирует конструирование продукта и позволяет разделить его не этапы.
+
+Основные принципы паттерна Стратегия:
+
+Инкапсуляция процесса создания сложного объекта,
+Возможность поэтапного конструирования объекта с переменным набором этапов (В отличие от однородных фабрик),
+Сокрытие внутреннего представления продукта от клиента,
+Реализации продуктов могут свободно изменяться, потому что клиент имеет дело только с абстрактным интерфейсом.
+С виду паттерн Строитель напоминает Итератор: Строитель инкапсулирует конструирование продукта в отдельном объекте, а Итератор инкапсулирует перебор,
+
+Строитель часто используется совместно с паттерном Компоновщик: Компоновщик позволяет объединять объекты в древовидные структуры, а Строитель обеспечить ее поэтапное построение. Добавьте Итератор, и вы получите очень мощный и гибкий механизм для работы с структурами данных любой сложности.
+
+Но для начала рассмотрим пример использования паттерна Строитель для создания простого планировщика задач.
+
+Календарь событий:
+class Calendar{
+
+    public $data = array();
+
+    public $taskManager = null;
+
+    public function __construct(){
+
+        $this->taskManager = new TaskManager($this);
+    }
+}
+
+abstract class Builder{
+
+    /**
+     * @name buildDay
+     * @todo Создать день
+     * @param date $date Дата дня события
+     */
+    public function addDay($date){
+
+        $this->currentDate = $date;
+
+        $this->calendar->data[$this->currentDate]=array();
+    }
+
+    /**
+     * @name addEvent
+     * @todo Добавить событие
+     * @param string $desc Описание события
+     * @param date $date Время события
+     */
+    public function addEvent($desc, $time){
+
+        $this->calendar->data[$this->currentDate][] = array(
+            'desc'  => $desc,
+            'time'  => $time,
+        );
+    }
+}
+
+Менеджер задач:
+class TaskManager extends Builder{
+
+    public $calendar = null;
+
+    public $currentDate;
+
+    public function __construct(Calendar $calendar){
+
+        $this->calendar = $calendar;
+    }
+
+}
+
+Тестим:
+$calendar = new Calendar();
+
+$calendar->taskManager->addDay(date('Y-m-d'));
+$calendar->taskManager->addEvent('task1', date('h:i:s'));
+$calendar->taskManager->addEvent('task2', date('h:i:s', strtotime("+1 hour")));
+
+$calendar->taskManager->addDay(date('Y-m-d', strtotime("+1 day")));
+$calendar->taskManager->addEvent('task1', date('h:i:s'));
+$calendar->taskManager->addEvent('task2', date('h:i:s', strtotime("+1 hour")));
+$calendar->taskManager->addEvent('task3', date('h:i:s', strtotime("+2 hour")));
+
+print_r($calendar->data);
+
+////////////////////////////////////////////////////////////////////
+///////////////////////////Прототип (prototype)//////////////////////
+////////////////////////////////////////////////////////////////////
+Паттерн прототип (prototype)
+
+Определение: паттерн позволяет создать экземпляры классов копируя существующие экземпляры.
+
+Описание: Создает копии объектов с помощью ключевого слова clone
+
+Используется в тех случаях, когда создание экземпляра класса требует больших затрат ресурсов или занимает много времени.
+
+Диаграмма классов:
+
+Пример использования:
+/**
+* @name LandshaftStore
+* Простейший пример использования прототипа
+*/
+class LandshaftStore {
+
+  /**
+  * Кэшированные объекты
+  */
+  public $tree     = null;
+  public $sea      = null;
+  public $mountain = null;
+
+  /**
+  * Конструктор
+  */
+  public function __construct(Tree $tree, Sea $sea, Mountain $mountain){
+
+    $this->tree     = $tree;
+    $this->sea      = $sea;
+    $this->mountain = $mountain;
+  }
+
+  /**
+  * @name getLandshaft
+  * @todo Генерация объектов
+  * return Tree|Sea{Mountain|null
+  */
+  public getLandshaft($type){
+
+    if($type == 'tree'){
+      return clone $this->tree;
+    }
+    elseif($type == 'sea'){
+      return clone $this->sea;
+    }
+    elseif($type == 'mountain'){
+      return clone $this->mountain;
+    }
+    else return null;
+  }
+}
+
+$landshaftStore = new LandshaftStore($tree, $sea, $mountain);
+$landshaft = $landshaftStore->getLandshaft('tree');
+
+Бывают ситуации, когда объекты-прототипы содержат ссылки на другие объекты. Клон такого объекта будет ссылаться на тот же объект. Если это нежелательно, достаточно определить метод __clone() в классах объектов-клонов так, как необходимо.
+
+////////////////////////////////////////////////////////////////////
+/////////////////Абстрактная фабрика (abstract factory)/////////////
+////////////////////////////////////////////////////////////////////
+Определение: предоставляет интерфейс создания семейств взаимосвязанных и взаимозависимых объектов без указания их конкретных классов
+
+Работая с Абстрактной фабрикой клиент не располагает информацией о конкретных создаваемых продуктах
+
+Диаграмма классов:
+
+Рассмотрим Абстрактную фабрику на примере все той же гипотетической фабрики по производству пиццы.
+
+И по традиции начнем с определения абстрактного класса Pizza.
+interface class Pizza {
+
+    /**
+    * @name prepare
+    * @todo Подготовка пиццы
+    * @return void
+    */
+    public function prepare();
+}
+
+В отличие от фабричного метода, нам потребуются фабрики ингридиентов, с которыми, к примеру, просто сырная пицца станет конкретной Нью-Йорксой сырной пиццей:
+
+interface IngridientsFactory {
+
+    /**
+    * @name prepareIngridients
+    * @todo Подготовка ингридиентов
+    * @param array $ingridients Ингридиенты
+    */
+    public function prepareIngridients($ingridients);
+}
+
+class NYIngridientsFactory implements IngridientsFactory{
+
+    public $ingridients = array()
+
+    public function __construct(){
+
+        $this->ingridients = array(
+            'cheese',
+            'bekon',
+            'flour',
+            'spices',
+        );
+    }
+
+    /**
+    * @name prepareIngridients
+    * @todo Подготовка ингридиентов
+    * @param array $ingridients Ингридиенты
+    */
+    public function prepareIngridients($ingridients){
+        //Реализация
+    }
+}
+
+class ChicagoIngridientsFactory implements IngridientsFactory{
+
+    public $ingridients = array()
+
+    public function __construct(){
+
+        $this->ingridients = array(
+            'cheese',
+            'onion',
+            'flour',
+            'spices',
+        );
+    }
+
+    /**
+    * @name prepareIngridients
+    * @todo Подготовка ингридиентов
+    * @param array $ingridients Ингридиенты
+    */
+    public function prepareIngridients($ingridients){
+        //Реализация
+    }
+}
+
+Определение конкретного класса конкретной пиццы.
+
+Процесс приготовления пиццы схож для различных видов, меняются только ингридиенты.
+
+class CheesePizza implements Pizza {
+
+    /**
+    * @var IingridientsFactory
+    */
+    public $ingridient = null;
+
+    public function __construct($ingridient){
+
+        $this->ingridient = $ingridient;
+
+        $this->prepare();
+    }
+
+    /**
+    * @name prepare
+    * @todo Подготовка пиццы
+    * @return void
+    */
+    public function prepare(){
+        //Реализация 1
+    }
+}
+
+class ClamPizza implaments Pizza {
+
+    /**
+    * @var IingridientsFactory
+    */
+    public $ingridient = null;
+
+    public function __construct($ingridient){
+
+        $this->ingridient = $ingridient;
+
+        $this->prepare();
+    }
+
+    /**
+    * @name prepare
+    * @todo Подготовка пиццы
+    * @return void
+    */
+    public function prepare(){
+        //Реализация 2
+    }
+}
+
+class PepperoniPizza implamants Pizza {
+
+    /**
+    * @var IingridientsFactory
+    */
+    public $ingridient = null;
+
+    public function __construct($ingridient){
+
+        $this->ingridient = $ingridient;
+
+        $this->prepare();
+    }
+
+    /**
+    * @name prepare
+    * @todo Подготовка пиццы
+    * @return void
+    */
+    public function prepare(){
+        //Реализация 3
+    }
+}
+
+Cоздание абстрактного класса фабрики
+
+abstract class PizzaStore {
+
+    /**
+    * @name createPizza
+    * @todo Создание объекта
+    * @return Pizza
+    /*
+    public function createPizza(){
+
+        //Тут могут быть какие-то шаги по созданию объекта
+    }
+}
+
+class NYPizzaStore extends PizzaStore {
+
+    /**
+    * @var IngridientFactory
+    * Фабрика ингридиентов
+    */
+    public $pizzaIngridientFactory = null;
+
+    public function __construct(){
+
+        $this->pizzaIngridientFactory = new NYPizzaIngridientFactory();
+    }
+
+    /**
+    * @name createPizza
+    * @todo Создание объекта
+    * Метод создает абстрактный продукт
+    * @return Pizza
+    /*
+    public function createPizza($string){
+        if($string == 'cheese'){
+            return new CheesePizza($this->pizzaIngridientFactory);
+        }
+        elseif($string == 'clam'){
+            return new ClamPizza($this->pizzaIngridientFactory);
+        }
+        elseif($string == 'pepperoni'){
+            return new PepperoniPizza($this->pizzaIngridientFactory);
+        }
+        else return null;
+    }
+}
+
+class ChicagoPizzaStore extends PizzaStore {
+
+    /**
+    * @var IngridientFactory
+    * Фабрика ингридиентов
+    */
+    public $pizzaIngridientFactory = null;
+
+    public function __construct(){
+
+        $this->pizzaIngridientFactory = new ChicagoPizzaIngridientFactory();
+    }
+
+    /**
+    * @name createPizza
+    * @todo Создание объекта
+    * Метод создает абстрактный продукт
+    * @return Pizza
+    /*
+    public function createPizza($string){
+        if($string == 'cheese'){
+            return new CheesePizza($this->pizzaIngridientFactory);
+        }
+        elseif($string == 'clam'){
+            return new ClamPizza($this->pizzaIngridientFactory);
+        }
+        elseif($string == 'pepperoni'){
+            return new PepperoniPizza($this->pizzaIngridientFactory);
+        }
+        else return null;
+    }
+}
+
+Для создание корпорации, которая будет создавать фабрики в различных городах, мы используем паттерн фабричный метод:
+
+Мы знаем конкретные классы фабрик: NYPizzaStore и ChicagoPizzaStore,
+Нам необходимо делегтровать создание пицы им.
+
+class PizzaStoreMaker {
+
+    /**
+    * @name createStore
+    * @todo Создание объекта
+    * фабричным методом
+    * @return PizzaStore
+    /*
+    public function createStore($string){
+        if($string == 'ny'){
+            return new NYPizzaStore();
+        }
+        elseif($string == 'chicago'){
+            return new ChicagoPizzaStore();
+        }
+        else return null;
+    }
+}
+
+Создание объектов:
+
+В итоге мы получили не совсем обычную абстрактную фабрику, а абстрактную мего-фабрику, которая использует фабричный метод для зоздания своих фабрик. Можно было бы обойтись без фабричного метода вручную создавая объекты фабрик, сделано же это было для того, чтобы еще раз наглядно рассмотреть различия между этими двумя паттернами:
+
+Сравнение фабричного метода и абстрактной фабрики
+Фабричный метод
+1. Определяет интерфейс создания объекта, но позволяет выбрать класс объекта (знает конкретные классы классы: NYPizzaStore и ChicagoPizzaStore)
+2. Делегирует операцию создания экземпляра субклассам .
+Абстрактная фабрика
+1. Предоставляет интерфейс создания семейств взаимосвязанных объектов без указания конкретных классов (классы CheesePizza, ClamPizza и PepperoniPizza сами по себе не являются пиццами, пиццами их делают ингридиенты, производимые: NYIngridientsFactory и ChicagoIngridientsFactory).
+2. Клиенты не располагают информацией о конкретных создаваемых продуктах.
+
+////////////////////////////////////////////////////////////////////
+/////////////////Фабричный метод (factory method)///////////////////
+////////////////////////////////////////////////////////////////////
+Определение: Фабричный метод определяет интерфейс создания объекта, но позволяет субклассам выбрать класс создаваемого экземпляра.
+
+Таким образом, Фабричный метод делегирует операцию создания экземпляра субклассам.
+
+Диаграмма классов:
+
+Рассмотрим Шаблонный метод на примере создания гипотетической фабрики по производству пиццы.
+
+Начнем с определения абстрактного класса Pizza.
+
+abstract class Pizza {
+
+    /**
+    * Ингридиенты
+    */
+    public $ingridient1;
+    public $ingridient2;
+    public $ingridient3;
+
+
+    /**
+    * @name prepare
+    * @todo Подготовка пиццы
+    * @return void
+    */
+    public function prepare(){
+
+        $this->act1();
+        $this->act2();
+        $this->act3();
+
+        return;
+    }
+
+
+    /**
+    * @name act1
+    * @todo подготовка теста
+    * @return void
+    */
+    public function act1(){}
+
+
+    /**
+    * @name act2
+    * @todo подготовка ингридиетнов
+    * @return void
+    */
+    public function act2(){}
+
+
+    /**
+    * @name act3
+    * @todo Выпечка
+    * @return void
+    */
+    public function act3(){}
+}
+
+Определение конкретного класса конкретной пиццы.
+
+Процесс приготовления пиццы схож для различных видов, меняются только ингридиенты.
+
+class NYStyleCheesePizza extends Pizza {
+
+    /**
+    * Ингридиенты
+    */
+    public $ingridient1 = 'cheese';
+    public $ingridient2 = 'flour';
+    public $ingridient3 = 'spices';
+
+}
+
+Создание абстрактного класса фабрики
+abstract class PizzaStore {
+
+    /**
+    * @name createPizza
+    * @todo Создание объекта
+    * @return Pizza
+    /*
+    public function createPizza(){
+
+        //Тут могут быть какие-то шаги по созданию объекта
+    }
+}
+
+Cоздание класса фабрики
+
+class NYPizzaStore extends PizzaStore {
+
+    /**
+    * @name createPizza
+    * @todo Создание объекта
+    * Это и есть тот самы "фабричный метод"
+    * @return Pizza
+    /*
+    public function createPizza($string){
+        if($string == 'cheese'){
+            return new NYStyleCheesePizza();
+        }
+        elseif($string == 'clam'){
+            return new NYStyleClamPizza();
+        }
+        elseif($string == 'pepperoni'){
+            return new NYStylePepperoniPizza();
+        }
+        else return null;
+    }
+}
+
+Создание объектов:
+
+//Создание объекта-фабрики
+$nyPizzaStore = new NYPizzaStore();
+
+//Создание объекта "сырная-пицца"
+$pizza = $nyPizzaStore->createPizza('cheese');
+
+Сравнение фабричного метода и абстрактной фабрики
+Фабричный метод
+1. Определяет интерфейс создания объекта, но позволяет выбрать класс объекта (знает конкретные классы классы: NYPizzaStore и ChicagoPizzaStore)
+2. Делегирует операцию создания экземпляра субклассам .
+Абстрактная фабрика
+1. Предоставляет интерфейс создания семейств взаимосвязанных объектов без указания конкретных классов (классы CheesePizza, ClamPizza и PepperoniPizza сами по себе не являются пиццами, пиццами их делают ингридиенты, производимые: NYIngridientsFactory и ChicagoIngridientsFactory).
+2. Клиенты не располагают информацией о конкретных создаваемых продуктах.
+
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+///////////////////////////////СТРУКТУРНЫЕ//////////////////////////
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////
+///////////////////////////Адаптер (adapter)////////////////////////
+////////////////////////////////////////////////////////////////////
+Определение: Паттерн адаптер преобразует интерфейс класса к другому интерфейсу, на который рассчитан клиент. Адаптер обеспечивает совместную работу классов, невозможную в обычных условиях из-за несовместимости интерфейсов.
+
+Паттерн адаптер очень прост и удобен, цель и назначение понятны из его определения. Осталось только понять, где его использовать и почему НЕЛЬЗЯ менять интерфейс класса, а нужно писать второй класс-адаптер?
+
+Классы должны быть закрыты для изменения и открыты для расширения, гласит принцип проектирования, он так и называется: "принцип открытости-закрытости". Чтобы защитить свой код от возникновения ошибок, однажды спроектировав класс, он должен быть максимально закрыт к последующим изменениям. Конечно не всегда получается спроектировать класс так, чтобы учесть все аспекты его последующего использования. И не нужно к этому стремиться: пытаясь спроектировать класс-бог, мы рано или поздно столкнемся с проблемой его сопровождения! Важно понимать, что после этапа проектирования, наступит этап написания кода, вслед за которым наступит этап оптимизации кода и тестирования. Пройдя все этапы класс как правило получает стабильную версию, дальнейшие изменения которого неизвестно как скажутся на его работе, если конечно не проводить тестирование без конца. Другое правило проектирование гласит "Класс должен иметь только одну ответственность", что позволяет максимально избежать изменения кода (2 ответственности у класса == 2 повода для изменения кода класса). Если класс умеет слишком много на этапе проектирования, пересмотрите архитектуру.
+
+А как же тогда в последствии наделить его новым поведением или изменить его поведение?
+
+Для этого существуют паттерны-обёртки, которые позволяют изменить интерфейс, либо поведение, без изменения кода класса, который наверняка уже участвует в работе и менять его крайне нежелательно:
+
+Необходимо новое поведение: паттерн "Декоратор".
+Необходимо предоставить единый упрощенный интерфейс: паттерн "Фасад".
+Необходимо изменить интерфейс, пожалуйста: паттерн "Адаптер".
+Диаграмма классов:
+
+Что мы имеем: Класс, интерфейс которого нужно изменить и класс, чей интерфейс нужно использовать.
+
+Есть интерфейс утка с прототипами методов, которые реализует конкретная утка:
+interface Duck {
+
+    /**
+    * @name quack
+    * Утка умеет крякать
+    */
+    public function quack();
+
+    /**
+    * @name fly
+    * и летать
+    */
+    public function fly();
+}
+Вот и сама утка:
+class MallardDuck implements Duck{
+
+    /**
+    * @name quack
+    */
+    public function quack(){
+
+        echo "Quack!<br>";
+    }
+
+    /**
+    * @name fly
+    */
+    public function fly(){
+
+        echo "I'm flying!<br>";
+    }
+}
+В отличие от утки индюшка не крякает:
+interface Turkey {
+
+    /**
+    * @name gobble
+    */
+    public function gobble();
+
+    /**
+    * @name fly
+    */
+    public function fly();
+}
+
+В отличае от утки индюшка не крякает:
+
+class WildTurkey implements Turkey {
+
+    /**
+    * @name gobble
+    */
+    public function gobble(){
+
+        echo "Gobble gobble!<br>";
+    }
+
+    /**
+    * @name fly
+    */
+    public function fly(){
+
+
+        echo "I'm flying too!<br>";
+    }
+}
+
+Все, что необходимо, это адаптер (теперь индюшка реализует интерфейс Duck):
+
+class TurkeyAdapter implements Duck {
+
+    public $turkey = null;
+
+    public function __construct(Turkey $turkey){
+
+        $this->turkey = $turkey;
+    }
+
+    /**
+    * @name quack
+    */
+    public function quack(){
+
+        $this->turkey->gobble();
+    }
+
+    /**
+    * @name fly
+    */
+    public function fly(){
+
+
+        $this->turkey->fly();
+    }
+}
+
+Тест драйв:
+
+/**
+* Утка
+*/
+$duck = new MallardDuck();
+
+/**
+* Индюшка
+*/
+$turkey = new WildTurkey();
+
+/**
+* Индюшка-утка
+*/
+$turkeyAdapter = new TurkeyAdapter($turkey);
+
+//Тест
+$duck->quack();
+$turkey->gobble();
+$turkeyAdapter->quack();
+
+////////////////////////////////////////////////////////////////////
+///////////////////////////Декоратор (decorator)////////////////////
+////////////////////////////////////////////////////////////////////
+Определение: Паттерн декоратор динамически наделяет объект новыми возможностями и является гибкой альтернативой субклассированию в области расширения функциональности.
+
+Наверняка многие уже встречали различные декораторы: Zend Form, кэширующие декораторы и т.д, все они схожи по своему принципу, - они наделяют объекты новыми функциональными возможностями.
+
+Но зачем он нужен, не проще написать новый метод или изменить старый, потратив при этом 2 минуты времени? Проще! И быстрее! Однако тогда мы нарушим принцип проектирования, который гласит...
+
+Принцип проектирования: Классы должны быть открыты для расширения и закрыты для редактирования и есть ряд причин для этого:
+
+Добавить функционал, значит добавить лишнюю ответственность, что нарушает еще один принцип проектирования: У класса должна быть только одна ответственность.
+Добавляя ответственность, мы добавляем как минимум еще один повод для изменения кода, что приведет к необходимости тестирования.
+Внося изменения в рабочий код, мы знаем, как поведет себя система, в которой он завязан.
+И самое главное, создавая классы, закрытые для изменения, мы получаем гибкую систему, которую просто и легко будет в последствие сопровождать.
+Как быть, если, к примеру, в кафе, где подают свежий молотый кофе, появится новый вид кофе? Придется писать новый класс. А если два вида, три, десять? Тогда десять классов. А если подорожает сахар, придется для каждого из десяти (а может двадцати) видов менять стоимость. А если подорожает молоко? Нужно инкапсулировать молоко, сахар, кофе в отдельные классы. А если наименований ну очень много? Строить иерархию из сотни классов, когда нам нужен, скажем, всего один метод, чтобы выставить счет? Пора использовать декоратор:
+
+interface Coffee {
+
+    /**
+    * @name getCost
+    * @todo Возвращает стоимость
+    * @return double
+    */
+    public function getCost();
+}
+
+class Espresso implements Coffee{
+
+    public $cost = 20;
+
+    /**
+    * @name getCost
+    * @todo Возвращает стоимость
+    * @return double
+    */
+    public function getCost(){
+        return $this->cost;
+    }
+}
+
+class Kapuchino  implements Coffee{
+
+    public $cost = 15;
+
+    /**
+    * @name getCost
+    * @todo Возвращает стоимость
+    * @return double
+    */
+    public function getCost(){
+        return $this->cost;
+    }
+}
+
+Пока хватит и двух сортов, теперь мы будем их наделять новыми вкусами:
+
+abstract class Condiments implements Coffee {
+
+    /**
+    * @name getCost
+    * @todo Возвращает стоимость
+    * @return double
+    */
+    public function getCost(){
+        //.....
+    }
+}
+class HasMilk extends Condiments{
+
+    public $coffee;
+
+    public function __construct(Coffee $coffee){
+
+        $this->coffee = $coffee;
+    }
+
+    /**
+    * @name getCost
+    * @todo Возвращает стоимость
+    * @return double
+    */
+    public function getCost(){
+        return 5 + $this->coffee->getCost();
+    }
+}
+
+class HasSugar extends Condiments{
+
+    public $coffee;
+
+    public function __construct(Coffee $coffee){
+
+        $this->coffee = $coffee;
+    }
+
+    /**
+    * @name getCost
+    * @todo Возвращает стоимость
+    * @return double
+    */
+    public function getCost(){
+        return 3 + $this->coffee->getCost();
+    }
+}
+
+Все готово. Приступим к приготовлению:
+
+$espresso = new Espresso();
+$kapuchino = new Kapuchino();
+$espressoWithMilk = new HasMilk($espresso);
+$kapuchinoWithMilk = new HasMilk($kapuchino);
+$kapuchinoWithMilkWithSugar = new HasSugar($kapuchinoWithMilk);
+
+echo $espresso->getCost()."руб. <br>";
+echo $kapuchino->getCost()."руб. <br>";
+echo $espressoWithMilk->getCost()."руб. <br>";
+echo $kapuchinoWithMilk->getCost()."руб. <br>";
+echo $kapuchinoWithMilkWithSugar->getCost()."руб. <br>";
+
+Что мы получаем в итоге?
+
+Нет необходимости хранить множество классов, объекты которых можно получить объединяя их с уже существующими ингридиентами.
+Не нарушается заповедь программиста "Don'r repeat your self."
+Мы получаем очень гибкую структуру, которую легко сопровождать.
+
+////////////////////////////////////////////////////////////////////
+///////////////////////////Заместитель (proxy)//////////////////////
+////////////////////////////////////////////////////////////////////
+Определение: Паттерн заместитель предоставляет суррогатный объект, предоставляющий доступ к другому объекту.
+
+Паттерн относится к категории структурных паттернов, то есть паттернов, объединяющих классы или объекты в более сложные структуры.
+
+Заместитель очень похож на другие паттерны-обертчики (адаптер, фасад, декоратор), но имеет совершенно несхожее предназначение, как понятно из названия, паттерн предоставляет косвенный доступ к какому-либо объекту и очень часто применяется при решении различных задач:
+
+Объект-заместитель управляет доступом с удаленному объекту, находящемуся, к примеру, на другом хосте.
+Виртуальный заместитель управляет доступом к ресурсу, создание которого требуют большого количества ресурсов.
+Защищенны заместитель контролирует доступом к ресурсу в соответствии с системой привилегий или прав доступа.
+Рассмотрим пример с созданием объекта, требующим большого количества времени:
+
+interface Icon {
+
+    /**
+    * @name getImage
+    * @todo Отображает изображение
+    * @return void
+    */
+    public function displayImage();
+}
+
+class ImageComponent implements Icon {
+
+
+    public $url = null;
+
+    public $file = 'source.jpg';
+
+    public function __construct($url){
+
+        $this->url = $url;
+     }
+
+    /**
+    * @name prepareImage
+    * @todo Загружает ресурсоемкое изображение
+    * @return void
+    */
+    public function downloadImage(){
+
+        $source = file_get_contents($this->url);
+
+        file_put_contents($this->file, $source);
+
+    }
+
+    /**
+    * @name displayImage
+    * @todo Отображает ресурсоемкое изображение
+    * @return void
+    */
+    public function displayImage(){
+
+        header( 'Content-Type: image/jpeg' );
+
+        echo file_get_contents($this->file);
+
+    }
+}
+
+class ImagePreview implements Icon {
+
+    public $image = null;
+
+    public $preview = null;
+
+
+    public function __construct(ImageComponent $image){
+
+        $this->image = $image;
+
+        $this->preview = $this->getPreview();
+
+    }
+
+
+    /**
+     * @name getPreview
+     * @todo Возвоащает сгенерированное preview-изображение
+     * @return \Imagick
+     */
+    public function getPreview(){
+
+        $image = new Imagick();
+
+        $draw = new ImagickDraw();
+
+        $pixel = new ImagickPixel( 'black' );
+
+        /* New image */
+        $image->newImage(145, 75, $pixel);
+
+        /* Black text */
+        $draw->setFillColor('white');
+
+        /* Font properties */
+        $draw->setFont('Bookman-DemiItalic');
+        $draw->setFontSize( 30 );
+
+        /* Create text */
+        $image->annotateImage($draw, 10, 45, 0, 'Preview');
+
+        /* Give image a format */
+        $image->setImageFormat('jpg');
+
+        return $image;
+
+    }
+
+
+    /**
+    * @name displayImage
+    * @todo Возвращает ресурсоемкое изображение
+    * @return source
+    */
+    public function displayImage(){
+
+        if(is_file($this->image->file)){
+
+            echo $this->image->displayImage();
+
+        }
+        else{
+
+            header( 'Content-Type: image/jpeg' );
+
+            echo $this->preview;
+
+            $this->image->downloadImage();
+        }
+
+    }
+}
+
+$image = new ImageComponent('http://www.dsbw.ru/public/site/images/photo/catalog/partition/info-section/5027.jpg');
+
+$ImagePreview = new ImagePreview($image);
+
+$ImagePreview->displayImage();
+
+Данный пример чересчур наивен, тем не менее он отражает суть паттерна Заместитель:
+
+Обращение к объекту производится с помощью суррогатного объекта.
+Ситуация, когда ресурс еще загружен обрабатывается, не вызывая ошибки.
+Каждый из классов, расширяющих Icon, имеет свою собственную ответственность:
+ImageComponent отвечает за загрузку объекта.
+ImageProxy отвечает за доступ к нему.
+
+////////////////////////////////////////////////////////////////////
+////////////////////////Компоновщик (Composite)/////////////////////
+////////////////////////////////////////////////////////////////////
+
+Определение: Паттерн Компоновщик объединяет объекты в древовидные структуры, для представления иерархий "часть/целое". Компоновщик позволяет выполнять однородные операции с отдельными объектами и их совокупностями.
+
+Это значит, что в такой структуре одни и те же операции могут применяться как к комбинациям, так и к отдельным объектам. (Во многих случаях различия между комбинациями и отдельными объектами игнорируются)
+
+Компоновщик,- один из самых полезных паттернов, он помогает упростить решение нетривиальных задач по группировке объектов в деревья и работы с ними.
+
+Рассмотрим пример работы с древовидным меню, узлами которой могут быть как отдельные объекты, так и агрегатные,- подменю, которые в свою очередь могут состоять из объектов и подменю...
+
+Для перебора элементов меню, будем использовать паттерн Итератор.
+
+Итератор:
+
+class MenuIterator{
+
+    public $menu;
+
+    public $cursor;
+
+    public function __construct(MenuComponent $menu){
+
+        $this->menu = $menu;
+
+        $this->cursor = -1;
+    }
+
+    /**
+     * @name next
+     * @todo Возвращает следующий объект меню
+     * @return Menu
+     */
+    public function next(){
+
+        if($this->hasNext()){
+            return $this->menu->menuComponents[++$this->cursor];
+        }
+    }
+
+    /**
+     * @name hasNext
+     * @todo Проверяет, существует ли сдедующий элемент
+     * @return bool
+     */
+    public function hasNext(){
+
+        if(isset($this->menu->menuComponents[$this->cursor + 1]))
+            return true;
+
+        return false;
+
+    }
+}
+
+Абстрактное меню:
+
+abstract class MenuComponent{
+
+    /**
+     * @name add
+     * @todo Добавление эелемента меню
+     * @param MenuComponent $menuComponent
+     */
+    public function add(MenuComponent $menuComponent){
+
+        throw new Exception('Нет реализации');
+    }
+
+    /**
+     * @name remove
+     * @todo Удаление эелемента меню
+     * @param MenuComponent $menuComponent
+     */
+    public function remove(MenuComponent $menuComponent){
+
+        throw new Exception('Нет реализации');
+    }
+
+    /**
+     * @name printMenu
+     * @todo Вывод информации об элементе меню
+     */
+    public function printMenu(){
+
+        throw new Exception('Нет реализации');
+    }
+
+    /**
+     * @name getIterator
+     * @todo Возвращает объект-итератор меню
+     * @return MenuIterator
+     */
+    public function getIterator(){
+
+        return new MenuIterator($this);
+    }
+}
+
+Конкретное блюдо:
+
+class MenuItem extends MenuComponent{
+
+    public $name;
+
+    public function __construct($name){
+
+        $this->name = $name;
+    }
+
+    /**
+     * @name printMenu
+     * @todo Вывод информации об элементе меню
+     */
+    public function printMenu(){
+
+        echo $this->name."<br>";
+    }
+}
+
+Меню
+
+class Menu extends MenuComponent{
+
+    public $name;
+
+    public $menuComponents = array();
+
+    public function __construct($name){
+
+        $this->name = $name;
+    }
+
+    /**
+     * @name add
+     * @todo Добавление эелемента меню
+     * @param MenuComponent $menuComponent
+     */
+    public function add(MenuComponent $menuComponent){
+
+        $this->menuComponents[] = $menuComponent;
+    }
+
+    /**
+     * @name remove
+     * @todo Удаление эелемента меню
+     * @param MenuComponent $menuComponent
+     */
+    public function remove(MenuComponent $menuComponent){
+
+        foreach($this->menuComponents as $key => $menu){
+
+            if($menu->name == $menuComponent->name){
+
+                unset($this->menuComponents[$key]);
+
+                break;
+            }
+        }
+    }
+
+    /**
+     * @name printMenu
+     * @todo Вывод информации об элементе меню
+     */
+    public function printMenu(){
+
+        echo $this->name."<br>";
+
+        $iterator = $this->getIterator();
+
+        while($iterator->hasNext()){
+
+            $menu = $iterator->next();
+
+            $menu->printMenu();
+        }
+    }
+
+    /**
+     * @name getIterator
+     * @todo Возвращает итератор объекта
+     * @return ManuIterator
+     */
+    public function getIterator(){
+
+        return new MenuIterator($this);
+    }
+}
+
+Тестим:
+
+$menu = new Menu('Главное меню');
+
+$drinks = new Menu('Напитки');
+
+$alc = new Menu('Алкогольные');
+$alc->add(new MenuItem("Пиво"));
+$alc->add(new MenuItem("Вино"));
+
+$notAlc = new Menu('Безалкогольные');
+$notAlc->add(new MenuItem("Чай"));
+$notAlc->add(new MenuItem("Компот"));
+
+$drinks->add($alc);
+$drinks->add($notAlc);
+
+$menu->add($drinks);
+
+$menu->add(new MenuItem('Первое'));
+$menu->add(new MenuItem('Второе'));
+
+$menu->printMenu();
+
+
+////////////////////////////////////////////////////////////////////
+//////////////////////////////Фасад (facade)////////////////////////
+////////////////////////////////////////////////////////////////////
+
+Определение: Паттерн Фасад предоставляет унифицированный интерфейс к группе интерфейсов подсистемы. Фасад определяет высокоуровневый интерфейс, упрощяющий работу с подсистемой.
+
+Фасад позволяет соблюсти принцип проектирования "Общайся только с друзьями",- клиент должен быть минимально информирован о системе. Фасад скрывает сложный интерфейс от клиента.
+
+Диаграмма классов:
+
+Данный паттерн предельно прост и удобен. Допустим у нас есть телевизор, стереосистема и световые приборы. Каджый день в 20:00 мы смотрим кино, для чего необходимо проделать одну и ту же монотонныу работу: включить телевизор, выбрать канал, включить стереосистему, застроить громкость и выключить свет. Давайте реализуем простой интерфейс для выполнения этих операций:
+
+class TV {
+
+    /**
+    * @name on
+    * @todo Включить
+    */
+    public function on(){
+        //реализация
+    }
+
+    /**
+    * @name off
+    * @todo Включить
+    */
+    public function off(){
+        //реализация
+    }
+
+    /**
+    * @name setChanel
+    * @todo Выбрнать канал
+    */
+    public function setChanel(){
+        //реализация
+    }
+}
+
+class Stereo {
+
+    /**
+    * @name on
+    * @todo Включить
+    */
+    public function on(){
+        //реализация
+    }
+
+    /**
+    * @name off
+    * @todo Включить
+    */
+    public function off(){
+        //реализация
+    }
+
+    /**
+    * @name tuneVolume
+    * @todo Настроить громкость
+    */
+    public function tuneVolume(){
+        //реализация
+    }
+}
+
+class Lights {
+
+    /**
+    * @name on
+    * @todo Включить
+    */
+    public function on(){
+        //реализация
+    }
+
+    /**
+    * @name off
+    * @todo Включить
+    */
+    public function off(){
+        //реализация
+    }
+}
+
+А вот и фасад:
+
+interface MovieControl {
+
+    /**
+    * @name beginWatching
+    * @todo Смотреть фильм
+    */
+    public function beginWatching();
+
+    /**
+    * @name stopWatching
+    * @todo Выключить
+    */
+    public function stopWatching();
+}
+
+class MovieWatcher implements MovieControl{
+
+    /**
+    * @var TV
+    */
+    public $tv;
+
+    /**
+    * @var Stereo
+    */
+    public $stereo;
+
+    /**
+    * @var Lights
+    */
+    public $lights;
+
+    public function __construct(TV $tv, Stareo $stereo, Lights $lights){
+
+        $this->tv = $tv;
+
+        $this->stereo = $stereo;
+
+        $this->lights = $lights;
+    }
+
+    /**
+    * @name beginWatching
+    * @todo Смотреть фильм
+    */
+    public function beginWatching(){
+
+        $tv->on();
+        $tv->setChanel();
+
+        $stereo->on();
+        $stereo->tuneVolume();
+
+        $lights->off();
+    }
+
+    /**
+    * @name stopWatching
+    * @todo Выключить
+    */
+    public function stopWatching(){
+
+        $tv->off();
+
+        $stereo->off();
+
+        $lights->on();
+    }
+
+}
+
+Тестим:
+
+$tv = new TV();
+$stereo = new Stereo();
+$lights = new Lights();
+
+$movieWatcher = new MovieWatcher($tv, $stereo, $lights);
+
+$movieWatcher->beginWatching();
+
+$movieWatcher->stopWatching();
+
+Что мы получили:
+
+Все интерфейсы классов максимально скрыты от клиента.
+Клиент получает собственный упрощенный интерфейс.
+
+
+////////////////////////////////////////////////////////////////////
+//////////////////////Приспособленец (Flyweight)////////////////////
+////////////////////////////////////////////////////////////////////
+
+Определение: предоставляет систему, в которой только один экземпляр класса и объект, хранящий состояния всех объектов.
+
+Иными словами, Приспобленец инкапсулирует переменные аспекты класса в отдельный класс. В отличие от Стратегии переменные аспекты всех объектов хранятся централизованно в объекте-менеджере. Менеджер в дальнейшем осуществляет работу с "виртуальными" объектами,- то есть с одним объектом, вызывая его методы с различными параметрами. Для реализации управляемого объекта можно даже использовать синглтон.
+
+Паттерн может быть полезен, когда:
+
+большое количество объектов занимает много памяти,
+необходимо централизованное хранилище для объектов.
+Из всего выше сказанного следует, что паттерн можно использовать, когда класс имеет много экземпляров, которыми можно управлять одинаково.
+
+Рассмотрим пример, в котором необходимо отрисовывать множество однотипных объектов, скажем деревьев, на карте.
+
+Интерфейс дерева:
+
+interface Tree {
+
+    /**
+     * @name display
+     * @todo Отрисовка дерева
+     * @param double $longitude Долгота
+     * @param double $latitude Широта
+     */
+    public function display($longitude, $latitude);
+}
+
+Конкретные деревья:
+
+class Oak implements Tree{
+
+    /**
+     * @name display
+     * @todo Отрисовка дуба
+     * @param double $longitude Долгота
+     * @param double $latitude Широта
+     */
+    public function display($longitude, $latitude){
+        echo "Отрисовка дерева по координатам: {$longitude}, {$latitude}<br>";
+    }
+}
+
+Менеджер:
+
+abstract class TreeManader{
+
+    /**
+     * @name setOakCoords
+     * @todo Задание координат  деревьев
+     * @param array $coords Массив координат
+     */
+    public function setCoords(array $coords){
+        $this->coords = $coords;
+    }
+
+    /**
+     * @name displayTrees
+     * @todo Отрисовка деревьев
+     */
+    public function displayTrees(){
+        foreach($this->coords as $coord){
+            $this->tree->display($coord['longitude'], $coord['latitude']);
+        }
+    }
+}
+
+class OakManager extends TreeManader{
+
+    /**
+     * Расположение деревьев
+     * @var array
+     */
+    public $coords = array();
+
+    /**
+     * Дерево
+     * @var Tree
+     */
+    public $tree;
+
+    public function __construct(){
+
+        $this->tree = new Oak();
+    }
+}
+
+Тестим:
+
+$oakManager = new OakManager();
+
+$oakManager->setCoords(array(
+    array(
+        "longitude" => 14.2345,
+        "latitude"  => 56.3456,
+    ),
+    array(
+        "longitude" => 15.2345,
+        "latitude"  => 55.3456,
+    ),
+));
+
+$oakManager->displayTrees();
+
+////////////////////////////////////////////////////////////////////
+/////////////////////////////Мост (Bridge)//////////////////////////
+////////////////////////////////////////////////////////////////////
+
+Определение: паттерн Мост позволяет изменять и абстракцию, и реализацию, инкапсулируя их в отдельные иерархии классов.
+
+Паттерн используется, когда:
+
+неизбежны изменения как абстракции, так и реализации,
+необходимо реализовать систему, работающую на разных платформах.
+Чтобы понять основную идею паттерна Мост, необходимо проанализировать, когда появляется необходимость разделения абстракции от реализации в различные иерархии.
+
+Принципы проектирования учат нас программировать на уровне интерфейса, а также закладывать удобство сопровождения на уровне проектирования системы, создавая гибкие архитектурные модели. А иначе как быть с постоянно меняющимися требованиями? А если конечный продукт вообще не определен на стадии проектирования? Как строить здание, если не известно, сколько у него будет этажей? Тут понадобится паттерн мост - связка между абстракциями и реализациями!
+
+Допустим, вы разрабатываете новейший телевизор, но вот беда, чтобы он был конкурентоспособным маркетологи постоянно меняют требования его основному функционалу. И это еще не все, специалисты по юзабилити постоянно меняют интерфейс ПДУ. Вы, конечно, уже отделили интерфейс от реализации, но этого мало, вы только что узнали, что в вашей системе контроля версий будет разрабатываться несколько независимых веток как абстракций, так и конкретных реализаций. Теперь без паттерна мост просто не обойтись.
+
+Иерархия ПДУ:
+
+abstract class RemoteControl {
+
+    /**
+    * Телевизор
+    * @var TV
+    */
+    public $tv = null;
+
+    public function __construct(TV $tv){
+
+        $this->tv = $tv;
+    }
+
+    /**
+    * @name on
+    * @todo Включить
+    */
+    public function on(){
+        //Реализация
+    }
+
+    /**
+    * @name off
+    * @todo Выключить
+    */
+    public function off(){
+        //Реализация
+    }
+
+    /**
+    * @name setChanel
+    * @todo переключить канал
+    * @param int $chanel Канал
+    */
+    public abstract function setChanel($chanel);
+}
+
+class PDU1 extends RemoteControl {
+
+
+    /**
+    * @name setChanel
+    * @todo переключить канал
+    */
+    public function setChanel(){
+
+        $this->tv->setChanel($chanel);
+    }
+}
+
+class PDU2 extends RemoteControl {
+
+    /**
+    * @name setChanel
+    * @todo переключить канал
+    * @param int $chanel Канал
+    */
+    public function setChanel($chanel){
+        $this->tv->setChanel($chanel);
+    }
+
+    /**
+    * @name prevChanel
+    * @todo Включить предыдущий канал
+    */
+    public function prevChanel(){
+        $this->tv->prevChanel();
+    }
+}
+
+Иерархия телевизоров:
+
+abstract class TV{
+
+    /**
+    * @name on
+    * @todo Включить
+    */
+    public function on(){
+        //Реализация
+    }
+
+    /**
+    * @name off
+    * @todo Выключить
+    */
+    public function off(){
+        //Реализация
+    }
+
+    /**
+    * @name setChanel
+    * @todo переключить канал
+    * @param int $chanel Канал
+    */
+    public abstract function setChanel($chanel);
+}
+
+class TV1 extends TV {
+
+
+    /**
+    * @name setChanel
+    * @todo переключить канал
+    * @param int $chanel Канал
+    */
+    public function setChanel($chanel){
+        //Реализация
+    }
+}
+
+class TV2 extends TV {
+
+    /**
+    * @name setChanel
+    * @todo переключить канал
+    * @param int $chanel Канал
+    */
+    public function setChanel($chanel){
+        //Реализация
+    }
+
+    /**
+    * @name prevChanel
+    * @todo Включить предыдущий канал
+    */
+    public function prevChanel(){
+        //Реализация
+    }
+}
+
+Тестим
+
+$tv1 = new TV1();
+$tv2 = new TV2();
+
+$pdu1 = new PDU1($tv1);
+$pdu2 = new PDU2($tv2);
+
+$pdu1->on();
+$pdu1->setChanel(1);
+$pdu1->off();
+
+$pdu2->on();
+$pdu2->setChanel(1);
+$pdu2->setChanel(2);
+$pdu2->prevChanel();
+$pdu2->off();
+
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+/////////////////////////////ПОВЕДЕНЧЕСКИЕ//////////////////////////
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////
+///////////////////////////Состояние (State)////////////////////////
+////////////////////////////////////////////////////////////////////
+
+Определение: Паттерн состояние управляет изменением поведения объекта при изменении его внутреннего объекта. Внешне это выглядит, словно объект меняет свой класс.
+
+Простым языком, паттерн инкапсулирует различные поведения объекта, зависящие от состояния этого объекта, в отдельные классы.
+
+Это позволяет программисту наделить объект огромным количеством разных вариантов поведения, и не запутать алгоритм чудовищным и непонятным ветвлением.
+
+К недостаткам можно отнести увеличение количество классов (каждое состояние-объекта определяет соответствующий класс), однако такой подход снимает лишнюю ответственность с класса основного объекта, следуя принципу проектирования (у класса должно быть не больше одной ответственности), что в свою очередь исключает лишние поводы для изменения основного класса.
+
+Место, в котором необходимо применить данный паттерн, как правило, характеризуется изобилием условных конструкций и ветвления, запутывающих алгоритм.
+
+Диаграмма классов:
+
+Пример реализации паттерна на примере работы автомата для продажи жевательной резинки:
+
+Интерфейс "Состояние" (можно использовать абстрактный класс, если классов-состояний есть общее поведение):
+
+interface State {
+
+    //Далее перечислены методы для работы с автоматом
+    /**
+    * @name insertQuarter
+    * @todo Вставить монетку
+    */
+    public function insertQuarter();
+
+    /**
+    * @name ejectQuarter
+    * @todo Вернуть монетку
+    */
+    public function ejectQuarter();
+
+    /**
+    * @name turnCrunk
+    * @todo Повернуть рычаг
+    */
+    public function turnCrunk();
+}
+
+Состояния "Нет монетки" автомата (реализут интерфейс State)
+
+class NoQuarterState implements State {
+
+    /**
+    * Все состояние имеют ссылку на объект автомата
+    * @var GumballMachine
+    */
+    public $machine;
+
+    public function __construct(GumballMachine $machine)}{
+
+        $this->machine = $machine;
+    }
+
+    //Далее идет реализация методов, описанных в интерфейсе
+    /**
+    * @name insertQuarter
+    * @todo Вставить монетку
+    */
+    public function insertQuarter(){
+
+        //Здесь могут быть какие-то действия, связанные с работой автомата
+        //или выводом сообщения, например:
+        echo "Вы вставили монетку!<br>";
+
+        //После того, как пользователь бросил в автомат монетку
+        //состояние автомата должно измениться
+        $this->machine->currentState = $this->machine->hasQuarterState;
+    }
+
+    /**
+    * @name ejectQuarter
+    * @todo Вернуть монетку
+    */
+    public function ejectQuarter(){\
+
+        echo "Нечего возвращать!<br>";
+
+    }
+
+    /**
+    * @name turnCrunk
+    * @todo Повернуть рычаг
+    */
+    public function turnCrunk(){
+
+        echo "Вы не вставили монетку!<br>";
+    }
+}
+
+Класс-состояние "Монета вставлена" создаем по тому же принципу:
+
+class HasQuarterState implements State {
+
+    public $machine;
+
+    public function __construct(GumballMachine $machine)}{
+
+        $this->machine = $machine;
+    }
+
+    /**
+    * @name insertQuarter
+    * @todo Вставить монетку
+    */
+    public function insertQuarter(){
+
+        echo "Вы уже вставили монетку!<br>";
+
+    }
+
+    /**
+    * @name ejectQuarter
+    * @todo Вернуть монетку
+    */
+    public function ejectQuarter(){\
+
+        echo "Возврат монеты!<br>";
+
+        //Состояние автомата меняется на "нет монетки"
+        $this->machine->currentState = $this->machine->noQuarterState;
+    }
+
+    /**
+    * @name turnCrunk
+    * @todo Повернуть рычаг
+    */
+    public function turnCrunk(){
+
+        echo "Подождите...<br>";
+
+        //Состояние автомата меняется на "состояние продажи"
+        $this->machine->currentState = $this->machine->soldState;
+    }
+}
+
+Класс "состояние продажи":
+
+class SoldState implements State {
+
+    public $machine;
+
+    public function __construct(GumballMachine $machine)}{
+
+        $this->machine = $machine;
+    }
+
+    /**
+    * @name insertQuarter
+    * @todo Вставить монетку
+    */
+    public function insertQuarter(){
+
+        echo "Вы уже вставили монетку!<br>";
+
+    }
+
+    /**
+    * @name ejectQuarter
+    * @todo Вернуть монетку
+    */
+    public function ejectQuarter(){\
+
+        echo "Простите, но вы уже дернули рычаг!<br>";
+
+    }
+
+    /**
+    * @name turnCrunk
+    * @todo Повернуть рычаг
+    */
+    public function turnCrunk() {
+
+        echo "Простите, но вы уже дернули рычаг!<br>";
+
+        //Выдача шарика
+        $this->machine->releaseBall();
+
+        if($this->machine->count > 0) {
+            //Переход в состояние "нет монетки"
+            $this->machine->currentState = $this->machine->noQuarterState;
+        }
+        else {
+            //Переход в состояние "все шарики проданы"
+            $this->machine->currentState = $this->machine->soldOutState;
+        }
+    }
+}
+
+Класс SoldOutState реализуется похожим образом с той лишь разницей, что ни одby из его методов не переведет объект автомат в другое состояние. т.к. автомат пуст, а количество шариков для продажи мы будем передавать в конструкторе самому объекту.
+
+Класс GumballMachine:
+
+class GumballMachine {
+
+    //объект должен хранить ссылки на объекты-состаяния
+    public $soldOutState        = null;
+    public $noQuarterState      = null;
+    public $hasQuarterState     = null;
+    public $soldState           = null;
+
+    public $currentState        = null;
+    public $count               = 0;
+
+    public function __construct($numberGumballs){
+
+        $this->count = (int)$numberGumballs;
+
+        //В объект-состояние передаем ссылку на автомат
+        //иначе методы объекта-состояния не смогут изменить
+        //текуott состояние автомата
+        $this->soldOutState     = new SoldOutState($this);
+        $this->noQuarterState   = new NoQuarterState($this);
+        $this->hasQuarterState  = new hasQuarterState($this);
+        $this->soldState        = new SoldState($this);
+
+    }
+
+    //Теперь видно, насколько прост и понятен стал алгоритм
+    //в котором вызываются методы автомата
+    //Вся работа теперь происходит в объектах State
+    public function insertQuarter() {
+
+        $this->currentState->insertQuarter();
+    }
+
+    public function ejectQuarter() {
+
+        $this->currentState->ejectQuarter();
+    }
+
+    public function turnCrunk() {
+
+        $this->currentState->turnCrunk();
+    }
+
+    public function releaseBall() {
+
+        echo "Возьмите шарик!<br>";
+
+        if($this->count != 0){
+            $this->count--;
+        }
+    }
+}
+
+
+
+////////////////////////////////////////////////////////////////////
+///////////////////////////Посетитель (Visiter)/////////////////////
+////////////////////////////////////////////////////////////////////
+Определение: Паттерн Посетитель используется для расширения возможностей комбинации объектов в том случае, если инкапсуляция не существенна.
+
+Посетитель обходит все объекты составной структуры, получая данные, либо проделывая какую-либо работу с каждым из них.
+
+Управляет объектом-посетителем специальный объект-клиент(Traverser), в нем-то и сосредоточена вся функциональность. При добавлении новой функциональности изменения вносятся только в посетителе, а объекты составной структуры не изменяются, тем самым соблюдая принцип "Открытости/закрытости".
+
+Преимущества посетителя:
+
+Возможность добавления операций в главную структуру без изменения самой структуры,
+Добавлять новые операции очень просто,
+Код операций, выполняемых посетителем, хранится централизованно.
+К недостаткам относится:
+
+Нарушение инкапсуляции составной структуры и
+Усложнение ее возможной модернизации.
+Рассмотрим пример сбора статистики цен на товары некого интернет-магазина.
+
+Единица товара:
+class Item{
+
+    public $name;
+
+    protected $price;
+
+    public function __construct($name, $price){
+
+        $this->name = $name;
+        $this->price = (double)$price;
+    }
+
+    public function getInfo(){
+        return $this->name.' - '.$this->price.'rur.';
+    }
+}
+
+Магазин:
+
+class Shop{
+
+    public $items = array();
+
+    /**
+     * @name addItem
+     * @toda Добавление товара
+     * @param Item $item Единица товара
+     */
+    public function addItem(Item $item){
+
+        $this->items[] = $item;
+    }
+
+    /**
+     * @name getItems
+     * @toda Возвращает коллекцию товаров
+     * @return array
+     */
+    public function getItems(){
+
+        return $this->items;
+    }
+}
+
+Посетитель:
+class Visiter{
+
+    /**
+     * @name getInfo
+     * @todo Запрашивает информацию у объекта Item
+     * @param Item $item Товар
+     */
+    public function getInfo(Item $item){
+
+        return $item->getInfo();
+    }
+}
+
+Менеджер:
+
+class Traverser{
+
+    /**
+     * Посетитель
+     * @var Visiter
+     */
+    public $visiter = null;
+
+    /**
+     * Магазин
+     * @var Shop
+     */
+    public $shop = null;
+
+    public function __construct(Shop $shop){
+
+        $this->visiter = new Visiter();
+
+        $this->shop = $shop;
+    }
+
+    /**
+     * @name displayStat
+     * @todo Вывод статистики
+     */
+    public function displayStat(){
+
+        foreach($this->shop->getItems() as $i => $item){
+            echo ++$i.'). '.$this->visiter->getInfo($item).'<br>';
+        }
+    }
+}
+
+Тестим:
+
+$shop = new Shop();
+
+$shop->addItem(new Item("Monitor", 5500));
+$shop->addItem(new Item("Keyboard", 250));
+$shop->addItem(new Item("Mouse", 250));
+$shop->addItem(new Item("Computer", 10000));
+
+$manager = new Traverser($shop);
+$manager->displayStat();
+
+
+
+
+////////////////////////////////////////////////////////////////////
+///////////////////////////Посредник (Mediator)/////////////////////
+////////////////////////////////////////////////////////////////////
+Определение: Паттерн Посредник используется для централизации сложных взаимодействий и управляющих операций между собой.
+
+Паттерн Посредник значительно упрощает все связанные объекты системы: вместо того, чтобы взаимодействовать друг с другом напрямую, объекты устройств общаются с специальным объектом-посредником, в котором и находится логика системы. Проще говоря, все объекты:
+
+оповещают Посредника об изменении своего состояния,
+отвечают на запросы посредника.
+Плюсы паттерна Посредник налицо:
+
+Объекты отделяются друг от друга (Принцип проектирования "стремитесь к слабой связанности объектов")
+Упрощается сопровождение системы за счет централизации управляющей логики,
+Расширяются возможности повторного использования кода объектов, находящихся под управлением посредника,
+Упрощаются сообщения, передаваемые мужду объектами в системе.
+Рассмотрим пример работы системы умный дом, вот требования к нему:
+
+Ровно в 7:00 каждый день кроме выходных должен зазвонить будильник,
+За 20 минут до звонка будильника должен включаться свет, помогая отводить сон,
+За 10 минут до звонка будильника чайник начинает кипятить воду.
+Итак приступим.
+
+Общий интерфейс объектов:
+
+interface Object{
+
+    /**
+     * @name сheck
+     * @todo Проверка
+     */
+    public function check();
+
+    /**
+     * @name action
+     * @todo Выполнить действие
+     */
+    public function action();
+}
+
+Будильник:
+
+class Ring implements Object{
+
+    public $mediator = null;
+
+    public function __construct(Mediator $mediator){
+
+        $this->mediator = $mediator;
+
+        $this->check();
+    }
+
+    /**
+     * @name сheck
+     * @todo Проверка
+     */
+    public function check(){
+        if(date('H:i') == '07:00'){
+            $this->mediator->ringEvent = true;
+        }
+    }
+
+    /**
+     * @name action
+     * @todo Будильник
+     */
+    public function action(){
+        echo "Ring<br>";
+    }
+}
+
+Календарь:
+
+class Calendar implements Object{
+
+    public $mediator = null;
+
+    public function __construct(Mediator $mediator){
+
+        $this->mediator = $mediator;
+
+        $this->check();
+    }
+
+    /**
+     * @name check
+     * @todo Проверка
+     */
+    public function check(){
+        if(date('l') == 'Sunday' or date('l') == 'Saturday'){
+            $this->mediator->weekendEvent = true;
+        }
+    }
+
+    /**
+     * @name action
+     * @todo Календарь
+     */
+    public function action(){}
+}
+
+Люстра:
+
+class Lamp implements Object{
+
+    public $mediator = null;
+
+    public function __construct(Mediator $mediator){
+
+        $this->mediator = $mediator;
+
+        $this->check();
+    }
+
+    /**
+     * @name check
+     * @todo Проверка
+     */
+    public function check(){
+        if(date('H:i') == '06:40'){
+            $this->mediator->lightEvent = true;
+        }
+    }
+
+    /**
+     * @name action
+     * @todo Включает свет
+     */
+    public function action(){
+        echo "Switch on the light.<br>";
+    }
+}
+
+Водонагреватель:
+
+class Boiler implements Object{
+
+    public $mediator = null;
+
+    public function __construct(Mediator $mediator){
+
+        $this->mediator = $mediator;
+
+        $this->check();
+    }
+
+    /**
+     * @name check
+     * @todo Проверка
+     */
+    public function check(){
+        if(date('H:i') == '06:50'){
+            $this->mediator->boilEvent = true;
+        }
+    }
+
+    /**
+     * @name action
+     * @todo Кипятит воду
+     */
+    public function action(){
+        echo "Boil the water.<br>";
+    }
+}
+
+Посредник:
+
+class Mediator{
+
+    public $clock = null;
+    public $calendar = null;
+    public $lamp = null;
+    public $boiler = null;
+
+    public $ringEvent = false;
+    public $weekendEvent = false;
+    public $lightEvent = false;
+    public $boilEvent = false;
+
+    public function __construct(){
+
+        $this->ring = new Ring($this);
+        $this->calendar = new Calendar($this);
+        $this->lamp = new Lamp($this);
+        $this->bolier = new Boiler($this);
+    }
+
+    public function action(){
+        if(!$this->weekendEvent){
+            if($this->lamp){
+                $this->lamp->action();
+            }
+            if($this->boilEvent){
+                $this->bolier->action();
+            }
+            if($this->ringEvent){
+                $this->ring->action();
+            }
+        }
+    }
+}
+
+Следующий далее код, инициализирующий систему, помещается в crontable, позволяя запускать его каждые несколько минут, отслеживая тем самым наступление событий системы:
+
+$madiator = new Mediator();
+$madiator->action();
+
+
+////////////////////////////////////////////////////////////////////
+/////////////////////Шаблонный метод (Template method)//////////////
+////////////////////////////////////////////////////////////////////
+
+Определение: Шаблонный метод позволяет задать скелет алгоритма в методе, оставляя определение реализации некоторых шагов субклассам. Субклассы могут переопределять некоторые части алгоритма без изменение его структуры.
+
+Это поведенческий паттерн, более того, его используют абсолютно все, некоторые даже не подозревая, что это известный паттерн проектирования.
+
+Паттерн очень прост и строится не на одном принципе проектирования:
+
+"Код должен зависеть от абстракций, а не от конкретных классов" - основные операции реализуются в абстрактном классе.
+"Программируйте на уровне интерфейса, а не реализации" - в роли интерфейса выступает абстрактный класс.
+<"Не вызывай нас, мы сами тебя вызовем (Голливудский принцип)" - классы никогда не обращаются с вызовами к абстрактному классу, сначала он обращается к ним. Этот принцип предотвращает разложение зависимостей./li>
+И напоследок, этот паттерн находит очень обширное применение в случаях, связанных со выполнением алгоритмов,- стоит только вспомнить принципы проектирования, как на ум приходит паттерн Шаблонный метод.
+
+Рассмотрим пример. Чего общего в алгоритмах приготовления кофе и чая? Кипятим воду, кидаем пакетик чая или ложку кофе, разливаем по кружкам, добавляем сахар или молоко.
+
+Поводов для реализации шаблонного метода более чем достаточно:
+
+Абстрактный класс "Напиток":
+
+abstract class Drink {
+
+  /**
+  * @name boilWater
+  * @todo Кипятим воду
+  */
+  public function boilWater(){
+    //Реализация
+  }
+
+  /**
+  * @name pourInCup
+  * @todo Наливаем в кружку
+  */
+  public function pourInCup(){
+    //Реализация
+  }
+
+  /**
+  * @name brew
+  * @todo Добавляем чай или кофе
+  * Оставляем реализацию потомкам
+  */
+  abstract public function brew();
+
+  /**
+  * @name addCondiments
+  * @todo Добавляем что-то еще
+  * Оставляем реализацию потомкам
+  */
+  abstract public function addCondiments();
+
+  /**
+  * @name hook
+  * @todo Это спец метод-хук, который ничего не делает,
+  * но потомки могут его переопределить как угодно.
+  */
+  public function hook(){}
+
+  /**
+  * @name prepareDrink
+  * @todo Приготовление напитка
+  */
+  public function prepareDrink(){
+      $this->boilWater();
+      $this->pourInCup();
+      $this->brew();
+      $this->addCondiments();
+      $this->hook();
+  }
+}
+
+Кофе:
+class Coffee extends Drink {
+
+  /**
+  * @name brew
+  * @todo Добавляем кофе
+  */
+  public function brew(){
+    //Добавляем кофе
+  }
+
+  /**
+  * @name addCondiments
+  * @todo Добавляем сливки
+  */
+  public function addCondiments(){
+    //Дабавляем сливки
+  }
+}
+
+Чай:
+
+class Tea extends Drink {
+
+  /**
+  * @name brew
+  * @todo Добавляем пакетик чая
+  */
+  public function brew(){
+    //Добавляем пакетик чая
+  }
+
+  /**
+  * @name addCondiments
+  * @todo Добавляем сахар
+  */
+  public function addCondiments(){
+    //Дабавляем сахар
+  }
+
+  /**
+  * @name hook
+  * @todo Добавляем лимон
+  */
+  public function hook(){
+    //Дабавляем лимон
+  }
+}
+
+Прошу к столу:
+
+$coffee = new Coffee();
+$coffee->prepareDrink();
+
+$tea = new Tea();
+$tea->prepareDrink();
+
+
+
+////////////////////////////////////////////////////////////////////
+///////////////////////////Итератор (Iterator)//////////////////////
+////////////////////////////////////////////////////////////////////
+Определение: Паттерн Итератор предоставляет механизм последовательного перебора элементов коллекции без раскрытия ее внутреннего представления.
+
+Итератор очень часто используемый паттерн не только в php, но и в других языках программирования, и в то же время не так-то просто найти ему применение.
+
+Во первых, в php не так много типов-коллекций. К примеру в java есть несколько встроенных типов коллекций (Hashtable, ArrayList), создавая переменные разных типов-коллекций возникает необходимость в Итераторе, который предоставит единый интерфейс для доступа к ним, не раскрывая их интерфейс.
+Во вторых php уже предоставляет встроенный Итератор (SPL).
+Так зачем же он нужен? Может быть, чтобы перебирать свойства объектов? Возможно, но я склоняюсь к мнению, что в 90% таких случаев нужно все же использовать массив. Еще варианты? Что перебирать итератору? Зачем он нужен? Зачем его использовать, и зачем я его описываю здесь?
+
+Если я заинтриговал, следовательно вы вплотную подошли к пониманию вопроса, зачем нужно уметь пользоваться Итератором.
+
+В сборнике паттернов проектирования есть немало интересных паттернов: паттерн Компоновщик позволяет создавать интересные древовидные структуры, паттерн Строитель позволяет строить древовидные структуры поэтапно. И всякий раз, создав сложную древовидную структуру, список, стек, очередь рано или поздно возникает задача....
+
+Да, вы правильно поняли, задача перебора листьев дерева, вот тут то без Итератора не обойтись.
+
+Но для начала рассмотрим тривиальный случай перебора массива.
+
+Самый общий интерфейс Итератора:
+
+interface IIterator {
+
+    /**
+     * @name first
+     * @todo Возвращает первый элемент
+     */
+    public function first();
+
+    /**
+     * @name last
+     * @todo Возвращает последний элемент
+     */
+    public function last();
+
+    /**
+     * @name prev
+     * @todo Возвращает предыдущий элемент
+     */
+    public function prev();
+
+    /**
+     * @name next
+     * @todo Возвращает следующий элемент
+     */
+    public function next();
+
+    /**
+     * @name getElement
+     * @todo Возвращает текущий элемент
+     */
+    public function getElement();
+}
+
+Итератор:
+
+class MyIterator implements IIterator{
+
+    public $collection = array();
+
+    public $cursor;
+
+    public function __construct(array $collection){
+
+        $this->collection = $collection;
+
+        $this->cursor = -1;
+    }
+
+    /**
+     * @name first
+     * @todo Возвращает первый элемент
+     */
+    public function first(){
+
+        $this->cursor = 0;
+
+        return $this->getElement();
+    }
+
+    /**
+     * @name last
+     * @todo Возвращает последний элемент
+     */
+    public function last(){
+
+        $this->cursor = count($this->collection)-1;
+
+        return $this->getElement();
+    }
+
+    /**
+     * @name prev
+     * @todo Возвращает предыдущий элемент
+     */
+    public function prev(){
+
+        if($this->cursor)
+            $this->cursor--;
+        else throw new Exception('Достигнут минимальный предел массива');
+
+        return $this->getElement();
+    }
+
+    /**
+     * @name next
+     * @todo Возвращает следующий элемент
+     */
+    public function next(){
+
+        if($this->cursor < count($this->collection)-1)
+            $this->cursor++;
+        else throw new Exception('Достигнут максимальный предел массива');
+
+        return $this->getElement();
+    }
+
+    public function getElement(){
+        return $this->collection[$this->cursor];
+    }
+}
+
+Тестим:
+
+$collection = array(1,2,3,4,5,6,7);
+
+$iterator = new MyIterator($collection);
+
+try{
+    echo $iterator->first()."<br>";
+    echo $iterator->next()."<br>";
+    echo $iterator->prev()."<br>";
+    echo $iterator->last()."<br>";
+    echo $iterator->next()."<br>";
+} catch(Exception $e){
+    echo $e->getMessage()."<br>";
+}
+
+Применение паттерна Итератор совместно с паттерном Компоновщик рассмотрим в главе с паттерном Компоновщик.
+
+
+
+////////////////////////////////////////////////////////////////////
+///////////////////////////Команда (Command)//////////////////////
+////////////////////////////////////////////////////////////////////
+
+Определение: Паттерн Команда отделяет объект, создающий запрос, от объекта, выполняющего операцию, инкапсулирует запрос в виде объекта.
+
+С помощью Команды можно реализовать:
+
+Параметризацию клиентских объектов с другими запросами
+Организацию очереди
+Регистрацию запросов
+А также поддержку отмены операций
+Команда относится к поведенческим паттернам, управляющими взаимодействием и распределением обязанностей между классами и объектами.
+
+Это простой и в то же время гибкий паттерн, который разгружает класс от ответственности за выполнение операций, делая его ответственным только за управление объектами-командами.
+
+
+
+Как и фасад, паттерн предоставляет интерфейс для пользователя, но в отличие от фасада, который служит для упрощения интерфейса, команда инкапсулиоует операции в классы-команды, которые реализуют общий интерфейс, позволяя пользователю управлять этими командами:
+
+выбирать нужную команду
+использовать общий интерфейс для выполнения команды
+отменить команду
+создавать ветвление, циклы и пр.
+Реализуем паттерн команда на примере создания пульта управления системой "умный дом".
+
+Начнем с определения интерфейса команды:
+
+interface Comand {
+
+    /**
+    * @name execute
+    * @todo Выполнить команду
+    */
+    public function execute();
+
+    /**
+    * @name undo
+    * @todo Отменяет команду
+    */
+    public function undo();
+}
+
+Кроме интерфейса имеем API для работы с бытовой техникой:
+
+class Light {
+
+    /**
+    * @name on
+    * @todo Включить свет
+    */
+    public function on(){
+        echo "Light on.<br>";
+    }
+
+    /**
+    * @name off
+    * @todo Выключить свет
+    */
+    public function off(){
+        echo "Light off.<br>";
+    }
+}
+
+class Radio {
+
+    /**
+    * @name on
+    * @todo Включить радио
+    */
+    public function on(){
+        echo "Radio on.<br>";
+    }
+
+    /**
+    * @name off
+    * @todo Выключить радио
+    */
+    public function off(){
+        echo "Radio off.<br>";
+    }
+}
+
+Команды:
+
+
+class LightOnComand implements Comand{
+
+    public $light = null;
+
+    public function __construct(Light $light){
+
+        $this->light = $light;
+    }
+
+    /**
+    * @name execute
+    * @todo Выполнить команду включить свет
+    */
+    public function execute(){
+
+        $this->light->on();
+    }
+
+    /**
+    * @name undo
+    * @todo Отменяет команду
+    */
+    public function undo(){
+
+        $this->light->off();
+    }
+}
+
+class LightOffComand implements Comand{
+
+    public $light = null;
+
+    public function __construct(Light $light){
+
+        $this->light = $light;
+    }
+
+    /**
+    * @name execute
+    * @todo Выполнить команду выключить свет
+    */
+    public function execute(){
+
+        $this->light->off();
+    }
+
+    /**
+    * @name undo
+    * @todo Отменяет команду
+    */
+    public function undo(){
+
+        $this->light->on();
+    }
+}
+
+class RadioOnComand implements Comand{
+
+    public $radio = null;
+
+    public function __construct(Radio $radio){
+
+        $this->radio = $radio;
+    }
+
+    /**
+    * @name execute
+    * @todo Выполнить команду включить радио
+    */
+    public function execute(){
+
+        $this->radio->on();
+    }
+
+    /**
+    * @name undo
+    * @todo Отменяет команду
+    */
+    public function undo(){
+
+        $this->radio->off();
+    }
+}
+
+class RadioOffComand implements Comand{
+
+    public $radio = null;
+
+    public function __construct(Radio $radio){
+
+        $this->radio = $radio;
+    }
+
+    /**
+    * @name execute
+    * @todo Выполнить команду выключить радио
+    */
+    public function execute(){
+
+        $this->radio->off();
+    }
+
+    /**
+    * @name undo
+    * @todo Отменяет команду
+    */
+    public function undo(){
+
+        $this->radio->on();
+    }
+}
+
+Остался класс-контроллер:
+
+
+class RemoteControl {
+
+    /**
+    * @var Comand
+    */
+    public $command = null;
+
+    /**
+    * @name setComend
+    * @todo Устанавливает команду
+    */
+    public function setComand(Comand $comand){
+
+        $this->command = $comand;
+    }
+
+    /**
+    * @name executeComand
+    * @todo Выполняет команду
+    */
+    public function executeComand(){
+
+        $this->command->execute();
+    }
+
+    /**
+    * @name undoComand
+    * @todo Отменяет команду
+    */
+    public function undoComand(){
+
+        $this->command->undo();
+    }
+}
+
+Тест
+
+$light = new Light();
+$radio = new Radio();
+
+$lightOnComand = new LightOnComand($light);
+$lightOffComand = new LightOffComand($light);
+
+$radioOnComand = new RadioOnComand($radio);
+$radioOffComand = new RadioOffComand($radio);
+
+$rm = new RemoteControl();
+
+$rm->setComand($lightOnComand);
+$rm->executeComand();
+$rm->undoComand();
+
+$rm->setComand($radioOnComand);
+$rm->executeComand();
+$rm->undoComand();
+
+////////////////////////////////////////////////////////////////////
+///////////////////////////Хранитель (Memento)//////////////////////
+////////////////////////////////////////////////////////////////////
+
+Определение: Паттерн хранитель используется для реализации возврата к одному из предыдущих состояний (например если пользователь выполнил команду "Отменить")
+
+Хранитель,- довольно простой паттерн, примеры его использования можно встретить гле угодно, где требуется сохранение состояния:
+
+Сохранение тестового документа,
+Сохранение игры,
+Сохранение параметров аккаунта и т.д.
+Цели паттерна Хранитель:
+
+Сохранение важного состояния ключевого объекта системы,
+Должная инкапсуляция ключевого объекта.
+Преимущества Хранителя:
+
+Хранение состояния отдельно от ключевого объекта улучшает связанность системы,
+Инкапсуляция данных ключевого объекта,
+Простая реализация восстановления.
+Пример системы, реализующий сохранения состояния ключевого объекта.
+
+Объект, состояние которого требуется сохранить:
+
+class GameObject{
+
+    /**
+     * @name getCurrentState
+     * @todo Получение текущего состояния объекта
+     * @return State
+     */
+    public function getCurrentState(){
+
+        return new State(serialize($this));
+    }
+
+    /**
+     * @name restoreState
+     * @todo Восстановление состояния объекта
+     * @return object
+     */
+    public function restoreState($state){
+
+        return unserialize($state);
+    }
+}
+
+Хранитель:
+
+class State{
+
+    public $state;
+
+    public function __construct($state){
+        $this->state = $state;
+    }
+}
+
+Пример работы системы:
+
+$object = new GameObject();
+
+//Сохранение
+$save = $object->getCurrentState();
+
+//Восстановление
+$object = $object->restoreState($save->state);
+
+
+
+
+////////////////////////////////////////////////////////////////////
+//////////////////////Интерпретатор (Interpreter)///////////////////
+////////////////////////////////////////////////////////////////////
+
+Определение: Паттерн Интерпретатор используется для создания языковых анализаторов.
+
+С Интерпретатора можно реализовать собственный язык программирования.
+
+Разберемся для начала, из чего состоят языки программирования:
+
+Во первых из выражений,
+Выражения в свою очередь строятся из:
+Команд,
+Разделителей,
+Циклов и
+Ветвления
+Также неотьемлемой частью любого языка программирования являются переменные.
+Схематично простейший язык программирования может изображаться так:
+
+Выражение ::= <Команда> | <Разделитель> | <Цикл>
+Разделитель ::= <Выражение> '.' <Выражение>
+Команда ::= go '.' turn_left '.' turn_right '.' stop
+Ветвление ::= If '(' Переменная ')' Выражение
+Переменная ::= [A-Z,A-z]+
+Преимущества Интерпретатора:
+
+Правила грамматики инкапсулированные с классы упрощает реализацию языка,
+Язык легко расширять,
+Создание дополнительных методов добавляет новое поведение, не связанное с интерпретаией.
+Теперь попробуем реализовать простейший язык программирования.
+
+Выражение:
+
+interface Expression{
+
+    public function interpret($code);
+}
+
+Интерпретатор:
+
+class Interpreter implements Expression{
+
+    public $expressions = array();
+
+    public function __construct(){
+
+        $this->expressions[] = new Go();
+        $this->expressions[] = new Turn_left();
+        $this->expressions[] = new Turn_right();
+        $this->expressions[] = new Stop();
+        $this->expressions[] = new Sequence();
+        $this->expressions[] = new Equals();
+        $this->expressions[] = new _If();
+    }
+
+    /**
+    * @name interpret
+    * @todo Интерпретирует выражение
+    * @param string $code Код выражения
+    */
+    public function interpret($code){
+        foreach($this->expressions as $expression){
+
+            $code = $expression->interpret($code);
+        }
+
+        return $code.';';
+    }
+
+    public function run($code){
+
+        $code = $this->interpret($code);
+
+        eval($code);
+    }
+}
+
+Команды:
+
+class Go implements Expression{
+
+    /**
+    * @name interpret
+    * @todo Интерпретирует выражение
+    * @param string $code Код выражения
+    */
+    public function interpret($code){
+
+        return preg_replace('|\s+go\s*|i', 'echo "Object going...<br>"', $code);
+    }
+}
+
+class Turn_left implements Expression{
+
+    /**
+    * @name interpret
+    * @todo Интерпретирует выражение
+    * @param string $code Код выражения
+    */
+    public function interpret($code){
+
+        return preg_replace('|\s+turn_left\s*|i', 'echo "Object turning left...<br>"', $code);
+    }
+}
+
+class Turn_right implements Expression{
+
+    /**
+    * @name interpret
+    * @todo Интерпретирует выражение
+    * @param string $code Код выражения
+    */
+    public function interpret($code){
+
+        return preg_replace('|\s+turn_right\s*|i', 'echo "Object turning right...<br>"', $code);
+    }
+}
+
+class Stop implements Expression{
+
+    /**
+    * @name interpret
+    * @todo Интерпретирует выражение
+    * @param string $code Код выражения
+    */
+    public function interpret($code){
+
+        return preg_replace('|\s+stop\s*|i', 'echo "Object stoped.<br>"', $code);
+    }
+}
+
+Разделитель:
+
+class Sequence implements Expression{
+
+    /**
+    * @name interpret
+    * @todo Интерпретирует выражение
+    * @param string $code Код выражения
+    */
+    public function interpret($code) {
+
+        return preg_replace('|\s*[,]\s*|i', '; ', $code);
+    }
+}
+
+Присваивание:
+
+class Equals implements Expression{
+
+    /**
+    * @name interpret
+    * @todo Интерпретирует выражение
+    * @param string $code Код выражения
+    */
+    public function interpret($code) {
+
+        $pattern = '|\s*([a-zA-Z]+)\s*=\s*([\d]+)\s*|i';
+
+        if(preg_match_all($pattern, $code, $matches)){
+            $var = $matches[1][0];
+            $digits = $matches[2][0];
+            $code = preg_replace($pattern, '$'.$var.'='.$digits, $code);
+        }
+
+        return $code;
+    }
+}
+
+Ветвление:
+
+class _If implements Expression{
+
+    /**
+    * @name interpret
+    * @todo Интерпретирует выражение
+    * @param string $code Код выражения
+    */
+    public function interpret($code) {
+
+        $pattern = '|if\(([a-zA-Z]*)\)|i';
+
+        if(preg_match_all($pattern, $code, $matches)){
+            $var = $matches[1][0];
+            $code = preg_replace($pattern, 'if($'.$var.')', $code);
+        }
+
+        return $code;
+    }
+}
+
+Тестим:
+
+$code = '
+    go,
+    turn_right,
+    go,
+    tl=10,
+    if(tl) turn_left,
+    go,
+    stop
+';
+$interpreter = new Interpreter();
+$interpreter->run($code);
+
+Результат выполнения кода:
+
+Object going...
+Object turning right...
+Object going...
+Object turning left...
+Object going...
+Object stoped.
+
+////////////////////////////////////////////////////////////////////
+////////////////////////Наблюдатель (Observer)//////////////////////
+////////////////////////////////////////////////////////////////////
+
+Определение: определяет отношение "один-ко-многим" между объектами таким образом, что при изменении состояние одного объекта происходит автоматическое оповещение и обновление всех зависимых объектов.
+
+Это поведенческий паттерн, позволяющий решать задачи информирования объектов:
+
+Рассылка почты
+Рассылка уведомлений о выходе обновлений
+и пр.
+Наблюдатель достаточно простой паттерн, ему легко найти применение и легко использовать.
+
+Наблюдатель следует принципу слабой связанности объектов, что позволяет строить гибкие системы, в который объекты минимально информированы друг о друге.
+
+Рассмотрим пример, рассылки обновлений:
+
+Необходим объект осуществляющий рассылку, его интерфейс:
+
+interface ISender {
+
+    /**
+     * @name registerObserver
+     * @todo Регистрация наблюдателя
+     * @param Observer $observer Наблюдатель
+     */
+    public function registerObserver(Observer $observer);
+
+    /**
+     * @name remoteObserver
+     * @todo Удаление наблюдателя
+     * @param Observer $observer Наблюдатель
+     */
+    public function remoteObserver(Observer $observer);
+
+    /**
+     * @name notifyObservers
+     * @todo Оповещение наблюдателей
+     */
+    public function notifyObservers();
+}
+
+и сам класс:
+
+class Sender implements ISender{
+
+    public $observers = array();
+
+    /**
+     * @name registerObserver
+     * @todo Регистрация наблюдателя
+     * @param Observer $observer Наблюдатель
+     */
+    public function registerObserver(Observer $observer){
+
+        $this->observers[$observer->name] = $observer;
+    }
+
+    /**
+     * @name remoteObserver
+     * @todo Удаление наблюдателя
+     * @param Observer $observer Наблюдатель
+     */
+    public function remoteObserver(Observer $observer){
+
+        if(isset($this->observers[$observer->getName()]))
+                unset($this->observers[$observer->getName()]);
+    }
+
+    /**
+     * @name notifyObservers
+     * @todo Оповещение наблюдателей
+     */
+    public function notifyObservers(){
+
+        $date = date("Y-m-d h:i:s");
+
+        foreach($this->observers as $observer){
+            $observer->update($date);
+        }
+    }
+}
+
+Интерфейс подписчиков (используется абстрактный класс, для хранения общих методов):
+
+abstract class Observer {
+
+    public $date;
+
+    public $name;
+
+    /**
+     * @name update
+     * @todo Обновление наблюдателя
+     * @param string $date Сообщение
+     */
+    public function update($date){
+
+        $this->date = $date;
+    }
+
+    /**
+     * @name getName
+     * @todo Получение имени наблюдателя
+     * @return string
+     */
+    public function getName(){
+
+        return $this->name;
+    }
+
+    /**
+     * @name getUpdate
+     * @todo Получение даты последнего обновления
+     * @return string
+     */
+    public function getUpdate(){
+
+        return $this->date;
+    }
+}
+
+Наблюдатели:
+
+class Person extends Observer {
+
+    public $name;
+
+    public function __construct($name){
+
+        $this->name = $name;
+    }
+}
+
+class Company extends Observer {
+
+    public $name;
+
+    public function __construct($name){
+
+        $this->name = $name;
+    }
+}
+
+Тестим код:
+
+$sender = new Sender();
+
+$clients = array(
+    new Person("Client1"),
+    new Person("Client2"),
+    new Company("Client3")
+);
+
+foreach($clients as $client){
+    $sender->registerObserver($client);
+}
+
+$sender->notifyObservers();
+
+
+foreach($clients as $i=>$client){
+    echo $client->getUpdate()."<br>";
+}
+
+sleep(5);
+
+$sender->remoteObserver($clients[0]);
+
+$sender->notifyObservers();
+
+foreach($clients as $i=>$client){
+    echo $client->getUpdate()."<br>";
+}
+
+
+////////////////////////////////////////////////////////////////////
+/////////Цепочка обязанностей (Chain of Responsibility)/////////////
+////////////////////////////////////////////////////////////////////
+Определение: Паттерн Цепочка обязанностей предоставляет механизм, позволяющий нескольким объектам обработать запрос.
+
+Цепочка обязанностей часто используется в нрафических средах для обработки событий (щелчков мыши, событий клавиатуры).
+
+Обработка запроса не гарантирована, если событие не будет обработано ни одним из объектов, она просто выходит с конца цепочки. В отдельной ситуации это может сать как минусом, так и плюсом.
+
+Допустим, есть задача: сформировать фото галлерею. Алгоритм при этом будет примерно следующий:
+
+Скачать фотографии,
+Обрезать белые края,
+Сгенерить preview-изображение.
+Пункты алгоритма менять нельзя. Как изолировать запрос от его выполнения? Задача похожа на ту, которую реализует паттерн Состояние, только теперь объекты-обработчики должны работать в определенной последовательности. Поможет паттерн Цепочка обязанностей:
+
+class Handler {
+
+    /**
+    * @var Handler
+    * Обработчик
+    */
+    public $successor = null;
+
+    /**
+    * @name handle
+    * @todo обработка запроса
+    */
+    public function handle($url){
+
+        $this->successor = new DownloadHandler($url);
+
+        while($this->successor !== null){
+            $this->successor = $this->successor->handle();
+        }
+    }
+}
+
+Обработчики:
+
+class DownloadHandler extends Handler{
+
+    public $url;
+
+    public function __construct($url){
+        $this->url = $url;
+    }
+
+    /**
+    * @name handle
+    * @todo Закачать изображение
+    */
+    public function handle(){
+
+        echo "Закачка фотографии...".$this->url."<br>";
+
+        return new TrimmerHandler();
+
+    }
+}
+
+class TrimmerHandler extends Handler{
+
+    /**
+    * @name handle
+    * @todo Обрезка изображения
+    */
+    public function handle(){
+
+        echo "Обрезка фото...<br>";
+
+        return new PreviewHandler();
+    }
+}
+
+class PreviewHandler extends Handler{
+
+    /**
+    * @name handle
+    * @todo Генерация preview
+    */
+    public function handle(){
+
+        echo "Генерация preview...<br>";
+
+        return null;
+    }
+}
+
+Тестим:
+
+$handler = new Handler();
+
+$urls = array(
+    "http://www.test.ru/photo1.jpg",
+    "http://www.test.ru/photo2.jpg",
+    "http://www.test.ru/photo3.jpg",
+);
+
+foreach($urls as $url){
+
+    $handler->handle($url);
+}
+
+
+Что мы имеем:
+
+Отправитель запроса изолирован он получателя,
+Объект упрощен, поскольку ему не знать структуру цепочки и хранить прямые ссылки на ее елементы,
+Появилась возможность динамического добавления или удаления обязанностей, посредством изменения элементов цепочки или их порядка.
+
+
+////////////////////////////////////////////////////////////////////
+///////////////////////////Стратегия (Strategy)/////////////////////
+////////////////////////////////////////////////////////////////////
+
+Определение: определяет семейство алгоритмов, инкапсулирует каждый их них и обеспечивает их взаимозаменяемость.
+
+Стратегия позволяет модифицировать алгоритмы независимо от их использования на стороне клиента.
+
+Данный паттерн удовлетворяет сразу 3-м принципам проектирования:
+
+Инкапсулируйте то, что изменяется - создавая стратегию определите изменяющиеся аспекты и инкапсулируйте их, чтобы обезопасить код от случайных ошибок, вызванных непродуманным поведением переменного аспекта.
+Отдавайте предпочтение композиции перед наследованием - композиция более гибкий инструмент, нежели наследование. Часто необходимо наделить потомков какого-либо суперкласса схожим поведением, которое нельзя вынести в родительский класс, чтобы не переопределять методы других объектах, вот в таких-то случая не обойтись без композиции. Проблема в том, что это не всегда удается определить на стадии проектирования, вот поэтому всегда отдавайте предпочтение композиции.
+Программируйте на уровне интерфейсов, а не реализации - синоним другому принципу проектирования - "код должен зависеть от абстракций, а не от конкретных классов". Собственно работая с обобщениями, а не счастностями сложнее попасть в тупик дублирования кода, ведь главный принцип программиста - don't repeat your self.
+Диаграмма классов:
+
+Стратегия, пожалуй самый наиболее частоиспользуемый паттерн проектирования. Его не редко можно увидеть как в чистом виде, так и в частичном,- не всегда в коде имеются переменные аспекты, не всегда уместна композиция, в этом то и есть его преимущество: код, в который заложен паттерн стратегия очень гибок и не раз еще все его плюсы проявятся во время сопровождения кода.
+
+Рассмотрим использования стратегии на примере ролевой игры:
+
+Имеется абстрактный класс персонаж:
+
+abstract class Character {
+
+    /**
+    * У каждого героя есть свое оружие
+    * @var WeaponBehavior
+    */
+    public $weapon;
+
+    /**
+    * @name fight
+    * @todo Каждый герой умеет драться
+    * @return void
+    */
+    abstract public function fight();
+
+    /**
+    * @name setWeapon
+    * @todo Выдать оружие
+    * @param WeaponBehavior $weapon
+    */
+    public function setWeapon(WeaponBehavior $weapon){
+        $this->weapon = $weapon;
+    }
+}
+
+А вот и сами герои
+
+class King extends Character {
+
+    public function fight(){
+        //Реализация
+    }
+}
+
+class Queen extends Character {
+
+    public function fight(){
+        //Реализация
+    }
+}
+
+class Knight extends Character {
+
+    public function fight(){
+        //Реализация
+    }
+}
+
+class Troll extends Character {
+
+    public function fight(){
+        //Реализация
+    }
+}
+
+Вполне очевидно, что разные герои пользуются разным оружием:
+
+interface WeaponBehavior {
+
+    /**
+    * У каждого оружия тоже имеется собственноу поведение
+    */
+    public function useWeapon();
+}
+
+class SwordBehavior implements WeaponBehavior {
+
+    /**
+    * @name useWeapon
+    * @todo Удар мечом
+    */
+    public function useWeapon(){
+        //Реализация
+    }
+}
+
+class KnifeBehavior implements WeaponBehavior {
+
+    /**
+    * @name useWeapon
+    * @todo Удар ножом
+    */
+    public function useWeapon(){
+        //Реализация
+    }
+}
+
+class BowAndArrowBehavior implements WeaponBehavior {
+
+    /**
+    * @name useWeapon
+    * @todo Выстрел из лука
+    */
+    public function useWeapon(){
+        //Реализация
+    }
+}
+
+
+class AxeBehavior implements WeaponBehavior {
+
+    /**
+    * @name useWeapon
+    * @todo Удар топором
+    */
+    public function useWeapon(){
+        //Реализация
+    }
+}
+
+Начнем:
+
+$king = new King();
+$king->setWeapon(new SwordBehavior());
+
+$knight = new Knight();
+$knight->setWeapon(new BowAndArrowBehavior());
+
+$queen = new Queen();
+$queen->setWeapon(new KnifeBehavior());
+
+$queen = new Troll();
+$queen->setWeapon(new AxeBehavior());
+
+//Понеслась...
+$king->fight();
+$queen->fight();
+$troll->fight();
+$knight->fight();
+
