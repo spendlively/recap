@@ -94,7 +94,7 @@
                 <img src="logo/yii.png" />
             </div>
         </a>
-        <a href="#" title="Ардуино скетчи">
+        <a href="doc.php?path=arduino" title="Ардуино скетчи">
             <div class="div-logo" style="border: 4px dotted #2bb3dd;">
                 <img src="logo/arduino.png" />
             </div>

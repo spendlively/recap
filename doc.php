@@ -12,6 +12,7 @@ $docs = array(
     'architecture' => 'docs/architecture/architecture',
     'patterns' => 'docs/architecture/patterns',
     'algorithms' => 'docs/architecture/algorithms',
+    'arduino' => 'docs/arduino/arduino',
 );
 $content = array();
 
@@ -43,14 +44,22 @@ ob_end_clean();
     <?php if(!empty($content)){ ?>
         <?php
                 foreach($content as $c) {
-                    $c = str_replace(" ", "&nbsp;", $c);
-                    if(preg_match('@^//[^\\n]+@ui', $c, $matches)){
+//var_dump($c);
+//echo "<br />";
+//continue;
+//                    $c = str_replace(" ", " &nbsp;", $c);
+		    if($c === ""){
+			$c = "<br />";
+	  	    }
+                    elseif(preg_match('@^//[^\\n]+@ui', $c, $matches)){
                         if(!empty($matches[0])){
-                            $c = '<br /><strong>' . $matches[0] . '</strong>';
+                            $c = '<strong>' . $matches[0] . '</strong>';
                         }
                     }
+
+			
         ?>
-            <p><?= $c; ?></p>
+            <p><pre><?= $c; ?></pre></p>
         <?php } ?>
     <?php } ?>
 </div>
