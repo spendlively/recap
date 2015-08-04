@@ -9,10 +9,20 @@ $docs = array(
     'hg' => 'docs/hg/hg',
     'js' => 'docs/js/js',
     'php' => 'docs/php/php',
-    'architecture' => 'docs/architecture/architecture',
     'patterns' => 'docs/architecture/patterns',
-    'algorithms' => 'docs/architecture/algorithms',
     'arduino' => 'docs/arduino/arduino',
+    'architecture' => 'docs/books/fauler/corporate/architecture',
+    'algorithms' => 'docs/books/algorithms/algorithms',
+    'cleancode' => 'docs/books/cleancode/cleancode',
+    'extreme' => 'docs/books/extreme/extreme',
+    'perfect' => 'docs/books/perfect/perfect',
+    'artofprogramming' => 'docs/books/artofprogramming/artofprogramming',
+    'nosql' => 'docs/books/nosql/nosql',
+    'designpatterns' => 'docs/books/designpatterns/designpatterns',
+    'pragmatic' => 'docs/books/pragmatic/pragmatic',
+    'refactoring' => 'docs/books/refactoring/refactoring',
+    'structure' => 'docs/books/structure/structure',
+    'ddd' => 'docs/books/ddd/ddd',
 );
 $content = array();
 

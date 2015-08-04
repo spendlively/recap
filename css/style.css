@@ -75,3 +75,9 @@ div.div-logo img {
     background: url(../images/toplink.gif?3) no-repeat left 3px;
 }
 /*END Стили VK для панельки слева "Наверк"*/
+
+.book_link{
+    color: #000000;
+    font-size: 18px;
+    padding-bottom: 20px;
+}
