@@ -1,21 +1,6 @@
 $(document).ready(function(){
 
-
-    function getWindowSize(){
-        var e = document.documentElement,
-            g = document.getElementsByTagName('body')[0],
-            x = window.innerWidth || e.clientWidth || g.clientWidth,
-            y = window.innerHeight|| e.clientHeight|| g.clientHeight;
-
-        return [x, y];
-    }
-
-    $( window ).resize(function() {
-//        var size = getWindowSize();
-//        alert(size[1]);
-//        console.log(size);
-    });
-
+    //Обработчик клика кнопки перехода на главную
     $('#stl_bg').click(function() {
         var location = document.location.href,
             href = document.location.href.split('/'),
@@ -23,4 +8,17 @@ $(document).ready(function(){
 
         document.location = goBackHref;
     });
+
+    //Сокрытие/открытие кнопки перехода на главную
+    var buttonIsHidden = true;
+    $(document).mousemove(function(event) {
+        if(event.pageX < 100 && buttonIsHidden === true){
+            $('#stl_left').show(500);
+            buttonIsHidden = false;
+        }
+    });
+    $( "#stl_left" ).mouseout(function() {
+            $('#stl_left').hide(500);
+            buttonIsHidden = true;
+        });
 });
