@@ -9,16 +9,20 @@ $(document).ready(function(){
         document.location = goBackHref;
     });
 
-    //Сокрытие/открытие кнопки перехода на главную
+    //Флажок состояния кнопки перехода на главную
     var buttonIsHidden = true;
+
+    //Анимация появления кнопки перехода на главную
     $(document).mousemove(function(event) {
         if(event.pageX < 100 && buttonIsHidden === true){
             $('#stl_left').show(500);
             buttonIsHidden = false;
         }
     });
-    $( "#stl_left" ).mouseout(function() {
-            $('#stl_left').hide(500);
-            buttonIsHidden = true;
-        });
+
+    //Анимация исчезания кнопки перехода на главную
+    $("#stl_left").mouseout(function(q) {
+        $('#stl_left').hide(500);
+        buttonIsHidden = true;
+    });
 });
