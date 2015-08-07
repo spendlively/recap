@@ -361,3 +361,7 @@ find . -type f -print -exec convmv --notest -f cp1251 -t utf8 {} \;
 //Восстановление данных с отформатированной флешки
 sudo apt-get install testdisk
 sudo photorec
+
+//Изменение часового пояса в ubuntu
+dpkg-reconfigure tzdata
+
