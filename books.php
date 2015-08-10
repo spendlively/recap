@@ -1,4 +1,7 @@
-<?php header('Content-Type: text/html; charset=utf-8'); ?>
+<?php
+    header('Content-Type: text/html; charset=utf-8');
+    $content = include 'content.php';
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,66 +18,13 @@
         </div>
     </div>
     <div id="wrapper">
-        <a href="doc.php?path=algorithms" title="Алгоритмы. Построение и анализ Авторы: Томас Кормен, Чарльз Лейзерсон, Рональд">
-            <div class="div-logo" style="border: 4px dotted #000000;">
-                <img src="logo/books/algo.png" />
-            </div>
-        </a>
-        <a href="doc.php?path=architecture" title="Архитектура корпоративных приложений (М. Фаулер)">
-            <div class="div-logo" style="border: 4px dotted #000000;">
-                <img src="logo/books/architect.png" />
-            </div>
-        </a>
-        <a href="doc.php?path=cleancode" title="Чистый код Р. Мартин">
-            <div class="div-logo" style="border: 4px dotted #000000;">
-                <img src="logo/books/clean.png" />
-            </div>
-        </a>
-        <a href="doc.php?path=extreme" title="Экстремальное программирование: разработка через тестирование. Кент Бек. (Test-driven Development by Example).">
-            <div class="div-logo" style="border: 4px dotted #000000;">
-                <img src="logo/books/exstreme.png" />
-            </div>
-        </a>
-        <a href="doc.php?path=perfect" title="Совершенный код С. Макконнелл">
-            <div class="div-logo" style="border: 4px dotted #000000;">
-                <img src="logo/books/ideal.png" />
-            </div>
-        </a>
-        <a href="doc.php?path=artofprogramming" title="Искусство программирования Д. Кнут">
-            <div class="div-logo" style="border: 4px dotted #000000;">
-                <img src="logo/books/knut.png" />
-            </div>
-        </a>
-        <a href="doc.php?path=nosql" title="NoSQL Distilled Мартин Фаулер">
-            <div class="div-logo" style="border: 4px dotted #000000;">
-                <img src="logo/books/nosql.png" />
-            </div>
-        </a>
-        <a href="doc.php?path=designpatterns" title="Паттерны проектирования Э. Гамма, Р. Хелм, Р. Джонсон, Д. Влиссидес">
-            <div class="div-logo" style="border: 4px dotted #000000;">
-                <img src="logo/books/oop.png" />
-            </div>
-        </a>
-        <a href="doc.php?path=pragmatic" title="Программист-прагматик Э. Хант, Д. Томас">
-            <div class="div-logo" style="border: 4px dotted #000000;">
-                <img src="logo/books/pragmatik.png" />
-            </div>
-        </a>
-        <a href="doc.php?path=refactoring" title="Рефакторинг. Улучшение существующего кода (Мартин Фаулер)">
-            <div class="div-logo" style="border: 4px dotted #000000;">
-                <img src="logo/books/refact.png" />
-            </div>
-        </a>
-        <a href="doc.php?path=structure" title="Структура и Интерпретация Компьютерных Программ Авторы: Харольд Абельсон, Джеральд Джей Сассман">
-            <div class="div-logo" style="border: 4px dotted #000000;">
-                <img src="logo/books/structure.png" />
-            </div>
-        </a>
-        <a href="doc.php?path=ddd" title="Предметно-ориентированное проектирование (DDD). Структуризация сложных программных систем. Ерик Эванс. (Tackling Complexity in the Heart of Software)">
-            <div class="div-logo" style="border: 4px dotted #000000;">
-                <img src="logo/books/ddd.png" />
-            </div>
-        </a>
+        <?php foreach($content['books']['items'] as $block) { ?>
+            <a href="<?= $block['href'] ?>" title="<?= $block['title'] ?>">
+                <div class="div-logo" style="<?= $block['style'] ?>">
+                    <img src="<?= $block['img'] ?>" />
+                </div>
+            </a>
+        <?php } ?>
     </div>
 </body>
 </html>

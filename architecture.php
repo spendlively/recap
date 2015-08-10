@@ -1,4 +1,7 @@
-<?php header('Content-Type: text/html; charset=utf-8'); ?>
+<?php
+    header('Content-Type: text/html; charset=utf-8');
+    $content = include 'content.php';
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,11 +17,13 @@
         </div>
     </div>
     <div id="wrapper">
-        <a href="doc.php?path=patterns" title="ООП Шаблоны проектирования">
-            <div class="div-logo" style="border: 4px dotted #004b62;">
-                <img src="logo/mvc.png" />
-            </div>
-        </a>
+        <?php foreach($content['proectirovanie']['items'] as $block) { ?>
+            <a href="<?= $block['href'] ?>" title="<?= $block['title'] ?>">
+                <div class="div-logo" style="<?= $block['style'] ?>">
+                    <img src="<?= $block['img'] ?>" />
+                </div>
+            </a>
+        <?php } ?>
     </div>
 </body>
 </html>
