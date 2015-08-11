@@ -1,3 +1,115 @@
+//СОЗДАНИЕ КОНСТРУКТОРА (КЛАССА)
+function c1(){};
+var c2 = function(){},
+    o1 = new c1(),
+    o2 = new c2();
+console.log(o1, o2);
+
+//3 СПОСОБА СОЗДАНИЕ ОБЪЕКТА
+function c1(name){this.name = name;};
+var o1 = new c1('o1'),
+    o2 = {
+        name: 'o2'
+    },
+    o3 = Object.create(null);
+console.log(o1.__proto__); //c1{}
+console.log(o2.__proto__); //Object
+console.log(o3.__proto__); //undefined
+
+//ПРОТОТИПНОЕ НАСЛЕДОВАНИЕ
+//Простой способ (deprecated)
+var parent = {};
+var child = {};
+child.__proto__ = parent;
+//Простой способ с использованием конструкторов (deprecated)
+function parent(){};
+function child(){};
+var c = new child();
+c.__proto__ = parent.prototype;
+//Создание объекта с указанием прототипа
+var parent = {};
+var child = Object.create(parent);
+//Использование конструкторов
+function parent(){};
+function child(){};
+child.prototype = new parent();
+//Самый правильный способ - использование функции
+function inherit(child, parent){
+    function f(){};
+    f.prototype = parent.prototype;
+    child.prototype = new f();
+    //плюшки
+    child.prototype.constructor = child;
+    child.superclass = parent.prototype;
+    return child;
+}
+
+//ЦЕПОЧКА ПРОТОТИПОВ
+Конечная цепь объектов, которая используется для организации наследования
+function parent(){};
+function child(){};
+child.prototype = new parent();
+var c = new child();
+console.log(c.__proto__.__proto__.__proto__.__proto__ === null); //child->parent->Object->null
+
+
+//__proto__ vs prototype
+__proto__ - свойство объекта //использование нежелательно, т.к. deprecated
+prototype - свойство конструктора (класса)
+
+//ОПЕРАТОР NEW
+1. СОздает пустой объект с единственным свойством __proto__
+2. Выполняет конструктор, в котором this - созданные ранее объект
+3. Возвращает объект
+function New(cls, args){
+    var n = {'__proto__': cls.prototype}; //1
+    cls.apply(n, args); //2
+    return n;
+}
+
+//INSTANCEOF
+Использует цепочку прототипов для определения порожден ли объект конструктором
+function grandParent(){};
+function parent(){};
+function child(){};
+parent.prototype = new grandParent();
+child.prototype = new parent();
+var c = new child();
+console.log(c instanceof parent); //true
+console.log(c instanceof grandParent);  //true
+
+//СВОЙСТВО this
+Указывает на текущий создаваемый конструктором объект.
+1. Если метод вызывается напрямую (без call, apply, with, bind, try catch),
+то this будет указывать на объект, который стоит слева от точки, иначе объект, указанный в функции.
+2. Если вызывается на прямую (без точки) - this будет равняться undefuned, null или window(global).
+
+//this vs self
+
+//extend
+
+//with
+var a = 3,
+    obj = {b:2};
+
+with (obj){
+    console.log(a+b); //5 (не работает с "use strict")
+}
+
+//Замыкания
+
+//call, apply, bind
+
+//async vs defer
+
+//Функции: slice, split, join, sort, reverse, shift, unshift, delete 
+
+//Date
+
+//Модули
+
+//Декораторы
+
 //Получение размеров страницы
 function getWindowSize(){
     var e = document.documentElement,
