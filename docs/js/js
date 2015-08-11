@@ -5,7 +5,7 @@ var c2 = function(){},
     o2 = new c2();
 console.log(o1, o2);
 
-//3 СПОСОБА СОЗДАНИЕ ОБЪЕКТА
+//3 СПОСОБА СОЗДАНИЯ ОБЪЕКТА
 function c1(name){this.name = name;};
 var o1 = new c1('o1'),
     o2 = {
@@ -85,8 +85,6 @@ console.log(c instanceof grandParent);  //true
 2. Если вызывается на прямую (без точки) - this будет равняться undefuned, null или window(global).
 
 //this vs self
-
-//extend
 
 //with
 var a = 3,
