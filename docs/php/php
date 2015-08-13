@@ -35,6 +35,20 @@ $generator = gen4();
 echo $generator->current();
 $generator->send(", World!");
 
+//Правильное закрытие дескриптора файла в фукции, возвращающей генератор
+function readErrorLog(){
+    try{
+        $f = fopen('/var/log/apache2/error.log', 'r');
+        while(!feof($f)){
+            yield fgets($f);
+        }
+    } finally {
+        fclose($f);
+    }
+}
+foreach(readErrorLog() as $line){
+    echo $line . PHP_EOF;
+}
 
 //Созданиe дочернего процесса php с помощью расширения pcntl
 $pid = pcntl_fork();
