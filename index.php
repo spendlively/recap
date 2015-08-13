@@ -1,6 +1,10 @@
 <?php
     header('Content-Type: text/html; charset=utf-8');
     $content = include 'content.php';
+    require_once 'vendor/Reminder.php';
+
+    $reminder = new \vendor\Reminder();
+    $activeItem = $reminder->getActiveItem();
 ?>
 <!DOCTYPE html>
 <html>
@@ -17,9 +21,11 @@
         </div>
     </div>
     <div id="wrapper">
-        <?php foreach($content as $block) { ?>
+        <?php foreach($content as $b => $block) {
+            $style = $activeItem[1] === $b ? $reminder->getActiveItemStyle() : $block['style'];
+        ?>
             <a href="<?= $block['href'] ?>" title="<?= $block['title'] ?>">
-                <div class="div-logo" style="<?= $block['style'] ?>">
+                <div class="div-logo" style="<?= $style ?>">
                     <img src="<?= $block['img'] ?>" />
                 </div>
             </a>

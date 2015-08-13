@@ -7,6 +7,7 @@ return array(
         'style' =>'border: 4px dotted #000000;',
         'img' =>'logo/linux.png',
         'cls' =>'div-logo',
+        'activable' => true,
         'items' => array(),
     ),
     'php' => array(
@@ -15,6 +16,7 @@ return array(
         'style' =>'border: 4px dotted #8ba9d9;',
         'img' =>'logo/php.png',
         'cls' =>'div-logo',
+        'activable' => true,
         'items' => array(),
     ),
     'mysql' => array(
@@ -23,6 +25,7 @@ return array(
         'style' =>'border: 4px dotted #004b62;',
         'img' =>'logo/mysql.png',
         'cls' =>'div-logo',
+        'activable' => true,
         'items' => array(),
     ),
     'proectirovanie' => array(
@@ -31,6 +34,7 @@ return array(
         'style' =>'border: 4px dotted #004b62;',
         'img' =>'logo/design.png',
         'cls' =>'div-logo',
+        'activable' => true,
         'items' => array(
             'patterns' => array(
                 'title' => 'ООП Шаблоны проектирования',
@@ -38,6 +42,7 @@ return array(
                 'style' =>'border: 4px dotted #004b62;',
                 'img' =>'logo/mvc.png',
                 'cls' =>'div-logo',
+                'activable' => true,
                 'items' => array(),
             ),
         ),
@@ -48,6 +53,7 @@ return array(
         'style' =>'border: 4px dotted #000000;',
         'img' =>'logo/htmlcss.png',
         'cls' =>'div-logo',
+        'activable' => false,
         'items' => array(),
     ),
     'javascript' => array(
@@ -56,6 +62,7 @@ return array(
         'style' =>'border: 4px dotted #3dade9;',
         'img' =>'logo/javascript.png',
         'cls' =>'div-logo',
+        'activable' => true,
         'items' => array(
             'js' => array(
                 'title' => 'JavaScript',
@@ -63,6 +70,7 @@ return array(
                 'style' =>'border: 4px dotted #3dade9;',
                 'img' =>'logo/javascript.png',
                 'cls' =>'div-logo',
+                'activable' => true,
                 'items' => array(),
             ),
             'jquery' => array(
@@ -71,6 +79,7 @@ return array(
                 'style' =>'border: 4px dotted #0868ab;',
                 'img' =>'logo/jqurery.png',
                 'cls' =>'div-logo',
+                'activable' => false,
                 'items' => array(),
             ),
             'extjs' => array(
@@ -79,6 +88,7 @@ return array(
                 'style' =>'border: 4px dotted #009900;',
                 'img' =>'logo/extjs.png',
                 'cls' =>'div-logo',
+                'activable' => false,
                 'items' => array(),
             ),
             'angular' => array(
@@ -87,6 +97,7 @@ return array(
                 'style' =>'border: 4px dotted #e23237;',
                 'img' =>'logo/angular.png',
                 'cls' =>'div-logo',
+                'activable' => false,
                 'items' => array(),
             ),
             'backbone' => array(
@@ -95,6 +106,7 @@ return array(
                 'style' =>'border: 4px dotted #0072b9;',
                 'img' =>'logo/backbone.png',
                 'cls' =>'div-logo',
+                'activable' => false,
                 'items' => array(),
             ),
             'knockout' => array(
@@ -103,6 +115,7 @@ return array(
                 'style' =>'border: 4px dotted #000000;',
                 'img' =>'logo/knockout.png',
                 'cls' =>'div-logo',
+                'activable' => false,
                 'items' => array(),
             ),
             'ember' => array(
@@ -111,6 +124,7 @@ return array(
                 'style' =>'border: 4px dotted #ff492b;',
                 'img' =>'logo/ember.png',
                 'cls' =>'div-logo',
+                'activable' => false,
                 'items' => array(),
             ),
             'react' => array(
@@ -119,6 +133,7 @@ return array(
                 'style' =>'border: 4px dotted #00dbfb;',
                 'img' =>'logo/react.png',
                 'cls' =>'div-logo',
+                'activable' => false,
                 'items' => array(),
             ),
             'dojo' => array(
@@ -127,6 +142,7 @@ return array(
                 'style' =>'border: 4px dotted #000000;',
                 'img' =>'logo/dojo.png',
                 'cls' =>'div-logo',
+                'activable' => false,
                 'items' => array(),
             ),
         ),
@@ -137,6 +153,7 @@ return array(
         'style' =>'border: 4px dotted #0fb700;',
         'img' =>'logo/zf.png',
         'cls' =>'div-logo',
+        'activable' => false,
         'items' => array(),
     ),
     'bootstrap' => array(
@@ -145,6 +162,7 @@ return array(
         'style' =>'border: 4px dotted #00a7d4;',
         'img' =>'logo/bootstrap.png',
         'cls' =>'div-logo',
+        'activable' => false,
         'items' => array(),
     ),
     'doctrine' => array(
@@ -153,6 +171,7 @@ return array(
         'style' =>'border: 4px dotted #ff852f;',
         'img' =>'logo/doctrine.png',
         'cls' =>'div-logo',
+        'activable' => false,
         'items' => array(),
     ),
     'git' => array(
@@ -161,6 +180,7 @@ return array(
         'style' =>'border: 4px dotted #ff3929;',
         'img' =>'logo/git.png',
         'cls' =>'div-logo',
+        'activable' => true,
         'items' => array(),
     ),
     'hg' => array(
@@ -169,6 +189,7 @@ return array(
         'style' =>'border: 4px dotted #999999;',
         'img' =>'logo/hg.png',
         'cls' =>'div-logo',
+        'activable' => true,
         'items' => array(),
     ),
     'mongo' => array(
@@ -177,6 +198,7 @@ return array(
         'style' =>'border: 4px dotted #009900;',
         'img' =>'logo/mongo.png',
         'cls' =>'div-logo',
+        'activable' => false,
         'items' => array(),
     ),
     'redis' => array(
@@ -185,6 +207,7 @@ return array(
         'style' =>'border: 4px dotted #bb1207;',
         'img' =>'logo/redis.png',
         'cls' =>'div-logo',
+        'activable' => false,
         'items' => array(),
     ),
     'smarty' => array(
@@ -193,6 +216,7 @@ return array(
         'style' =>'border: 4px dotted #ffc12b; background: #ffc12b;',
         'img' =>'logo/smarty.png',
         'cls' =>'div-logo',
+        'activable' => false,
         'items' => array(),
     ),
     'sphinx' => array(
@@ -201,6 +225,7 @@ return array(
         'style' =>'border: 4px dotted #2bb3dd;',
         'img' =>'logo/sphinx.png',
         'cls' =>'div-logo',
+        'activable' => false,
         'items' => array(),
     ),
     'yii' => array(
@@ -209,6 +234,7 @@ return array(
         'style' =>'border: 4px dotted #2bb3dd;',
         'img' =>'logo/yii.png',
         'cls' =>'div-logo',
+        'activable' => false,
         'items' => array(),
     ),
     'arduino' => array(
@@ -217,14 +243,16 @@ return array(
         'style' =>'border: 4px dotted #2bb3dd;',
         'img' =>'logo/arduino.png',
         'cls' =>'div-logo',
+        'activable' => true,
         'items' => array(),
     ),
     'c' => array(
         'title' => 'Си++',
-        'href' => 'doc.php?path=arduino',
+        'href' => '#',
         'style' =>'border: 4px dotted #004381;',
         'img' =>'logo/cpp.png',
         'cls' =>'div-logo',
+        'activable' => false,
         'items' => array(),
     ),
     'books' => array(
@@ -233,6 +261,7 @@ return array(
         'style' =>'border: 4px dotted #561311;',
         'img' =>'logo/books.png',
         'cls' =>'div-logo',
+        'activable' => true,
         'items' => array(
             'algorithms' => array(
                 'title' => 'Алгоритмы. Построение и анализ Авторы: Томас Кормен, Чарльз Лейзерсон, Рональд',
@@ -240,6 +269,7 @@ return array(
                 'style' =>'border: 4px dotted #000000;',
                 'img' =>'logo/books/algo.png',
                 'cls' =>'div-logo',
+                'activable' => false,
                 'items' => array(),
             ),
             'architecture' => array(
@@ -248,6 +278,7 @@ return array(
                 'style' =>'border: 4px dotted #000000;',
                 'img' =>'logo/books/architect.png',
                 'cls' =>'div-logo',
+                'activable' => false,
                 'items' => array(),
             ),
             'cleancode' => array(
@@ -256,6 +287,7 @@ return array(
                 'style' =>'border: 4px dotted #000000;',
                 'img' =>'logo/books/clean.png',
                 'cls' =>'div-logo',
+                'activable' => false,
                 'items' => array(),
             ),
             'extreme' => array(
@@ -264,6 +296,7 @@ return array(
                 'style' =>'border: 4px dotted #000000;',
                 'img' =>'logo/books/exstreme.png',
                 'cls' =>'div-logo',
+                'activable' => false,
                 'items' => array(),
             ),
             'perfect' => array(
@@ -272,6 +305,7 @@ return array(
                 'style' =>'border: 4px dotted #000000;',
                 'img' =>'logo/books/ideal.png',
                 'cls' =>'div-logo',
+                'activable' => false,
                 'items' => array(),
             ),
             'artofprogramming' => array(
@@ -280,6 +314,7 @@ return array(
                 'style' =>'border: 4px dotted #000000;',
                 'img' =>'logo/books/knut.png',
                 'cls' =>'div-logo',
+                'activable' => false,
                 'items' => array(),
             ),
             'nosql' => array(
@@ -288,6 +323,7 @@ return array(
                 'style' =>'border: 4px dotted #000000;',
                 'img' =>'logo/books/nosql.png',
                 'cls' =>'div-logo',
+                'activable' => true,
                 'items' => array(),
             ),
             'designpatterns' => array(
@@ -296,6 +332,7 @@ return array(
                 'style' =>'border: 4px dotted #000000;',
                 'img' =>'logo/books/oop.png',
                 'cls' =>'div-logo',
+                'activable' => false,
                 'items' => array(),
             ),
             'pragmatic' => array(
@@ -304,6 +341,7 @@ return array(
                 'style' =>'border: 4px dotted #000000;',
                 'img' =>'logo/books/pragmatik.png',
                 'cls' =>'div-logo',
+                'activable' => false,
                 'items' => array(),
             ),
             'refactoring' => array(
@@ -312,6 +350,7 @@ return array(
                 'style' =>'border: 4px dotted #000000;',
                 'img' =>'logo/books/refact.png',
                 'cls' =>'div-logo',
+                'activable' => false,
                 'items' => array(),
             ),
             'structure' => array(
@@ -320,6 +359,7 @@ return array(
                 'style' =>'border: 4px dotted #000000;',
                 'img' =>'logo/books/structure.png',
                 'cls' =>'div-logo',
+                'activable' => false,
                 'items' => array(),
             ),
             'ddd' => array(
@@ -328,6 +368,7 @@ return array(
                 'style' =>'border: 4px dotted #000000;',
                 'img' =>'logo/books/ddd.png',
                 'cls' =>'div-logo',
+                'activable' => false,
                 'items' => array(),
             ),
         ),

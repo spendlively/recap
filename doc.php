@@ -51,27 +51,23 @@ ob_end_clean();
 </div>
 <div class="doc">
     <h1><?= $path; ?></h1>
-    <?php if(!empty($content)){ ?>
-        <?php
-                foreach($content as $c) {
-//var_dump($c);
-//echo "<br />";
-//continue;
-//                    $c = str_replace(" ", " &nbsp;", $c);
-		    if($c === ""){
-			$c = "<br />";
-	  	    }
-                    elseif(preg_match('@^//[^\\n]+@ui', $c, $matches)){
-                        if(!empty($matches[0])){
-                            $c = '<strong>' . $matches[0] . '</strong>';
-                        }
+    <?php
+        if(!empty($content)){
+            foreach($content as $c) {
+		        if($c === ""){
+                    $c = "<br />";
+                }
+                elseif(preg_match('@^//[^\\n]+@ui', $c, $matches)){
+                    if(!empty($matches[0])){
+                        $c = '<strong>' . $matches[0] . '</strong>';
                     }
-
-			
-        ?>
-            <p><pre><?= $c; ?></pre></p>
+                }
+    ?>
+    <p><pre><?= $c; ?></pre></p>
         <?php } ?>
     <?php } ?>
+
+    <input id="iread" type="button" value="Прочитал!">
 </div>
 </body>
 </html>
