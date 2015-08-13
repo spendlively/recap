@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    $('input#iread').click(function(){
+    $('input#ireadbtn').click(function(){
         $.post("nextItem.php");
     });
 });

@@ -67,7 +67,7 @@ ob_end_clean();
         <?php } ?>
     <?php } ?>
 
-    <input id="iread" type="button" value="Прочитал!">
+    <div id="iread"><input id="ireadbtn" type="button" value="Прочитал!"></div>
 </div>
 </body>
 </html>
