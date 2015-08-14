@@ -39,6 +39,7 @@ ob_end_clean();
     <title>Конспекты</title>
     <link href="css/style.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="css/doc.css" type="text/css" />
+    <link rel="stylesheet" href="css/print.css" type="text/css" media="print" />
     <script src="js/jquery-1.11.3.min.js"></script>
     <script src="js/doc.js"></script>
     <script src="js/app.js"></script>
