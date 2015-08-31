@@ -84,7 +84,7 @@ return array(
             ),
             'extjs' => array(
                 'title' => 'extjs',
-                'href' => '#',
+                'href' => 'doc.php?path=extjs',
                 'style' =>'border: 4px dotted #009900;',
                 'img' =>'logo/extjs.png',
                 'cls' =>'div-logo',

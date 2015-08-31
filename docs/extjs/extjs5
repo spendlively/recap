@@ -1,0 +1,15 @@
+//Иниуиализация приложения
+Ext.application({
+    name: 'MyApp',
+    launch: function(){}
+});
+
+//Callback при загрузке класса
+Ext.define('Test', {
+    constructor: function(){
+        console.log('CONSTRUCTOR')
+    }
+}, function(){
+    console.log('CALLBACK')
+});
+

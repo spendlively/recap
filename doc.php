@@ -23,6 +23,7 @@ $docs = array(
     'refactoring' => 'docs/books/refactoring/refactoring',
     'structure' => 'docs/books/structure/structure',
     'ddd' => 'docs/books/ddd/ddd',
+    'extjs' => 'docs/extjs/extjs5',
 );
 $content = array();
 
