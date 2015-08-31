@@ -13,3 +13,26 @@ Ext.define('Test', {
     console.log('CALLBACK')
 });
 
+//Сonfig, геттеры и сеттеры
+Ext.define('My.own.Window', {
+    extend: 'Ext.window.Window',
+    isWindow: true,
+    config: {
+        title: 'Title Here'
+    },
+    applyTitle: function(title) {
+        if (!this.title && title){
+            this.title = title;
+        }
+    }
+});
+var myWindow = Ext.create('My.own.Window', {
+     renderTo: Ext.getBody(),
+     width: 200,
+     height: 150,
+     bodyPadding: 5,
+     html: 'HTML'
+});
+myWindow.setTitle('TITLE');
+myWindow.show();
+console.log(myWindow.getTitle());
