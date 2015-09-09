@@ -24,6 +24,7 @@ $docs = array(
     'structure' => 'docs/books/structure/structure',
     'ddd' => 'docs/books/ddd/ddd',
     'extjs' => 'docs/extjs/extjs5',
+    'htmlcss' => 'docs/htmlcss/htmlcss',
 );
 $content = array();
 

@@ -1,7 +1,29 @@
-//Иниуиализация приложения
-Ext.application({
-    name: 'MyApp',
-    launch: function(){}
+//Дебаг классов в Extjs
+Ext.define('BufferInfo', {
+    override: 'Ext.grid.plugin.BufferedRenderer',
+    setBodyTop: function(bodyTop) {
+        debugger;
+        this.callParent(arguments);
+    }
+});
+
+//Инициализация приложения
+Ext.onReady(function(){
+    Ext.application({
+        name: 'MyApp',
+        launch: function(){}
+    });
+});
+
+//Инициализация viewport
+Ext.onReady(function(){
+    var childPanel = Ext.create('Ext.panel.Panel', {
+        title: 'Child Panel 1',
+        html: 'A Panel'
+    });
+    Ext.create('Ext.container.Viewport', {
+        items: [childPanel]
+    });
 });
 
 //Callback при загрузке класса
@@ -36,3 +58,58 @@ var myWindow = Ext.create('My.own.Window', {
 myWindow.setTitle('TITLE');
 myWindow.show();
 console.log(myWindow.getTitle());
+
+//Создание собственного компонента
+Ext.define('Ext.ux.Image', {
+    extend: 'Ext.Component',
+    alias: 'widget.managedimage',
+    autoEl: {
+        tag: 'img',
+        src: Ext.BLANK_IMAGE_URL,
+        cls: 'my-managed-image'
+    },
+    onRender: function() {
+        this.autoEl = Ext.apply({}, this.initialConfig, this.autoEl);
+        this.callParent(arguments);
+        this.el.on('load', this.onLoad, this);
+    },
+    onLoad: function() {
+        this.fireEvent('load', this);
+    },
+    setSrc: function(src) {
+        if (this.rendered) {
+            this.el.dom.src = src;
+        } else {
+            this.src = src;
+        }
+    },
+    getSrc: function(src) {
+        return this.el.dom.src || this.src;
+    }
+});
+var image = Ext.create('Ext.ux.Image');
+Ext.create('Ext.panel.Panel', {
+    title: 'Image Panel',
+    height: 200,
+    renderTo: Ext.getBody(),
+    items: [ image ]
+});
+image.on('load', function() {
+    console.log('image loaded: ', image.getSrc());
+});
+image.setSrc('http://www.sencha.com/img/sencha-large.png');
+
+//Обновление layout вручную
+var container = Ext.create('Ext.panel.Panel', {
+    renderTo: Ext.getBody(),
+    width: 400,
+    height: 200,
+    title: 'Parent',
+    suspendLayout: true
+});
+container.add({
+    xtype: 'panel',
+    title: 'Child'
+});
+container.suspendLayout = false;
+container.updateLayout();

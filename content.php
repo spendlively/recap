@@ -49,7 +49,7 @@ return array(
     ),
     'htmlcss' => array(
         'title' => 'HTML5 и CSS3',
-        'href' => '#',
+        'href' => 'doc.php?path=htmlcss',
         'style' =>'border: 4px dotted #000000;',
         'img' =>'logo/htmlcss.png',
         'cls' =>'div-logo',
