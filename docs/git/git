@@ -12,6 +12,25 @@ git commit -m "Коммичу первый коммит"
 git remote add origin https://github.com/spendlively/recap.git
 git push -u origin master
 
+//Работа с github и composer
+//Создание публичного ssh-ключа
+cd ~/.ssh/
+ls -al
+ssh-keygen -t rsa
+ls -al
+cat id_rsa.pub (скопировать от начала до конца "ssh-rsa ... spendlively@spendlively-System-Product-Name")
+//Отправка ключа в гитхаб
+1. Edit profile (зеленая кнопка справа)
+2. SSH keys (В списке справа)
+3. delete (Удалить ненужный/старый ключ)
+4. Add SSh key (Добавить ssh-ключ - вставить из пункта 1)
+//Слияния master с веткой 1, созданной Composer'ом
+git branch
+git checkout master
+git merge 1
+git status
+git push -u origin master
+
 //Клонирование репозитория
 mkdir -m 777 GIT
 cd GIT/
