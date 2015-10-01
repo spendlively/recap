@@ -117,3 +117,11 @@ function getWindowSize(){
 
     return [x, y];
 }
+
+//Определение геолокации
+function showPosition(position) {
+    console.log("Широта: " + position.coords.latitude);
+    console.log("Долгота: " + position.coords.longitude); 
+}
+navigator.geolocation.getCurrentPosition(showPosition);
+
