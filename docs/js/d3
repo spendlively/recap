@@ -1,0 +1,36 @@
+//<a target="_blank" href="https://github.com/mbostock/d3/wiki/API-Reference">Документация по d3.js</a>
+
+//Простое создание html-элемента
+d3.select('body').append('div').classed('my-class', true);
+
+//Создание html разметки и привязка данных
+var data = [1,2,3,4,5];
+d3.
+    select('body').             //Делаем выборку элемента body
+    selectAll('div').           //Выбираем подмножество всех div (которые еще не существует)
+    data(data).                 //Связываем выборку с массивом данных
+    enter().                    //Выбираем подмножество добавляемых элементов
+    append('div').              //Добавляем новые элементы div
+    text(function(d){
+        return 'Test ' + d;
+    }).                         //Добавляем содержимое
+    attr('class', 'my-p').      //Добавляем класс
+    style({
+        color: 'red'
+    }).                         //Добавляем стиль
+    style('width', function(d){
+        return d*10 + 'px';
+    });                         //Добавляем с использованием анонимной функции
+
+//Анимация 1сек.
+d3.select('body').append('div').
+    style({
+       width: '100px',
+       height: '100px',
+       background: 'red'
+    }).
+    transition().
+    duration(1000).
+    style('width', '200px');
+
+//

@@ -25,6 +25,8 @@ $docs = array(
     'ddd' => 'docs/books/ddd/ddd',
     'extjs' => 'docs/extjs/extjs5',
     'htmlcss' => 'docs/htmlcss/htmlcss',
+    'd3' => 'docs/js/d3',
+    'android' => 'docs/java/android/android',
 );
 $content = array();
 
