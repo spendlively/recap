@@ -110,6 +110,15 @@ return array(
                 'activable' => false,
                 'items' => array(),
             ),
+            'jasmine' => array(
+                'title' => 'Jasmine: Behavior-Driven JavaScript',
+                'href' => 'doc.php?path=jasmine',
+                'style' =>'border: 4px dotted #c1574f;',
+                'img' =>'logo/jasmine.png',
+                'cls' =>'div-logo',
+                'activable' => false,
+                'items' => array(),
+            ),
             'extjs' => array(
                 'title' => 'extjs',
                 'href' => 'doc.php?path=extjs',

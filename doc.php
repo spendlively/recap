@@ -8,6 +8,7 @@ $docs = array(
     'git' => 'docs/git/git',
     'hg' => 'docs/hg/hg',
     'js' => 'docs/js/js',
+    'jasmine' => 'docs/js/jasmine',
     'php' => 'docs/php/php',
     'phpunit' => 'docs/php/phpunit',
     'patterns' => 'docs/architecture/patterns',
