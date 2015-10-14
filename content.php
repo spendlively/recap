@@ -12,12 +12,31 @@ return array(
     ),
     'php' => array(
         'title' => 'PHP: Hypertext Preprocessor',
-        'href' => 'doc.php?path=php',
+        'href' => 'php.php',
         'style' =>'border: 4px dotted #8ba9d9;',
         'img' =>'logo/php.png',
         'cls' =>'div-logo',
         'activable' => true,
-        'items' => array(),
+        'items' => array(
+            'php' => array(
+                'title' => 'PHP: Hypertext Preprocessor',
+                'href' => 'doc.php?path=php',
+                'style' =>'border: 4px dotted #8ba9d9;',
+                'img' =>'logo/php.png',
+                'cls' =>'div-logo',
+                'activable' => true,
+                'items' => array(),
+            ),
+            'phpunit' => array(
+                'title' => 'PHP: Hypertext Preprocessor',
+                'href' => 'doc.php?path=phpunit',
+                'style' =>'border: 4px dotted #8ba9d9;',
+                'img' =>'logo/phpunit.png',
+                'cls' =>'div-logo',
+                'activable' => true,
+                'items' => array(),
+            ),
+        ),
     ),
     'mysql' => array(
         'title' => 'MySQL',

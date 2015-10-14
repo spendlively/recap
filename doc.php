@@ -9,6 +9,7 @@ $docs = array(
     'hg' => 'docs/hg/hg',
     'js' => 'docs/js/js',
     'php' => 'docs/php/php',
+    'phpunit' => 'docs/php/phpunit',
     'patterns' => 'docs/architecture/patterns',
     'arduino' => 'docs/arduino/arduino',
     'architecture' => 'docs/books/fauler/corporate/architecture',
