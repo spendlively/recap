@@ -149,3 +149,14 @@ notifyMe();
 function getRandomDigit(min, max){
     return Math.floor(min + Math.random() * (max + 1 - min));
 }
+
+//Модификация часового пояса с помощью UTC
+var d = new Date(),
+    hoursOffset = 6, //Сдвиг 6 часов
+    utc = d.toUTCString(), //Строка в UTC
+    hours = d.getUTCHours() + hoursOffset,
+    minutes = d.getMinutes(),
+    seconds = d.getSeconds(),
+    output = ((''+hours).length<2 ? '0' :'') + hours + ':' +
+        ((''+minutes).length<2 ? '0' :'') + minutes + ':' +
+        ((''+seconds).length<2 ? '0' :'') + seconds;
