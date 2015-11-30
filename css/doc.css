@@ -23,3 +23,7 @@ div#iread{
 input#ireadbtn{
     margin-left: 450px;
 }
+
+.doc pre{
+    word-wrap: break-word;
+}
