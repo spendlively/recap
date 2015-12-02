@@ -30,7 +30,7 @@ $(document).ready(function(){
     $("a.block-icon").click(function(e) {
         var link = this;
         e.preventDefault();
-        $(this).addClass('animated flip');
+        $(this).addClass('animated flip').css('position', 'relative').css('z-index', '999');
         setTimeout(function(){
             window.location = link.href;
         }, 1000);
