@@ -25,4 +25,15 @@ $(document).ready(function(){
         $('#stl_left').hide(500);
         buttonIsHidden = true;
     });
+
+    //Анимация переходя по ссылке
+    $("a.block-icon").click(function(e) {
+        var link = this;
+        e.preventDefault();
+        $(this).addClass('animated flip');
+        setTimeout(function(){
+            window.location = link.href;
+        }, 1000);
+    });
+
 });

@@ -10,6 +10,7 @@
 <html>
 <head>
     <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <link href="css/animate.css" rel="stylesheet" type="text/css" />
     <script src="js/jquery-1.11.3.min.js"></script>
     <script src="js/app.js"></script>
     <title>Конспекты</title>
@@ -24,8 +25,8 @@
         <?php foreach($content['proectirovanie']['items'] as $b => $block) {
             $style = $activeItem[2] === $b ? $reminder->getActiveItemStyle() : $block['style'];
         ?>
-            <a href="<?= $block['href'] ?>" title="<?= $block['title'] ?>">
-                <div class="div-logo" style="<?= $style ?>">
+            <a href="<?= $block['href'] ?>" title="<?= $block['title'] ?>" class="block-icon">
+                <div class="div-logo animated flipInX" style="<?= $style ?>">
                     <img src="<?= $block['img'] ?>" />
                 </div>
             </a>

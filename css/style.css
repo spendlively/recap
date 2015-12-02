@@ -14,7 +14,9 @@ div#wrapper {
 
 div#wrapper a {
     text-decoration: none;
-    outline: none;
+    outline: none !important;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-tap-highlight-color: transparent;
 }
 
 div.div-logo {
@@ -27,6 +29,7 @@ div.div-logo {
 }
 
 div.div-logo:hover{
+
 }
 
 div.div-logo img {
