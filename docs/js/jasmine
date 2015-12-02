@@ -1,0 +1,52 @@
+//Пример простого теста
+describe("Название набора тестов", function() {
+    return it("Название теста", function(){
+        return expect(1 + 2).toBe(3);
+    });
+});
+
+//Отмена выполнения теста/набора тестов
+xdescribe...
+    return xit...
+
+//ВИДЫ УТВЕРЖДЕНИЙ
+//Строгое ссылочное соответствие
+expect(true).toBe(true);
+expect(true).not.toBe(false);
+
+//Сравнение содержимого
+expect(a).toEqual(b);
+
+//Аргумент является defined
+expect(window.document).toBeDefined();
+
+//Аргумент является undefined
+expect(window.notExists).toBeUndefined();
+
+//Аргумент является null
+expect(a).toBeNull();
+
+//Аргумент является true
+expect(5 > 0).toBeTruthy();
+
+//Аргумент является false
+expect(5 < 0).toBeFalsy();
+
+//Значение аргумента меньше 5
+expect(1 + 2).toBeLessThan(5);
+
+//Значение аргумента больше 0
+expect(1 + 2).toBeGreaterThan(0);
+
+//Значение аргумента a близко к b на 1 знак после запятой
+expect(a).toBeCloseTo(b, 1);
+
+//В строке содержится подстрока
+expect("some string").toMatch(/string/);
+
+//В массиве содержится значение (или в строке подстрока)
+expect([1, 2, 3]).toContain(2);
+expect("some string").toContain("some");
+
+//В функция выбрасывает эксепшн
+expect(func).toThrow();
