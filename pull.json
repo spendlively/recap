@@ -1,0 +1,27 @@
+{
+    "Topics": {
+        "PHP": ["PSR-1/7", "Oauth", "Работа с коллекциями"],
+        "JavaScript": ["Require.js", "Mocha и Chai", "ES6", "async/defer", "Сборка"],
+        "Linux": ["Пакетные менеджеры"],
+        "DB": ["Explain", "Как избежать создания временных таблиц"],
+        "HTML/CSS": ["Поворачивающие css3-эффекты"],
+        "Security": ["10 атак на веб-приложения в действии"],
+        "Design": ["SOLID","GRASP"],
+        "Algorithms": [],
+        "Other": []
+    },
+    "Technologies": [
+        "ZendFramework 2",
+        "Extjs 5/6",
+        "Java",
+        "Алгоритмы",
+        "С/С++",
+        "Чип и Дейл",
+        "Node.js",
+        "Python",
+        "MongoDB",
+        "Backbone, Angular, Knockout, React, Ember",
+        "Sphinx",
+        "WordPress"
+    ]
+}
