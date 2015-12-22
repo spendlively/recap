@@ -1,0 +1,100 @@
+//УСТАНОВКА LIBGDX
+//Зависимости для libgdx
+JDK
+Android Studio + Android SDK //http://developer.android.com/sdk/installing/index.html
+Android virtual device
+
+//libgdx
+https://libgdx.badlogicgames.com/download.html -> Down load Setup App -> gdx-setup.jar
+sudo chmod a+x gdx-setup.jar
+
+//Установка libgdx
+Name: test (имя проекта)
+Package: ru.test (имя пакета - адрес наоборот)
+Game class: MyGame (Класс игры)
+Destination: /path/to/my/game (Где будет храниться проект)
+Android SDK: Путь к Android SDK
+LibGDX Version: Release 1.7.0
+Sub Projects: Desktop, Android
+Extensions: none
+GENERATE -> yes
+
+//Путь к андроид sdk
+Android studio -> configure -> project defaults -> project structure -> Android SDK location
+
+//Запуск
+Android Studio -> Import project (Eclipse ADT, Gradle, etc.) -> /path/to/my/game/build.gradle
+
+//Модули проекта
+android
+    java
+        package
+            AndroidLauncher
+                Класс, отвечающий за запуск игры в эмуляторе (Запуск отсюда)
+                Инициирует класс MyGame из папки core
+    assets
+        Картинки и прочие графические ресурсы
+core
+    java
+        package
+            MyGame
+
+desktop
+    java
+        package
+            DesktopLauncher
+                Запускалка десктопной версии игры
+
+//Настройка модуля desktop для запуска не через эмулятор и более быстрой разработки
+Верхнее меню android -> Edit Configuration -> + (Добавить конфигурацию) -> Application
+Name: Desktop
+Main class: DesktopLauncher
+Working directiry: android/.../assets
+Use classpath of module: desktop
+OK
+
+//Эмуляторы для андроид
+GENYMOTION (4 версии)
+
+//Интерфейсы
+Application (Gdx.app)
+    запускает приложение и сообщает api-клиенту о событиях уровня приложения,
+    таких как изменение размеров окна например, обеспечивает возможность логгирования
+    и запросов например использования памяти
+Files (Gdx.files)
+    предоставляет лежащую в основе платформы файловую систему
+Input
+    информирует api-клиента о пользовательском вводе: о событиях мыши,
+    клавиатуры, сенсора, аккселерометра (опрос и обработка событий)
+Audio (Gdx.audio)
+    предоставляет средство для воспроизведения звуковых эффектов и потоковой музыки,
+    а так же прямой доступ к аудиоустройству для pcm-аудиоввода/вывода
+Graphics
+    предоставляет openGL и позволяет запрашивать и устанавливать видеорежимы
+
+Описанные модули могут бюыть доступны через статические поля класса Gdx:
+AudioDevice audioDevice = Gdx.audio.newAudioDevice(44100, false);
+
+Для каждой платформы есть свой стартер-класс (AndroidLauncher, DesktopLauncher, ...)
+
+//Методы ApplicationAdapter
+public void create
+    вызывается 1 раз при создании приложения
+public void render
+    вызывается каждым игровым циклом приложения кождый раз
+    когда должна быть выполнена визуализация,
+    обновление логики игры обычно выполняется в этом методе
+public void resize
+    вызывается при каждом изменении размеров экрана в игре
+    и когда игра не находится в состоянии пауза
+public void pause
+    на андроид вызывается когда нажата кнопка home или при входящем звонке,
+    на десктопе вызывает перед методом dispose при выходе из приложения.
+    хорошее места для сохранения состаяния.
+public void resume
+    вызывается только на андроид когда приложение возобновляет работу
+public void dispose
+    вызывается когда приложение уничтожается, ему предшествует pause
+
+Метод render можно считать телом главного цикла
+

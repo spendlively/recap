@@ -32,6 +32,7 @@ $docs = array(
     'd3' => 'docs/js/d3',
     'android' => 'docs/java/android/android',
     'java' => 'docs/java/java/java',
+    'libgdx' => 'docs/java/android/libgdx',
 );
 $content = array();
 
