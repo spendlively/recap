@@ -1,0 +1,92 @@
+//IDE
+Eclipse
+Android studio
+IntelliJ idea
+
+//Hello, world
+//Main.java
+package main.test.ru;
+
+class Main{
+    public static void main(String[] args){
+        System.out.println("Hello, World!");
+    }
+}
+
+//Простые типы данных
+//byte, short, int, long, float, double, char, boolean
+int i = 1;
+double d = 4.5;
+float f = (float)4.5, f2 = 4.5f;
+char c = 'c';
+String s1 = new String("str1");
+String s2 = "str2";
+String s3 = s1 + s2;
+boolean b = true;
+
+//Массивы
+int[] arr;
+arr = new [10];
+arr.length;
+arr[0] = 4;
+int[] arr = {1, 2, 3}
+import java.util.Arrays;
+
+//Циклы
+for(int i = 0; i < 3; i++){}
+System.out.println(Arrays.toString(arr));
+
+int[] arr = {1, 2, 3};
+for(int el : arr){
+    System.out.println(el);
+}
+
+//Вызов статического метода
+Main.staticMethod();
+
+//Наследование
+class A{
+    public void foo(){
+        System.out.println("foo");
+    }
+}
+
+class B extends A{
+    @Override
+    publuc void foo(){
+        super.foo();
+    }
+}
+
+//Геттеры и сеттеры
+class Student{
+    protected String name;
+    public String getName(){
+        return name;
+    }
+    public void setName(String name){
+        this.name = name;
+    }
+}
+
+Student s = new Student();
+
+//Конструктор и конструктор по умолчанию
+class Point{
+    int x;
+    int y;
+    Point(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
+    Point(){
+        this(0, 0);
+    }
+}
+Point p = new Point(1, 2);
+
+//Компиляция
+//jdk - java development kit
+#javac Main.java //-> Main.class
+//Запуск класса из консоли
+java Main

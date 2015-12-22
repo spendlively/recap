@@ -31,6 +31,7 @@ $docs = array(
     'htmlcss' => 'docs/htmlcss/htmlcss',
     'd3' => 'docs/js/d3',
     'android' => 'docs/java/android/android',
+    'java' => 'docs/java/java/java',
 );
 $content = array();
 

@@ -418,6 +418,15 @@ return array(
         'cls' =>'div-logo',
         'activable' => true,
         'items' => array(
+            'java' => array(
+                'title' => 'Программирование на языке Java',
+                'href' => 'doc.php?path=java',
+                'style' =>'border: 4px dotted #3dade9;',
+                'img' =>'logo/java.png',
+                'cls' =>'div-logo',
+                'activable' => true,
+                'items' => array(),
+            ),
             'android' => array(
                 'title' => 'Android',
                 'href' => 'doc.php?path=android',

@@ -8,6 +8,7 @@
         "Security": ["10 атак на веб-приложения в действии"],
         "Design": ["SOLID","GRASP"],
         "Algorithms": [],
+        "HighLoad": [],
         "Other": []
     },
     "Technologies": [
