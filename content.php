@@ -436,6 +436,15 @@ return array(
                 'activable' => true,
                 'items' => array(),
             ),
+            'libgdx' => array(
+                'title' => 'libgdx',
+                'href' => 'doc.php?path=libgdx',
+                'style' =>'border: 4px dotted #f50000;',
+                'img' =>'logo/libgdx.png',
+                'cls' =>'div-logo',
+                'activable' => true,
+                'items' => array(),
+            ),
         ),
     ),
     'testing' => array(
