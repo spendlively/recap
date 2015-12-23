@@ -56,6 +56,17 @@ OK
 //Эмуляторы для андроид
 GENYMOTION (4 версии)
 
+//Установка genymotion (зависимость - virtualbox)
+1. Регистрация на сайте genymotion.com
+2. Скачивание эмулятора genymotion  https://www.genymotion.com/#!/download
+3. Установка genymotion
+    sudo chmod a+x genymotion-2.6.0-linux_x64.bin
+    ./genymotion-2.6.0-linux_x64.bin
+4. Установка плагина для android studio
+    http://plugins.genymotion.com/plugins/idea/1.0.3/genymotion-idea-plugin-20140326.jar
+5. Установка плагина в andriod studio
+    Кнопка genymotion device manager -> указать путь к установленному genymotion
+
 //Интерфейсы
 Application (Gdx.app)
     запускает приложение и сообщает api-клиенту о событиях уровня приложения,
