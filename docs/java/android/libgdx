@@ -149,6 +149,7 @@ public void dispose
         Освобождение ресурсов
 
 Контрольные элементы игры
+    Интерфейс класса        - gdx.ApplicationAdapter
     Камера                  - gdx.graphics.OrthographicCamera
     Отрисовка               - gdx.graphics.g2d.SpriteBatch
     Графика                 - gdx.graphics.Texture
@@ -159,6 +160,7 @@ public void dispose
     Массив                  - gdx.utils.Array
     Наносекунды             - gdx.utils.TimeUtils;
     Итератор массива        - java.util.Iterator
+    Коды кнопок клавы       - gdx.Input
 
 //Код класса Drop
 package com.mygdx.game;
