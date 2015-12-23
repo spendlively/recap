@@ -5,7 +5,7 @@ IntelliJ idea
 
 //Hello, world
 //Main.java
-package main.test.ru;
+package ru.test.main;
 
 class Main{
     public static void main(String[] args){
@@ -31,17 +31,17 @@ arr.length;
 arr[0] = 4;
 int[] arr = {1, 2, 3}
 import java.util.Arrays;
+System.out.println(Arrays.toString(arr));
 
 //Циклы
 for(int i = 0; i < 3; i++){}
-System.out.println(Arrays.toString(arr));
 
 int[] arr = {1, 2, 3};
 for(int el : arr){
     System.out.println(el);
 }
 
-//Вызов статического метода
+//Вызов статического метода класса Main
 Main.staticMethod();
 
 //Наследование
