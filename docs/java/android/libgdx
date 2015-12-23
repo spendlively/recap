@@ -131,6 +131,35 @@ public void dispose
             config.useAccelerometer = false;
             config.useCompass = false;
 
+Аспекты работы игры
+    public void create()
+        Инициализация и определение ресурсов
+        Создание камеры
+        Создание объекта SpriteBatch для отрисовки графический элементов
+        Старт музыки
+        Создание объектов Rectangle для каждого графического элемента для хранения размеров и координат
+    public void render ()
+        Очистка и заливка экрана
+        Обновленмие камеры
+        Отрисовка всех графических элементов (SpriteBatch)
+        Обработка событий пользователя
+        Обработка ухода элементов за границы экрана
+        Реализация движения элементов - смена координат
+    public void dispose()
+        Освобождение ресурсов
+
+Контрольные элементы игры
+    Камера                  - gdx.graphics.OrthographicCamera
+    Отрисовка               - gdx.graphics.g2d.SpriteBatch
+    Графика                 - gdx.graphics.Texture
+    Звук                    - gdx.audio.Sound
+    Музыка                  - gdx.audio.Music
+    Размер/координаты       - gdx.math.Rectangle
+    Вектор преобр координат - gdx.math.Vector3
+    Массив                  - gdx.utils.Array
+    Наносекунды             - gdx.utils.TimeUtils;
+    Итератор массива        - java.util.Iterator
+
 //Код класса Drop
 package com.mygdx.game;
 
