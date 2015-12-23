@@ -370,3 +370,19 @@ dpkg-reconfigure tzdata
 //-k - сохранение контента (стили и скрипты)
 //-t 0  - неограниченное количество попыток
 wget -k -p -t 0  http://site.ru
+
+//Создание ярлыка в меню ubuntu
+cd /usr/share/applications/
+sudo gedit name.desktop
+[Desktop Entry]
+Name=Android studio
+Comment=Android studio
+GenericName=
+Keywords=
+Exec=/home/spendlively/libgdx/android-studio/bin/studio.sh
+Terminal=false
+Type=Application
+Icon=/home/spendlively/libgdx/android-studio/bin/studio.png
+Path=/home/spendlively/libgdx/android-studio/
+Categories=
+NoDisplay=false
