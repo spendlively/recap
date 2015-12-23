@@ -65,6 +65,10 @@ ob_end_clean();
     <?php
         if(!empty($content)){
             foreach($content as $c) {
+
+                $c = str_replace('>', '&gt;', $c);
+                $c = str_replace('<', '&lt;', $c);
+
 		        if($c === ""){
                     $c = "<br />";
                 }
