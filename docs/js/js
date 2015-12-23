@@ -160,3 +160,18 @@ var d = new Date(),
     output = ((''+hours).length<2 ? '0' :'') + hours + ':' +
         ((''+minutes).length<2 ? '0' :'') + minutes + ':' +
         ((''+seconds).length<2 ? '0' :'') + seconds;
+
+//Проверка виден ли dom-элемент
+function isTargetVisible(el){
+    var rect = el.getBoundingClientRect();
+    if(
+        rect &&
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    ){
+        return false;
+    }
+    return true;
+}
