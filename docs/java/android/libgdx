@@ -124,7 +124,7 @@ public void dispose
 
     Ориентация экрана
         android->mainfests->AndroidMainfest.xml
-            activity android:screenOrientation="landscape" //portrate
+            activity android:screenOrientation="landscape" //portrait
 
     Отключение акселерометра и компаса
         android->AndroidLauncher::onCreate
@@ -311,4 +311,63 @@ public class Drop extends ApplicationAdapter {
 		rainMusic.dispose();
 		batch.dispose();
 	}
+}
+
+//Переключения между экранами
+//Точка входа - Drop.java
+public class Drop extends Game{
+    public void create() {
+	//Точка входа, включение экрана с меню
+        this.setScreen(new MainMenuScreen(this));
+    }
+}
+
+//Экран с меню игры - MainMenuScreen.java
+public class MainMenuScreen implements Screen{
+
+    //Инстанс Game, нужно для переключения экрана
+    final Drop game;
+
+    //Инстанс камеры и т.д.
+    OrthographicCamera camera;
+
+    public MainMenuScreen(final Drop gam){
+        game = gam;
+        //Инициализация камеры
+    }
+
+    public void render(float delta) {
+	//Обработка ввода пользователя
+        if (Gdx.input.isTouched()){
+            //Переключение экрана на экран игры
+            game.setScreen(new GameScreen(game));
+        }
+    }
+
+    //Событие при активизации экрана
+    public void show(){}
+
+    //Событие при деактивизации экрана
+    public void hide(){}
+}
+
+
+//Экран с игрой - GameScreen.java
+public class GameScreen implements Screen{
+
+    final Drop game;
+
+    public GameScreen (final Drop gam){
+        this.game = gam;
+        //Инициализация камеры и т.д.
+    }
+
+    //Отрисовка
+    public void render (float delta){}
+
+    //Событие при активизации экрана
+    public void show(){}
+
+    //Событие при деактивизации экрана
+    public void hide(){}
 }
