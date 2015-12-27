@@ -371,3 +371,365 @@ public class GameScreen implements Screen{
     //Событие при деактивизации экрана
     public void hide(){}
 }
+
+//Полезное
+Импорт класса: клик + ALT + ENTER
+Документация: https://libgdx.badlogicgames.com/nightlies/docs/api/
+Размеры окна: Gdx.graphics.getWidth(), Gdx.graphics.getHeight()
+Время в сек. от последнего render'а: Gdx.graphics.getDeltaTime()
+
+
+//SpriteBatch (0, 0 - левый нижний угол)
+//Методы для рисования текстуры
+batch.draw(texture, x, y);
+batch.draw(texture, x, y, width, height);
+batch.draw(texture, x, y, textureX, textureY, width, height);
+batch.draw(texture, x, y, width, height, textureX, textureY, textureWidth, textureHeight, mirrorX, mirrorY);
+batch.draw(texture, x, y, centerX, centerY, width, height, scaleX, scaleY, rotation, textureX, textureY, textureWidth, textureHeight, mirrorX, mirrorY);
+//Чтобы вращать вокруг центра: centerX = width/2; centerY = height/2;
+
+//Методы для рисования региона текстуры
+batch.draw(textureRegion, x, y, width, height);
+batch.draw(textureRegion, x, y, centerX, centerY, width, height, scaleX, scaleY, rotation);
+
+//Texture
+SpriteBatch batch = new SpriteBatch();
+Texture texture = new Texture("badlogic.jpg");
+
+batch.begin();
+batch.draw(texture, 100, 100);
+batch.end();
+
+//TextureRegion (0, 0 - левый верхний угол)
+SpriteBatch batch = new SpriteBatch();
+Texture texture = new Texture("badlogic.jpg");
+TextureRegion textureRegion = new TextureRegion(texture, 0, 0, width, height);
+
+batch.begin();
+batch.draw(textureRegion, x+200, y+200);
+batch.end();
+
+//Sprite
+SpriteBatch batch = new SpriteBatch();
+Texture texture = new Texture("badlogic.jpg");
+Sprite sprite = new Sprite(texture, 0, 0, 256, 256);
+sprite.setPosition(100, 100);
+sprite.setRotation(90);
+
+batch.begin();
+sprite.draw(batch);
+batch.end();
+
+//Tinting - наложение цветного фильтра (red (0..1), green (0..1), blue (0..1), a (0..1))
+SpriteBatch batch = new SpriteBatch();
+Texture texture = new Texture("badlogic.jpg");
+
+batch.begin();
+batch.setColor(1, 0, 0, 1);
+batch.draw(texture, 0, 0);
+batch.end();
+
+//Stage и Actor - сцена и актеры
+class Quad extends Actor {
+
+	@Override
+	public void draw(Batch batch, float parentAlpha){
+		Texture texture = new Texture("badlogic.jpg");
+		batch.draw(texture, getX(), getY(), getWidth(), getHeight());
+	}
+}
+
+//render
+Quad actor = new Quad();
+
+Stage stage = new Stage(new ScreenViewport());
+Gdx.input.setInputProcessor(stage);
+
+actor.setSize(100, 100);
+actorsetPosition(0, 0);
+//actor.setOrigin()
+//actor.setRotation()
+//actor.setX(), actor.setY()
+//actor.setWidth(), actor.setHeight()
+
+stage.addActor(actor);
+
+stage.draw();
+stage.act(Gdx.graphics.getDeltaTime());
+
+stage.draw(); //Вызов методов draw у каждого актера
+stage.act(Gdx.graphics.getDeltaTime()); //Вызов методов act у каждого актера
+
+//Group - группа актеров
+//Group наследует Actor => все его методы
+Quad actor1 = new Quad();
+actor1.setSize(100, 100);
+actor1.setPosition(0, 0);
+
+Quad actor2 = new Quad();
+actor2.setSize(100, 100);
+actor2.setPosition(100, 0);
+
+Group group = new Group();
+group.setSize(200, 200);
+group.setPosition(0, 0);
+group.addActor(actor1);
+group.addActor(actor2);
+//group.addActorAt(zIndex, actor);
+//group.removeActorAt(actor);
+//group.getActors();
+
+Stage stage = new Stage(new ScreenViewport());
+Gdx.input.setInputProcessor(stage);
+stage.addActor(group);
+stage.draw();
+stage.act(Gdx.graphics.getDeltaTime());
+
+//Интерфейс Screen
+render(float delta)
+resize(width, height)
+show() //Экран становится текущим
+hide()
+pause()
+resume()
+dispose()
+
+//Game - Управление экранами Screen (implements ApplicationListener)
+setScreen(Screen screen) hide, screen=src, show, resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight())
+getScreen() //return screen
+dispose() //screen.hide()
+pause() //screen.pause()
+resume() //screen.resume()
+render(float delta) //screen.render(Gdx.graphics.getDeltaTime())
+resize(width, height)  //screen.resize(width, height)
+
+class MyScreen implements Screen {
+
+    Texture texture;
+    SpriteBatch batch;
+
+    public MyScreen(SpriteBatch btc){
+
+        texture = new Texture("badlogic.jpg");
+        batch = btc;
+    }
+
+    @Override
+    public void render(float delta) {
+
+        Gdx.gl.glClearColor(1, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        batch.begin();
+        batch.draw(texture, 0, 0);
+        batch.end();
+    }
+
+    @Override
+    public void show() {}
+
+    @Override
+    public void resize(int width, int height) {}
+
+    @Override
+    public void pause() {}
+
+    @Override
+    public void resume() {}
+
+    @Override
+    public void hide() {}
+
+    @Override
+    public void dispose() {}
+}
+
+public class MyGdxGame extends Game {
+
+	Screen myScreen;
+	SpriteBatch batch;
+
+	@Override
+	public void create () {
+
+		batch = new SpriteBatch();
+		myScreen = new MyScreen(batch);
+		setScreen(myScreen);
+	}
+}
+
+//Обработка событий (polling, events)
+//Определение собственного обработчика ввода (polling)
+//Application::create()
+Gdx.input.setInputProcessor(new MyInputListener());
+
+//MyInputListener.java
+public class MyInputListener implements InputProcessor{
+
+    @Override
+    public boolean keyDown(int keycode) {
+
+        switch(keycode){
+            case Input.Keys.UP:
+                System.out.println("UP");
+                break;
+            case Input.Keys.DOWN:
+                System.out.println("DOWN");
+                break;
+            case Input.Keys.LEFT:
+                System.out.println("LEFT");
+                break;
+            case Input.Keys.RIGHT:
+                System.out.println("RIGHT");
+                break;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        System.out.println("touchDown");
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
+    }
+}
+
+//Событийная модель
+//Листнер актера
+public class MyActorListener extends InputListener {
+
+    @Override
+    public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+        System.out.println("touchDown");
+        return true;
+    }
+
+    @Override
+    public boolean keyDown(InputEvent event, int keycode) {
+
+        float x = event.getListenerActor().getX();
+        float y = event.getListenerActor().getY();
+
+        switch(keycode){
+            case Input.Keys.UP:
+                System.out.println("UP");
+                break;
+            case Input.Keys.DOWN:
+                System.out.println("DOWN");
+                break;
+            case Input.Keys.LEFT:
+                System.out.println("LEFT");
+                break;
+            case Input.Keys.RIGHT:
+                System.out.println("RIGHT");
+                break;
+        }
+
+        return false;
+    }
+}
+
+//Актер
+public class MyActorListener extends InputListener {
+
+    @Override
+    public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+        System.out.println("touchDown");
+        return true;
+    }
+
+    @Override
+    public boolean keyDown(InputEvent event, int keycode) {
+
+        float x = event.getListenerActor().getX();
+        float y = event.getListenerActor().getY();
+
+        switch(keycode){
+            case Input.Keys.UP:
+                System.out.println("UP");
+                break;
+            case Input.Keys.DOWN:
+                System.out.println("DOWN");
+                break;
+            case Input.Keys.LEFT:
+                System.out.println("LEFT");
+                break;
+            case Input.Keys.RIGHT:
+                System.out.println("RIGHT");
+                break;
+        }
+
+        return false;
+    }
+}
+
+//Запуск
+public class MyActorListener extends InputListener {
+
+    @Override
+    public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+        System.out.println("touchDown");
+        return true;
+    }
+
+    @Override
+    public boolean keyDown(InputEvent event, int keycode) {
+
+        float x = event.getListenerActor().getX();
+        float y = event.getListenerActor().getY();
+
+        switch(keycode){
+            case Input.Keys.UP:
+                System.out.println("UP");
+                break;
+            case Input.Keys.DOWN:
+                System.out.println("DOWN");
+                break;
+            case Input.Keys.LEFT:
+                System.out.println("LEFT");
+                break;
+            case Input.Keys.RIGHT:
+                System.out.println("RIGHT");
+                break;
+        }
+
+        return false;
+    }
+}
+
+//Дизайн игры
+ - Жанр
+ - Режимы игры: 1 игрок, 2 игрока
+ - Количество экранов
+ - Ресурсы: картинки, звуки, шрифты
+ - Актеры, Сцены, Экраны, Обработчики
