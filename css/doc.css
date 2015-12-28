@@ -27,3 +27,17 @@ input#ireadbtn{
 .doc pre{
     word-wrap: break-word;
 }
+
+.docwrapper{
+    background-color: #2b2b2b;
+    border-color: #2b2b2b;
+    min-height: 2000px;
+}
+
+.recap.doc{
+    background-color: #2b2b2b;
+    border-color: #2b2b2b;
+    /*color: #a2b7c6;*/
+    color: #ffc66d;
+    /*color: #bbb529;*/
+}

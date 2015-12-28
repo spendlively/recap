@@ -60,29 +60,31 @@ ob_end_clean();
         <div id="stl_text">Наверх</div>
     </div>
 </div>
-<div class="doc">
-    <h1><?= $path; ?></h1>
-    <?php
-        if(!empty($content)){
-            foreach($content as $c) {
+<div class="docwrapper">
+    <div class="recap doc">
+        <h1><?= $path; ?></h1>
+        <?php
+            if(!empty($content)){
+                foreach($content as $c) {
 
-                $c = str_replace('>', '&gt;', $c);
-                $c = str_replace('<', '&lt;', $c);
+                    $c = str_replace('>', '&gt;', $c);
+                    $c = str_replace('<', '&lt;', $c);
 
-		        if($c === ""){
-                    $c = "<br />";
-                }
-                elseif(preg_match('@^//[^\\n]+@ui', $c, $matches)){
-                    if(!empty($matches[0])){
-                        $c = '<strong>' . $matches[0] . '</strong>';
+                    if($c === ""){
+                        $c = "<br />";
                     }
-                }
-    ?>
-    <p><pre><?= $c; ?></pre></p>
+                    elseif(preg_match('@^//[^\\n]+@ui', $c, $matches)){
+                        if(!empty($matches[0])){
+                            $c = '<strong>' . $matches[0] . '</strong>';
+                        }
+                    }
+        ?>
+        <p><pre><?= $c; ?></pre></p>
+            <?php } ?>
         <?php } ?>
-    <?php } ?>
 
-    <div id="iread"><input id="ireadbtn" type="button" value="Прочитал!"></div>
+        <div id="iread"><input id="ireadbtn" type="button" value="Прочитал!"></div>
+    </div>
 </div>
 </body>
 </html>
