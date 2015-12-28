@@ -1,1 +1,73 @@
-android
+//Установка компонентов
+configure -> SDK Manager -> android SDK
+	SDK Platform
+		Android 6.0
+		...
+		Android 4.0.3
+	SDK Tools
+		Sndroid SDK Build Tools
+		Sndroid SDK Tools 24.4.1
+		Sndroid SDK Platform-Tools 23.1
+		Sndroid Support Repository 25
+		Sndroid Support Library 23.1.1
+		Google Play Services 29
+		Google Repository 24
+
+//Создание проекта
+Start a new Android Studio project
+	Application name: Test
+	Company Domain: test.ru
+	Project Location: /path/to/app/Test
+Select the form factors your app will run on
+	Phones and Tablet
+		Minimum SDK: API 14: Android 4.0 (IceCreamSandwitch)
+Add an Activity to Mobile
+	Blank Activity
+Customize an Activity
+	Activity Name: MainActivity
+	Layout Name: main
+	Title: MainActivity
+	Mnu Resourse Name: menu_main
+
+//Выбор Android Version (ошибка рендеринга всвязи с проблемой со стилями)
+API 19: Android 4.4.2
+
+//Создание эмуляторов
+tools -> Android -> AVD Manager ->Create Virtual Device (кнопка)
+Select Hardware
+	Nexus One (next)
+System Image (Установка образа устройства)
+	Name: KitKat 
+	Api Level: 19 
+	ABI: armeabi
+	Target: Android 4.4
+Запуск устройства
+	Actions: Start AVD (Зеленая стрелочка или двойной клик)
+
+//Запуск приложения
+Run -> Run app (Shift + F10 (Зеленая стрелочка))
+Device Chooser (Выбор устройства)
+	Choose a runing device -> ok
+	
+
+//Управление эмулятором
+HOME: Кнопка домой
+TAB: Перемещение по кнопкам
+ENTER: Выбор кнопки
+
+//Создание рекоммегндованного эмулятора
+tools -> Android -> AVD Manager ->Create Virtual Device (кнопка)
+Select Hardware
+	Nexus S (next)
+System Image (Установка образа устройства)
+	Name: KitKat 
+	Api Level: 19 
+	ABI: x86
+	Target: Android 4.4
+Show Advanced Settings
+	Device Frame
+		Custom Skin Defenition: No skin
+	
+	
+Запуск устройства
+	Actions: Start AVD (Зеленая стрелочка)
