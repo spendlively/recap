@@ -60,3 +60,7 @@ else{
     pcntl_setpriority(5);
     echo "Child" . PHP_EOL;
 }
+
+//Обход ошибки в которой iconv возвращает false
+$content = iconv('CP1251//TRANSLIT','UTF-8',$content);
+$content = iconv('CP1251//IGNORE','UTF-8',$content);
