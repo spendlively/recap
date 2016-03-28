@@ -116,8 +116,8 @@ container.updateLayout();
 
 //5 способов рендеринга html внутри контейнера
 items: [{
-    html: "<a href='#'>1. HTML property of a panel</a>",
-    xtype: "panel"
+        html: "<a href='#'>1. HTML property of a panel</a>",
+        xtype: "panel"
     },{
         xtype: "panel",
         html: new Ext.XTemplate("<a href='#'>{value}").apply({
