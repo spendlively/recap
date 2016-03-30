@@ -140,12 +140,21 @@ items: [{
 ]
 
 //Выборка DOM-элементов
+//QUERY
 //HTMLElement Ext.query(selector/xpath, [HTMLElement], ["select"||"simple"], [single=true])
+var query = Ext.query('#element-id');
+query.removeCls('cls-name');
+query.addCls('cls-name');
+query.applyStyles("width: 100%; height: 100%;");
+
+//SELECT
+//Ext.CompositeElementLite/Ext.CompositeElement Ext.select(String/HTMLElement, [unique:bool], [root:HTMLElement/String])
 var select = Ext.select('#element-id');
 select.removeCls('cls-name');
 select.addCls('cls-name');
 select.applyStyles("width: 100%; height: 100%;");
 
+//GET
 //Ext.dom.Element Ext.get(String/HTMLElement/Ext.Element);
 var get = Ext.get('element-id');
 get.getAttribute('class');
@@ -153,9 +162,11 @@ get.applyStyles("background:#B5B8C8;");
 get.removeCls('cls-name');
 get.addCls('cls-name');
 
-//Ext.Component Ext.getCmp(String);
-var cmp = Ext.getCmp('element-id');
-
+//FLY
 //Ext.dom.Element.Fly Ext.fly(String/HTMLElement, [named:String])
 var fly = Ext.fly(grid.getView().getNode(record));
 var rowEls = fly.query('.x-grid-cell');
+
+//GETCMP
+//Ext.Component Ext.getCmp(String);
+var cmp = Ext.getCmp('element-id');
