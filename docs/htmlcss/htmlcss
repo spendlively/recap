@@ -8,4 +8,62 @@ span.digital.orange{
 }
 
 //Различные фреймворки для css-анимации
-<p><span><a class="book_link" href="https://medium.com/@vilcins/handy-web-animations-tools-8faff4790b1c#.z035kqd9v" target="_blank">medium.com</a></span></p>
+https://medium.com/@vilcins/handy-web-animations-tools-8faff4790b1c#.z035kqd9v
+
+//Новые тэги HTML5: 
+- header - шапка сайта
+- nav - основное меню
+- footer - подвал сайта
+- article - статья
+- section - глава
+- aside - пометка, отступление
+- figure - иллюстрация
+- figcaption - подрисуночная подпись внутри figure
+//Блоксхема по элементам: tinyurl.com/o298cs6
+
+//Рекоммендуемые тэги
+- blockquote - цитаты
+- abbr - аббревиатуры
+- code, recipe - код
+- dl(список), dt(название), dd(определение) - термины
+- cite - ссылка на книжный заголовок
+- address - контакты автора
+
+//Устаревшие теги: 
+- font
+- b
+- i(strong, em)
+- br (не злоупотреблять)
+
+//Бесплатные IDE для фронтэнд разработки: 
+Brackets, Atom, jEdit
+Коммерческие: Sublime  Text
+
+//Рекоммендации гугл для фронтэнд разработчиков: 
+tinyurl.com/olx2lyk
+
+//Включение поддержки html5 в explorer 6,7,8: 
+<!--[if  lt  IE  9]>  <script  src="//html5shiv. googlecode.com/  svn/trunk/html5.js"></script> <![endif]-->
+
+//Проверка валидности html-страницы: 
+validator.w3.org
+Расширение для проверки: tinyurl.com/2353zt
+
+//Проверка валидности css кода: 
+tinyurl.com/382hc
+
+Режим совместимости браузеров: tinyurl.com/nr9dehz и  tinyurl.com/pm8k7ng
+
+//Типы документов:
+//HTML5
+<!doctype html>
+//HTML  4.01  Transitional
+<!DOCTYPE  HTML  PUBLIC  "-//W3C//DTD  HTML  4.01  Transitional//EN"  "http://www.w3.org/ TR/html4/loose.dtd">
+//XHTML  1.0  Transitional
+<!DOCTYPE  html  PUBLIC  "-//W3C//DTD  XHTML  1.0  Transitional//EN"  "http://www.w3.org/ TR/xhtml1/DTD/xhtml1-transitional.dtd"> <html xmlns="http://www.w3.org/1999/xhtml">
+
+//Принудительное обновление страницы: 
+- Chrome и в Internet Explorer - Ctrl+F5  (+F5)
+- Firefox - Ctrl+Shift+R  (+Shift+R)
+- Safari, Chrome - Ctrl+R  (+R)
+
