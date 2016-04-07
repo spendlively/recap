@@ -176,6 +176,9 @@ function isTargetVisible(el){
     return true;
 }
 
+//Спецификация DOM 4
+https://www.w3.org/TR/dom/#introduction-to-dom-events
+
 //XMLHttpRequest
 http://xmlhttprequest.ru/#start
 https://learn.javascript.ru/ajax-xmlhttprequest
@@ -192,12 +195,6 @@ http://javascript.ru/tutorial/dom
 http://javascript.ru/tutorial/dom/intro
 https://learn.javascript.ru/dom-console
 
-//События
-https://learn.javascript.ru/introduction-browser-events
-https://learn.javascript.ru/events-and-interfaces
-https://learn.javascript.ru/event-details
-https://learn.javascript.ru/forms-controls
-https://learn.javascript.ru/widgets
 
 //JSONP
 https://learn.javascript.ru/ajax-jsonp
