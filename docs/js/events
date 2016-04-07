@@ -1,0 +1,242 @@
+//ОБРАБОТКА СОБЫТИЙ В JAVASCRIPT
+//Добавления обработчика события через свойство onclick
+//Работает не со всеми событиями (ontransitionend)
+<input value="Нажми меня" onclick="alert(this.innerHTML)" type="button">
+
+//Вариант 2
+<input id="elem" type="button" value="Нажми меня" />
+<script>
+    elem.onclick = function() {
+        alert( 'Спасибо' );
+    };
+</script>
+
+//Добавления нескольких обработчиков события с помощью addEventListener
+element.addEventListener("click", foo);
+element.removeEventListener("click", foo);
+Если функцию не сохранить в foo, то потом обработчик не снять
+
+//Добавления нескольких обработчиков события в IE8
+//Чтобы обойти можно подключить polyfill.io
+element.attachEvent("on" + event, handler);
+element.detachEvent("on" + event, handler);
+У обработчиков, назначенных с attachEvent, нет this
+
+//События бывают асинхронными (mousedown, mouseup, click) - они помещаются в очередь главного потока
+//И синхронными (focus) - они выполняются сразу
+//Вызов синхронного события асинхронно
+setTimeout(function() {
+    text.focus();
+}, 0);
+//В браузере есть так называемый CallStack - очередь функций, которые должен выполнить браузер в потоке.
+//и CallbackQueue (Очередь каллбеков). В нее попадают функции, которые передаются в SetTimout в качестве первого аргумента
+//Из CallbackQueue функции тоже попадают в CallStack, но только тогда, когда он опустеет.
+
+//Как происходит событие
+1. Стадия перехвата (capturing stage)
+   Событие сначала идет сверху вниз: window->Document->html->body->div->...
+2. Стадия цели (target stage)
+   Событие достигло целевого элемента
+3. Стадия всплытия (bubbling stage)
+   После этого событие начинает всплывать div->body->html->Document->window
+
+//Свойства объекта события
+type - Тип события, в данном случае click
+currentTarget - объект воздействия
+clientX/clientY - Координаты курсора в момент клика (относительно окна)
+eventPhase – на какой фазе сработал обработчик (погружение = 1, всплытие = 3).
+
+//Т.к.первый аргумент функции-обработчика называется "event"
+<input type="button" onclick="alert(event.type)" value="Тип события">
+//IE8- вместо передачи параметра обработчику создаёт глобальный объект window.event
+elem.onclick = function() {
+    alert( window.event.clientX );
+};
+//Универсальное решение
+element.onclick = function(event) {
+    event = event || window.event;
+};
+
+//Всплытие
+//События сначала срабатывают на самом вложенном элементе, затем выше (снизу-вверх)
+<form onclick="alert('form')">FORM
+    <div onclick="alert('div')">DIV
+        <p onclick="alert('p')">P</p>
+    </div>
+</form>
+//p → div → form
+//event.target – это исходный элемент (самый вложенный), на котором произошло событие, в процессе всплытия он неизменен.
+//this ( = event.currentTarget) – это текущий элемент, до которого дошло всплытие, на нём сейчас выполняется обработчик.
+
+//Не все события всплывают, focus, например, не всплывает
+
+//Прекращение всплытия
+//Событие будет всплывать иногда даже до window
+//Но любой промежуточный обработчик может остановить всплытие
+event.stopPropagation() //препятствует продвижению события, но на текущем элементе все обработчики отработают
+event.stopImmediatePropagation() //предотвращает всплытие и останавливает обработку событий на текущем элементе
+
+//Погружение - поиск элемента, для которого сработало событие (стадия перехвата (capturing stage))
+Чтобы поймать событие на стадии перехвата, нужно использовать третий аргумент addEventListener
+- true, то событие будет перехвачено по дороге вниз
+- false, то событие будет поймано при всплытии (по умолчанию)
+
+//Отработать события сверху-вниз-вверх
+elems[i].addEventListener("click", highlightThis, true);
+elems[i].addEventListener("click", highlightThis, false);
+
+//Отличия IE8
+1. Нет свойства event.currentTarget
+- При назначении обработчика через onсвойство у нас есть this
+- При назначении через attachEvent обработчик не получает this, так что текущий элемент, можно будет взять лишь из замыкания
+(function() {
+    var elem = document.getElementById("content");
+    function handler() {
+        //код обработчика
+    }
+    elem.attachEvent("onclick", handler);
+})();
+2. Вместо event.target в IE8- используется event.srcElement
+var target = event.target || event.srcElement;
+3. Для остановки всплытия используется код event.cancelBubble=true
+event.stopPropagation ? event.stopPropagation() : (event.cancelBubble=true);
+
+//Делегирование событий
+Установка одного обработчика на общего предка енскольких элементов
+<div id="menu">
+  <button data-action="save">Сохранить</button>
+  <button data-action="load">Загрузить</button>
+  <button data-action="search">Поиск</button>
+</div>
+...
+<script>
+  function Menu(elem) {
+    this.save = function(){//SAVE};
+    this.load = function(){//LOAD};
+    this.search = function(){//SEARCH};
+
+    var self = this;
+
+    elem.onclick = function(e) {
+      var target = e.target;
+      var action = target.getAttribute('data-action');
+      if (action) {
+        self[action]();
+      }
+    };
+  }
+
+  new Menu(menu);
+</script>
+
+//Шаблон проектирования поведение
+1. Элементу ставится атрибут, описывающий его поведение
+2. Ставится обработчик на документ, который ловит все клики и, если элемент имеет нужный атрибут, производит нужное действие.
+Счётчик:
+<button data-counter>1</button>
+...
+<script>
+    document.onclick = function(event) {
+        if (!event.target.hasAttribute('data-counter')) return;
+        var counter = event.target;
+        counter.innerHTML++;
+    };
+</script>
+
+//Действия браузера по умолчанию
+//Отмена клика по ссылке
+1. event.preventDefault()
+<a href="/" onclick="event.preventDefault()">здесь</a>
+2. Если же обработчик назначен через onсобытие (не через addEventListener), то можно просто вернуть false из обработчика.
+<a href="/" onclick="return false">Нажми здесь</a>
+или
+menu.onclick = function(event) {
+  if (event.target.nodeName != 'A') return;
+  return false;
+};
+
+//Отмена фокусировки в элементе input
+<input onmousedown="return false" onfocus="this.value=''" value="Кликни меня">
+
+//В IE8 нужно назначить свойство event.returnValue = false
+//Кроссбраузерное решение
+element.onclick = function(event){
+    event = event || window.event;
+    if (event.preventDefault){
+        event.preventDefault();
+    }else{
+        event.returnValue = false;
+    }
+}
+или
+event.preventDefault ? event.preventDefault() : (event.returnValue=false);
+
+//Генерация событий на элементах
+https://learn.javascript.ru/dispatch-events
+
+// современный стандарт
+var event = new Event("click", {
+  bubbles: true, //всплывать как браузерные события
+  cancelable: true //можно отменить действие по умолчанию
+});
+elem.dispatchEvent(event);
+// старый стандарт (поддерживается IE9+)
+var event = document.createEvent("Event");
+event.initEvent("click", true, true);
+elem.dispatchEvent(event);
+
+//Программный клик по кнопке
+<button id="elem" onclick="alert('Клик');">Автоклик</button>
+..
+<script>
+    var event = new Event("click");
+    elem.dispatchEvent(event);
+</script>
+
+//Проверка реальный клик или программный
+event.isTrusted == true //Клин реальный 
+
+//Конструкторы MouseEvent, KeyboardEvent и другие
+var e = new MouseEvent("click", {
+    bubbles: true,
+    cancelable: true,
+    clientX: 100,
+    clientY: 100
+});
+alert( e.clientX );
+
+//Свои события
+//Конструктор CustomEvent позволяет задать доп. свойство detail
+<h1 id="elem">Привет для Васи!</h1>
+...
+elem.addEventListener("hello", function(event){
+    alert( event.detail.name );
+}, false);
+var event = new CustomEvent("hello", {
+    detail: {name: "Вася"}
+});
+elem.dispatchEvent(event);
+
+//initMouseEvent
+void initMouseEvent(
+  DOMString typeArg, // тип
+  boolean bubblesArg, // всплывает?
+  boolean cancelableArg, // можно отменить?
+  AbstractView ? viewArg, // объект window, null означает текущее окно
+  long detailArg, // свойство detail и другие...
+  long screenXArg,
+  long screenYArg,
+  long clientXArg,
+  long clientYArg,
+  boolean ctrlKeyArg,
+  boolean altKeyArg,
+  boolean shiftKeyArg,
+  boolean metaKeyArg,
+  unsigned short buttonArg,
+  EventTarget ? relatedTargetArg);
+};
+
+var event = document.createEvent("MouseEvent");
+event.initMouseEvent("click", true, true, null, 0, 0, 0, 100, 100, true, true, true, null, 1, null);
+elem.dispatchEvent(event);
+

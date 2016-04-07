@@ -39,11 +39,11 @@ https://medium.com/@vilcins/handy-web-animations-tools-8faff4790b1c#.z035kqd9v
 Brackets, Atom, jEdit
 Коммерческие: Sublime  Text
 
-//Рекоммендации гугл для фронтэнд разработчиков: 
+//SEO-рекоммендации от гугл
 tinyurl.com/olx2lyk
 
 //Включение поддержки html5 в explorer 6,7,8: 
-<!--[if  lt  IE  9]>  <script  src="//html5shiv. googlecode.com/  svn/trunk/html5.js"></script> <![endif]-->
+<!--[if  lt  IE  9]>  <script  src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script> <![endif]-->
 
 //Проверка валидности html-страницы: 
 validator.w3.org
@@ -67,3 +67,6 @@ tinyurl.com/382hc
 - Firefox - Ctrl+Shift+R  (+Shift+R)
 - Safari, Chrome - Ctrl+R  (+R)
 
+//НОВЫЕ АТТРИБУТЫ HTML5
+- data-counter
+- data-toggle-id

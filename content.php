@@ -83,6 +83,15 @@ return array(
                 'activable' => true,
                 'items' => array(),
             ),
+            'jsevents' => array(
+                'title' => 'JavaScript Events',
+                'href' => 'doc.php?path=js-events',
+                'style' =>'border: 4px dotted #3dade9;',
+                'img' =>'logo/javascript.png',
+                'cls' =>'div-logo',
+                'activable' => true,
+                'items' => array(),
+            ),
             'jquery' => array(
                 'title' => 'jQuery',
                 'href' => '#',
