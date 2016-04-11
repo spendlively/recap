@@ -1,0 +1,277 @@
+//DOM - Объектная модель документа
+//https://www.w3.org/DOM/DOMTR
+//Всё, что есть в HTML, находится и в DOM: комменты, пробелы, переносы
+document.body.style.background = 'red';
+
+//BOM - Объектная модель браузера
+Объекты navigator, location, функции alert/confirm/prompt
+
+//Методы консоли
+$$("div.ux-desktop-shortcut") – все элементы по CSS-селектору
+$("div.ux-desktop-shortcut") – первый элемент по CSS-селектору
+//chrome - https://developers.google.com/web/tools/chrome-devtools/debug/console/console-reference
+//firebug - https://getfirebug.com/wiki/index.php/Command_Line_API
+
+//Навигация по DOM
+HTML - document.documentElement
+BODY - document.body
+узел не найден - null
+
+//Навигация по любым элементам
+el.childNodes - коллекция детей (не массив - нет методов forEach, for..in, map, push, pop и др.)
+el.firstChild - первый в колекции детей
+el.lastChild - последний в колекции детей
+el.previousSibling - сосед слева
+el.nextSibling - сосед справа
+el.parentNode - родитель
+
+//Навигация по узлам
+el.children – только дочерние узлы-элементы (тэги)
+el.firstElementChild - первый из коллекции только дочерних узлов-элементов
+el.lastElementChild - последний из коллекции только дочерних узлов-элементов
+el.previousElementSibling – соседний узел-элемент слева
+el.nextElementSibling – соседний узел-элемент справа
+el.parentElement – родитель-элемент (document.documentElement.parentElement == null)
+
+//IE8
+В IE8- поддерживается только children (нужен полифилл)
+
+//Особые ссылки для таблиц
+table.rows – коллекция строк TR таблицы
+tr.cells – коллекция ячеек TD/TH
+tr.secionRowIndex – номер строки в текущей секции THEAD/TBODY
+tr.rowIndex – номер строки в таблице
+table.caption/tHead/tFoot – ссылки на элементы таблицы CAPTION, THEAD, TFOOT
+table.tBodies – коллекция элементов таблицы TBODY (может быть несколько)
+td.cellIndex – номер ячейки в строке
+
+//Перебор коллекции childNodes
+1. МОЖНО: [].forEach.call(els, function(el) {...}
+2. МОЖНО: var elems = Array.prototype.slice.call(els); //Вернет массив
+3. НЕЛЬЗЯ: for..in //0, 1, 2, length, item
+
+//Поиск элементов
+//Поиск по id
+window['content-holder']
+document.getElementById('content') - только относительно document
+document.getElementsByTagName('div') - поиск div-ов внутри document
+document.getElementsByName('age') - поиск всех элементов с атрибутом name = 'age'
+document.getElementsByClassName('class-name') - поиск всех элементов по имени класса
+el.getElementsByTagName('div') - поиск div-ов внутри element
+el.getElementsByTagName('*') - поиск всех потомков
+
+//Новые методы querySelector/querySelectorAll
+document.querySelector('ul > li:last-child') - поиск элемента по css-селектору
+document.querySelectorAll('ul > li:last-child') - поиск всех элементов по css-селектору
+document.querySelectorAll(':hover')
+
+//Проверка удовлетворяет ли элемент селектору css (true либо false)
+el.matches('a[href$="zip"]')
+
+//Поиск ближайшего элемента выше по иерархии DOM, подходящего под CSS-селектор css
+var numberSpan = document.querySelector('.num');
+numberSpan.closest('li');
+
+//XPath в современных браузерах
+//Синтаксис - https://developer.mozilla.org/en/XPath
+var result = document.evaluate(
+    "//h2[contains(., 'XPath')]",
+    document.documentElement,
+    null,
+    XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
+    null
+);
+for (var i = 0; i < result.snapshotLength; i++) {
+  alert( result.snapshotItem(i).outerHTML );
+}
+
+//Основные классы элементов
+input – HTMLInputElement
+body – HTMLBodyElement
+a – HTMLAnchorElement
+
+//Узнать класс
+alert( document.body ); // [object HTMLBodyElement]
+
+//Проверить класс
+document.body instanceof HTMLBodyElement // true
+document.body instanceof HTMLElement // true
+document.body instanceof Element // true
+document.body instanceof Node // true
+
+//Исследование свойств элемента
+console.dir(document.body);
+
+//Детальное описание свойств и методов каждого DOM-класса
+https://html.spec.whatwg.org/multipage/
+
+//Свойства узлов
+el.nodeType - тип узла (Элемент/Текстовый узел) (еще типы http://www.w3.org/TR/REC-DOM-Level-1/level-one-core.html#ID-1950641247)
+el.nodeName - название(тег) элемента (для любых узлов Node)
+el.tagName - название(тег) элемента (только у элементов Element)
+//При помощи tagName мы можем работать только с элементами,
+//а nodeName может что-то сказать и о других типах узлов
+el.innerHTML - содержимое элемента в виде строки (в innerHTML можно и читать и писать)
+el.outerHTML - HTML элемента целиком
+el.data - Содержимое других узлов, например, текстовых или комментариев (можно читать и обновлять)
+el.nodeValue - тоже что и data - лучше НЕ ИСПОЛЬЗОВАТЬ
+el.textContent - содержит текст внутри элемента, за вычетом тегов (возвращает конкатенацию текстовых узлов внутри el)
+el.hidden - сокрытие элемента (display:none)
+el.value – значение для INPUT, SELECT или TEXTAREA
+el.id – идентификатор
+el.href – адрес ссылки
+
+//Тонкости innerHTML
+ - Для таблиц в IE9- – innerHTML только для чтения
+ - innerHTML += осуществляет перезапись
+ - Если в innerHTML есть тег script – он не будет выполнен.
+
+//Тонкости outerHTML
+При записи элемент не меняется, а заменяется на новый
+переменная, в которой изначально был старый элемент,
+и в которой мы «перезаписали» outerHTML, остаётся со старым элементом
+
+//Вставка тэгов
+<div></div>
+<div></div>
+<script>
+  var name = prompt("Введите имя?", "<b>Винни-пух</b>");
+  document.body.children[0].innerHTML = name; //вставится html
+  document.body.children[1].textContent = name; //вставится текст
+</script>
+
+//Полифиллы
+https://learn.javascript.ru/dom-polyfill
+
+//Сойства и аттрибуты тэгов
+//Свойства
+При чтении html БОЛЬШИНСТВО стандартных HTML-атрибутов становятся свойствами соответствующих объектов
+Для нестандартных атрибутов DOM-свойство не создаётся
+Узел DOM может содержать пользовательские свойства и методы
+Пользовательские свойства:
+1. Могут иметь любое значение.
+2. Названия свойств чувствительны к регистру.
+3. Работают за счет того, что DOM-узлы являются объектами JavaScript.
+
+//Аттрибуты тэгов
+1. Всегда являются строками.
+2. Их имя нечувствительно к регистру (ведь это HTML)
+3. Видны в innerHTML (за исключением старых IE)
+
+//Методы для работы с аттрибутами
+el.hasAttribute(name) – проверяет наличие атрибута
+el.getAttribute(name) – получает значение атрибута
+el.setAttribute(name, value) – устанавливает атрибут
+el.removeAttribute(name) – удаляет атрибут
+el.attributes - все аттрибуты
+
+//Работы с аттрибутом checked
+input.removeAttribute('checked'); //снять галочку
+input.checked = true; //поставить галочку
+
+//Изменение значения аттрибута
+input.value = 'new'; //Аттрибут не изменится
+input.setAttribute('value', 'new'); //Аттрибут изменится
+
+//Работа с классами
+document.body.className = "class1 class2";
+el.classList.contains("class") //true/false
+el.classList.add/remove("class") //добавляет/удаляет класс class
+el.classList.toggle("class") //если класса class нет, добавляет его, если есть – удаляет
+//Можно перебрать классы через for, как псевдо-массив
+
+//Использование нестандартных аттрибутов к CSS
+.order[order-state="new"] {
+    color: green;
+}
+
+//Свойство dataset, data-атрибуты
+С помощью нестандартных атрибутов можно привязать к элементу данные
+Стандарт HTML5 специально разрешает атрибуты data-* и резервирует их для пользовательских данных.
+http://www.w3.org/TR/2010/WD-html5-20101019/elements.html#embedding-custom-non-visible-data-with-the-data-attributes
+<div id="el" data-about="Elephant">
+el.dataset.about
+
+//IE8
+Для изменения класса нужно использовать свойство className, setAttribute('class', ...) не сработает.
+
+//Проверка на вложенность
+parent.contains(child) //true, если parent содержит child или parent == child
+
+//Для порядка узлов
+var result = nodeA.compareDocumentPosition(nodeB);
+Результат:
+000000	0	nodeA и nodeB один и тот же узел
+000001	1	Узлы в разных документах (или один из них не в документе)
+000010	2	nodeB предшествует nodeA (в порядке обхода документа)
+000100	4	nodeA предшествует nodeB
+001000	8	nodeB содержит nodeA
+010000	16	nodeA содержит nodeB
+100000	32	Зарезервировано для браузера
+
+//Добавление и удаление узлов
+//Создание элемента (без вставки)
+var div = document.createElement('div');
+div.className = "alert";
+div.innerHTML = "<strong>Ура!</strong> Вы прочитали это важное сообщение.";
+
+//Создание тесктового узла
+var textElem = document.createTextNode('Тут был я');
+
+//Добавление элемента
+prnt.appendChild(child) //Вставляет child в конец дочерних элементов в prnt
+prnt.insertBefore(child, nextSibling) //Вставляет child в prnt перед nextSibling
+list.insertBefore(child, list.firstChild); //Вставка в начало списка (даже если firstChild == null)
+//Все методы вставки возвращают вставленный узел
+//Все методы вставки автоматически удаляют вставляемый элемент со старого места - НЕ НАДО УДАЛЯТЬ
+
+//Клонирование узлов
+var div2 = div.cloneNode(true);
+div2.querySelector('strong').innerHTML = 'Супер!';
+div.parentNode.insertBefore(div2, div.nextSibling);
+
+//Удаление узлов
+parent.removeChild(child) //Удаляет child из списка детей parent
+parent.replaceChild(newChild, child) //Вставляет newChild на его место child в parent
+element.remove() //Удаляет element
+//Оба метода возвращают удаленный узел, его можно вставить в другое место
+
+//Множественная вставка
+el.insertAdjacentHTML("beforeBegin", "<li>3</li><li>4</li>") //создаёт html
+el.insertAdjacentText("beforeBegin", text) //создаёт текстовый узел
+1. beforeBegin - перед el
+2. afterBegin - внутрь el, в самое начало.
+3. beforeEnd - внутрь el, в конец.
+4. afterEnd - после el.
+
+//DocumentFragment -
+ - кросс-браузерный DOM-объект, похож на обычный DOM-узел, но им не является
+ - нет обычных свойств DOM-узлов, таких как innerHTML, tagName и т.п. Это не узел.
+var fragment = document.createDocumentFragment();
+for(...){
+    fragment.appendChild(list[i]); // вставить каждый LI в DocumentFragment
+}
+ul.appendChild(fragment); // вместо фрагмента вставятся элементы списка
+
+//Новые методы вставки
+node.append(...nodes) //вставляет nodes в конец node
+node.prepend(...nodes) //вставляет nodes в начало node
+node.after(...nodes) //вставляет nodes после узла node
+node.before(...nodes) //вставляет nodes перед узлом node
+node.replaceWith(...nodes) //вставляет nodes вместо node
+//Эти методы ничего не возвращают!!!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

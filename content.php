@@ -92,6 +92,15 @@ return array(
                 'activable' => true,
                 'items' => array(),
             ),
+            'jsdocument' => array(
+                'title' => 'Документ и объекты страницы',
+                'href' => 'doc.php?path=jsdocument',
+                'style' =>'border: 4px dotted #3dade9;',
+                'img' =>'logo/javascript.png',
+                'cls' =>'div-logo',
+                'activable' => true,
+                'items' => array(),
+            ),
             'jquery' => array(
                 'title' => 'jQuery',
                 'href' => '#',

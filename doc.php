@@ -9,6 +9,7 @@ $docs = array(
     'hg' => 'docs/hg/hg',
     'js' => 'docs/js/js',
     'js-events' => 'docs/js/events',
+    'jsdocument' => 'docs/js/jsdocument',
     'jasmine' => 'docs/js/jasmine',
     'php' => 'docs/php/php',
     'phpunit' => 'docs/php/phpunit',
