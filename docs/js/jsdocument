@@ -261,7 +261,30 @@ node.before(...nodes) //вставляет nodes перед узлом node
 node.replaceWith(...nodes) //вставляет nodes вместо node
 //Эти методы ничего не возвращают!!!
 
+//Нестандартные свойства
+el.style.cssFloat = 'left';
+el.style.MozBorderRadius = '5px'; el.style.WebkitBorderRadius = '5px';
 
+//Сброс стиля на css
+el.style.width="";
+
+//Задание стиля
+el.style="color:blue"; //не работает
+el.setAttribute("style", ...); //работает
+//самый правильный вариант
+//полная перезапись el.style
+el.style.cssText="color: red !important; \
+    background-color: yellow; \
+    width: 100px; \
+    text-align: center; \
+    blabla: 5; \
+";
+
+//Стили css не видны в el.style
+//Получение полного стиля css
+getComputedStyle(document.body)
+//Кроссбраузерность и IE8
+window.getComputedStyle ? getComputedStyle(elem, "") : elem.currentStyle;
 
 
 
