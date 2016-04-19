@@ -1,0 +1,87 @@
+//В V8 большинство возможностей ES-2015 поддерживаются только при включённом use strict
+'use strict';
+
+//Проверка поддержки es6
+https://kangax.github.io/compat-table/es6/
+
+//let - объявление локальной переменной внутри блока
+//Переменная видна только после объявления и только в текущем блоке
+//Нельзя переобъявлять в том же блоке
+if (true) let apples = 10;
+
+//const - объявление константы, которую нельзя менять, в остальном как let
+const apple = 5;
+
+//Деструктуризация
+let [first, last] = ["1", "2"];
+let [,,title] = "1 2 3 4".split(" "); //title = 3
+let [first="1", last] = []; //first = 1, last = undefined
+let {title, title: t, width:w=100} = {title: "1"}; //title=t="1", w=100
+let {...all} = {title: "1"}; //all = {title: "1"}
+let {title, size: {width, height}, items: [item1, item2]} = options; //Вложенная деструктуризация
+
+//ОШИБКА
+let a, b;
+{a, b} = {a:5, b:6};
+
+//НЕТ ОШИБКИ
+let a, b;
+({a, b} = {a:5, b:6});
+
+//Оператор «spread»
+let [first, last, ...rest] = "1 2 3 4".split(" ");
+//rest = ["3", "4"]
+function foo(first, last, ...rest) {} //Оператор … должен быть в конце
+
+//Параметры по умолчанию
+function foo(title = "1"){
+    alert(`${title}`);
+}
+function foo(title = 1+2){}
+
+//Передача массива как списка
+let max = Math.max(...numbers);
+
+//Деструктуризация в параметрах
+let options = {title: "Меню"};
+function foo({title="1", width:w=100, height:h=200}) {}
+foo(options);
+
+//Имя функции «name»
+function f() {} // f.name == "f"
+
+//Объявление функции Function Declaration, сделанное в блоке, видно только в этом блоке
+if (true) {
+    sayHi(); // работает
+
+    function sayHi() {
+        alert("Привет!");
+    }
+}
+
+//Функции-стрелки =>
+let inc = x => x+1;      //let inc = function(x) { return x + 1; };
+let sum = (a,b) => a + b;//let sum = function(a,b){ return a + b; };
+let getTrue = () => true;//let getTrue = function(){ return true; };
+let getTime = () => {
+    let date = new Date();
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    return `${hours}:${minutes}`;
+};
+alert(getTime());
+//Функции-стрелки не имеют своего this - внутри – тот же this, что и снаружи.
+//Функции-стрелки не имеют своего arguments
+//Функции-стрелки не могут быть использованы как конструкторы, с new.
+
+//Новый вид кавычек для строк (разрешён перевод строки)
+let str = `обратные
+    кавычки`;
+
+//Полезные методы
+str.includes(s) – проверяет, включает ли одна строка в себя другую, возвращает true/false.
+str.endsWith(s) – возвращает true, если строка str заканчивается подстрокой s.
+str.startsWith(s) – возвращает true, если строка str начинается со строки s.
+str.repeat(times) – повторяет строку str times раз.
+
+

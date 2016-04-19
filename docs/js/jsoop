@@ -1,0 +1,106 @@
+//ФУНКЦИОНАЛЬНЫЙ СТИЛЬ
+//Публичные и приватные свойства и методы
+function Cat(){
+    var privateVar = 1;
+    this.publicVar = 2;
+
+    var privateM1 = function(){
+        return this;
+    }.bind(this);
+
+    var me = this;
+    var privateM2(){
+        return me;
+    };
+
+    this.publicM = function(){
+        return this;
+    }
+}
+
+//ПРОТОТИПНЫЙ СТИЛЬ
+//Наследование м/у объектами
+var animal = { eats: true };
+var rabbit = { jumps: true };
+rabbit.__proto__ = animal;
+
+//Методы для работы с прототипом
+Object.getPrototypeOf(obj) (кроме IE8-)
+Object.setPrototypeOf(obj, proto) (кроме IE10-)
+Object.create(proto, descriptors) (кроме IE8-)
+
+//Создание прототипа в конструкторе
+var animal = { eats: true };
+function Rabbit(name) {
+    this.name = name;
+    this.__proto__ = animal;
+}
+//Rabbit.prototype = animal; //Или так
+var rabbit = new Rabbit("Кроль");
+// Значением prototype может быть только объект
+
+//В каждой функции создается prototype по у молчанию, содержащий свойство constructor
+function Rabbit(name) {
+    this.name = name; alert( name );
+}
+var rabbit = new Rabbit("Кроль");
+var rabbit2 = new rabbit.constructor("Крольчиха");
+
+//Кроссбраузерный вариант создания прототипа
+function inherit(proto) {
+    function F() {}
+    F.prototype = proto;
+    var object = new F;
+    return object;
+}
+
+//Встроенные свойства и функции берутся из соответствующмих прототипов
+Object.prototype
+Array.prototype
+Number.prototype
+Function.prototype
+Boolean.prototype
+String.prototype
+Date.prototype
+ТОЛЬКО null и undefined не имеют свойств
+
+//Создание класса с помощью прототипа
+function Animal(name) {
+    this.name = name;
+}
+Animal.prototype.run = function(speed){};
+var animal = new Animal('Зверь');
+
+//Наследование
+function Rabbit(name) {
+    this.name = name;
+}
+//Наследование от Animal присваивается сразу после объявления конструктора,
+//иначе он перезатрёт уже записанные в прототип методы
+Rabbit.prototype = Object.create(Animal.prototype);
+//Rabbit.prototype = new Animal(); - неправильно, т.к. создание объекта Animal может требовать параметры и вляють на document
+Rabbit.prototype.constructor = Rabbit;
+//свой метод или переопределение метода Animal
+Rabbit.prototype.jump = function() {};
+var rabbit = new Rabbit('Кроль');
+
+//Вызов конструктора родителя
+function Rabbit(name) {
+    Animal.apply(this, arguments);
+}
+
+//Порядок наследования
+//1. Определение конструктора родителя
+function Animal(name) {}
+//2. Определение конструктора потомка
+function Rabbit(name) {}
+//3. Наследование прототипа
+Rabbit.prototype = Object.create(Animal.prototype);
+//4. Определение методов потомка
+
+//Проверка класса: "instanceof"
+obj instanceof Func
+//Проверяет тот факт, что obj является результатом вызова new Func. Он учитывает цепочку __proto__
+
+//Наследование от Error
+https://learn.javascript.ru/oop-errors
