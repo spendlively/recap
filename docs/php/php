@@ -64,3 +64,36 @@ else{
 //Обход ошибки в которой iconv возвращает false
 $content = iconv('CP1251//TRANSLIT','UTF-8',$content);
 $content = iconv('CP1251//IGNORE','UTF-8',$content);
+
+//REFLECTION API
+//Исследование классов с помощью ReflectionClass
+$rc = new ReflectionClass('User');
+//print_r(get_class_methods($rc));
+$rc->getName();
+$rc->getShortName();
+$rc->hasMethod('methodName');
+
+//Исследование методов с помощью ReflectionMethod
+$rm = new ReflectionMethod('NS\User', 'getData');
+$rm->isPublic();
+//Вызов метода
+$user = new NS\User;
+$rm->invoke($user);
+$rm->invokeArgs($user, array());
+
+//Исследование свойств с помощью ReflectionProperty
+$rp = new ReflectionProperty('NS\User', 'data');
+$rp->getName();
+$rp->setAccessible();
+$user = new NS\User;
+$rp->getValue($user);
+
+//Исследование параметров с помощью ReflectionParameter
+$rp = new ReflectionParameter(array('NS\User', 'setData'), 0); //0-ой параметр
+$rp->isOptional();
+
+//Исследование объектов с помощью ReflectionObject
+$user = new NS\User;
+$ro = new ReflectionObject($user);
+$ro->getNamespaceName();
+
