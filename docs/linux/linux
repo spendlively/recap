@@ -450,3 +450,63 @@ dpkg --force-help //Просмотр подсказки по ключам --forc
 dpgk --force-overwrite
 //ДОБАВЛЕНИЕ СПИСКОВ ПАКЕТОВ
 ...
+
+//ПОДКЛЮЧЕНИЕ ПО SSH С ПОМОЩЬЮ RSA КЛЮЧЕЙ
+//Сгенерировать пару ключей RSA 2048
+ssh-keygen //Спросит каталог (.ssh) и пароль
+
+//Передача публичного ключа на удаленную машину в рабочий каталог
+scp .ssh/key.pub root@192.168.20.117:~/
+
+//Настройка демона sshd на удаленной машине, чтобы он принимал ключ
+mkdir .ssh
+chmod 700 .ssh
+cat key.pub >> .ssh/authorized_keys
+chmod 644 .ssh/authorized_keys
+
+//Запрещение входа по паролю на удаленной машине
+nano /etc/ssh/sshd_config
+PermitRootLogin no
+PubkeyAuthentication yes
+PasswordAuthentiocation no
+PermitEmptyPasswords no
+
+//Перезапускаем sshd на удаленной машине
+service sshd restart
+
+//Подключение к удаленной машине
+ssh root@192.168.20.117 -i key.pub
+
+//Настройка ключа по умолчанию
+nano .ssh/config
+Host spendlively
+	Hostname 192.168.20.117
+	User spendlively
+	IdentityFile ~/.ssh/key.pub
+	IdentitiesOnly yes # использовать только этот ключ
+
+//Подключение у даленной машине вариант 2
+ssh 192.168.20.117
+
+//Перенос 22 порта на удаленной машине
+nano /etc/ssh/sshd_config
+Port 22222
+
+//ПОДКЛЮЧЕНИЕ К GITHUB С ПОМОЩЬЮ SSH КЛЮЧА
+//Создание ключей
+ssh-keygen -t rsa -C 'spendlively@mail.ru'
+
+//Пересылаем публичный ключ на github
+cat key.pub | pbcopy
+//В браузере
+http://github.com
+Settings (верх правый угол) -> SSH keys -> Add SSH key
+Title -> title
+key -> paste
+Addkey
+
+//Добавляю приватный ключ сгенерированный для github
+ssh_add key
+
+//Подключение к github по ssh
+ssh -T spendlively@github.com
