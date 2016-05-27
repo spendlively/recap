@@ -170,3 +170,45 @@ var rowEls = fly.query('.x-grid-cell');
 //GETCMP
 //Ext.Component Ext.getCmp(String);
 var cmp = Ext.getCmp('element-id');
+
+//2 варианта добавления нескольких обработчиков на одно событие
+//1: наследование
+Ext.define('Child', {
+    extend: 'Parent',
+    constructor: function(config){
+        var cfg = this.callParent(arguments);
+        this.on({
+            beforeshow: function(){
+                console.log(222)
+            }
+        });
+        return cfg;
+    }
+});
+Ext.create('Child', {
+    listeners: {
+        beforeshow: function(){
+            console.log(111)
+        }
+    }
+});
+
+//2: композиция
+Ext.define('Child', {
+    constructor: function(config){
+        var tip = Ext.create('Parent', config);
+        tip.on({
+            beforeshow: function(ths){
+                console.log(222)
+            },
+        });
+        return tip;
+    }
+});
+Ext.create('Child', {
+    listeners: {
+        beforeshow: function(){
+            console.log(111)
+        }
+    }
+});

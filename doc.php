@@ -37,6 +37,9 @@ $docs = array(
     'android' => 'docs/java/android/android',
     'java' => 'docs/java/java/java',
     'libgdx' => 'docs/java/android/libgdx',
+    'apache' => 'docs/webservers/apache',
+    'nginx' => 'docs/webservers/nginx',
+    'fpm' => 'docs/webservers/fpm',
 );
 $content = array();
 
