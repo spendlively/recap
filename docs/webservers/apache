@@ -1,1 +1,33 @@
-apache
+//MOD_REWRITE (.htaccess)
+//RewriteRule
+Меняет URL-адрес введенный пользователем на свой собственный
+RewriteRule Паттерн URL [Флаги]
+Паттерн - шаблон регулярных выражений, содержащий адрес, который видит пользователь
+URL - новый адрес, который будет подставлен вместо того, который видет браузер
+
+//Подстановка нового адреса
+RewriteEngine on
+RewriteRule ^old-url\.html$ /new-url.html [R=301,L]
+L - остановить процесс обработки URL
+R=301 - использовать 301 HTTP-заголовок
+
+//ЧПУ
+RewriteEngine on
+RewriteRule ^article/([^/]+)/?$ article.php?id=$1 [L]
+Меняет адрес вида /articles/article1/ на /article.php?id=article1
+
+//RewriteCond
+Устанавливает условие, которое должно выполняться следующим за ним правилом RewriteRule
+
+//Запрет использования изображения с вашего сайта
+RewriteEngine on
+RewriteCond %{HTTP_REFERER} !^$
+RewriteCond %{HTTP_REFERER} !^http://(www\.)?example\.com/.*$ [NC]
+RewriteRule .+\.(gif|jpg|png)$ - [F]
+Защищает от ссылок вида http://www.example.com/myphoto.jpg с чужого сайта
+- Первое условие - наличие значения в переменной HTTP_REFERER
+- Второе условие - HTTP_REFERER не должно начнаться с http://www.example.com/ или http://example.com/
+- [NC] - нечуствительно к регистру
+- Если оба условия выполнились и в URL есть картинка (.gif) - выдавать ошибку ([F])
+- "-" означает - не менять URL на другой
+
