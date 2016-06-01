@@ -1,0 +1,302 @@
+//Криптографические алгоритмы
+//Симметричные - для шифрования и дешифрования используется один ключ
+Симметричные шифры (des - старый, aes - новый) быстрее и менее ресурсоемкие чем асимметричные
+
+//Ассиметричные - для шифрования и дешифрования используются разные ключи
+Свойство ассиметричной криптографии - то что шифруется открытым ключом, расшифровывается закрытым и наоборот.
+
+//RSA - ассиметричный алгоритм
+1. Получатель и отправитель создают пары открытых и закрытых ключей
+2. Отправитель шифрует сообщение открытым ключем получателя
+3. Получатель расшифровывает сообщение своим закрытым ключом
+
+//Диффи-хеллман
+1. Отправитель и получатель создают по закрытому ключу
+2. Далее о и п обмениваются числами вычисляют общий ключ, не передвавя его в открытом доступе
+3. О и п шифруют и расшифровывают свои сообщения симметричным алгоритмом полученным ключом.
+Минус: если общение групповое - нужно со всеми договариваться, в итоге получится огромное количество ключей
+
+//Электронно-цифровая подпись
+1. Отправитель документа считает криптостойкую хэш сумма от него
+2. Отправитель шифрует хэш сумму своим закрытым ключом получив при этом подпись
+3. Отправитель отправляет документ и подпись получателю
+4. Получатель расшифровывает подпись открытым ключом отправителя и получает хэш
+5. Получатель вычисляет хэш документа и сравнивает его с хэшем из подписи, если они совпали - то это гарантия, что документ пришел от нужного отправителя
+
+//Инфраструктура открытых ключей
+1. Центр сертификации подписывает открытый ключ отправителя своим закрытым ключом и включает его в сертификат
+2. Получатель получает сертификат отправителя и расшифровывает подпись центра сертификации его открытым ключом
+3. Таким образом доверяя центру сертификации получатель гарантированно получает открытый ключ от получателя
+4. Сертификаты корневых центров сертификации содержащие их открытые ключи зашиты в операционной системе
+
+Форматы ключей pem, der, pkcs12
+Команды openssl
+Стандарт x509
+Как са подписывает серт закрытым ключом
+Алгоритм подписи sha-1
+
+///////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////ШИФРОВАНИЕ////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
+
+//AES
+//Вариант 1
+openssl enc -aes-256-cbc -in file.txt -out file.aes
+openssl enc -aes-256-cbc -d -in file.aes > file.txt
+
+//Вариант с солью
+openssl enc -aes-256-cbc -salt -in file.txt -out file.aes
+openssl enc -d -aes-256-cbc -in file.aes -out file.txt
+
+//Вариант 3 с base64-ключом сохраненным в файл
+openssl rand -base64 32 -out key.txt
+openssl enc -aes-256-cbc -salt -in file.txt -out file.aes -pass file:./key.txt
+openssl enc -aes-256-cbc -d -in file.aes -out file.txt -pass file:./key.txt
+
+//RSA
+//Создание ключей
+openssl genrsa -out private.pem -aes256 2048
+openssl rsa -in private.pem -pubout -out public.pem
+
+//В RSA размер шифруемых данных ограничен размером ключа,
+//поэтому зашифровать более 2Кб данных 2048 ключом не получится
+//Выход - зашифровать AES ключом, а ключ зашифровать RSA
+
+//Шифрование строки
+echo "test" | openssl rsautl -encrypt -pubin -inkey public.pem > file.rsa
+cat file.rsa | openssl rsautl -decrypt -inkey private.pem > file.txt
+
+//Шифрование файла
+openssl rsautl -encrypt -pubin -inkey public.pem -in file.txt -out file.rsa
+openssl rsautl -decrypt -inkey private.pem -in file.rsa -out file.txt
+
+//pgp
+
+///////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////КОНЕЦ//////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////
+/////////////Простой вариант создание ssl-защизенного подключения с openssl////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
+Пример создания ssl-сертификата для работы https (простой вариант)
+
+1. Устанавливаем пакет openssl, если он еще не установлен
+apt-get update
+apt-get install openssl
+
+2. Включаем ssl-модуль для apache2, если он еще не включен
+a2enmod ssl
+
+3. Создаем каталог для сертификатов и закрытых ключей
+mkdir /etc/apache2/ssl/
+cd /etc/apache2/ssl/
+
+4. Создаем приватный ключ (4096 бит) сервера iSMS (server.key)
+openssl genrsa -out server.key 4096
+
+5. Создаем сертификат сервера iSMS (server.crt) на 10000 дней подписанный приватным ключом (server.key)
+Потребуется ответить на несколько вопросов для заполнения поля subject сертификата
+openssl req -new -x509 -days 10000 -key server.key -out server.crt
+
+6. Дописываем в конфиг виртуального хост веб-сервера apache (/etc/apache2/sites-available/wasutp.conf) конфиг для работы по 443 порту (https) с использованием ssl-сертификатов.
+В итоге получаем примерно следующее:
+<VirtualHost *:80>
+
+        Alias /icons/ "/home/www-data/www/htdocs/WASUTP/public/icons/"
+
+        ServerName wasutp.loc
+
+        ServerAdmin webmaster@localhost
+        DocumentRoot /home/www-data/www/htdocs/WASUTP/public/
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+        <Directory /home/www-data/www/htdocs/WASUTP/public/>
+                AllowOverride All
+                Options +FollowSymLinks +Indexes
+                Order deny,allow
+                Allow From all
+        </Directory>
+</VirtualHost>
+<IfModule mod_ssl.c>
+	<VirtualHost *:443>
+		SSLEngine on
+		SSLCertificateFile /etc/apache2/ssl/server.crt
+		SSLCertificateKeyFile /etc/apache2/ssl/server.key
+
+		Alias /icons/ "/home/spendlively/vhosts/WASUTP/HG/iSMS/src/public/icons/"
+
+	        ServerName wasutp.loc
+	        ServerAlias www.wasutp.loc
+
+	        ServerAdmin spendlively@mail.ru
+	        DocumentRoot /home/spendlively/vhosts/WASUTP/HG/iSMS/src/public/
+
+	        ErrorLog ${APACHE_LOG_DIR}/error.log
+	        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+	        <Directory /home/spendlively/vhosts/WASUTP/HG/iSMS/src/public/>
+	                Require all granted
+	                AllowOverride All
+                	Options +FollowSymLinks +Indexes
+        	        Order deny,allow
+	        </directory>
+
+	</VirtualHost>
+</IfModule>
+
+7. После конфигурирования виртуального хоста перезагружаем apache чтобы изменения вступили в силу
+service apache2 restart
+
+8. Если все выполнено правильно, то при переходе по адресу iSMS (в нашем случае wasutp.loc, www.wasutp.loc, 192.168.20.117, 127.0.0.4) браузер выдаст предупреждение "Ваше подключение не защищено", а "https" будет перечеркнуто.
+
+Закрытые ключи должны храниться в безопасном месте!!!
+
+9. Для дополнительной информации можно почитать про:
+- инфраструктуру открытых ключей PKI
+- стандарт x509
+- команду openssl
+
+///////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////КОНЕЦ//////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////СОЗДАНИЕ УДОСТОВЕРИТЕЛЬНОГО ЦЕНТРА/////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
+Пример создания и настройки удостоверительного центра (CA) и подписывания ssl-сертификатов iSMS
+(простая инфраструктура открытых ключей (PKI) c одиночным УЦ)
+
+1. Устанавливаем пакет openssl, если он еще не установлен
+apt-get update
+apt-get install openssl
+
+2. Включаем ssl-модуль для apache2, если он еще не включен
+a2enmod ssl
+
+3. Создаем каталог для сертификатов и закрытых ключей
+mkdir /etc/apache2/ssl/
+cd /etc/apache2/ssl/
+
+4. Создаем приватный ключ (4096 бит) удостоверительного центра (ca.key)
+openssl genrsa -out ca.key 4096
+
+5. Создаем сертификат удостоверительного центра (на 10000 дней) подписанный приватным ключом (ca.crt)
+Потребуется ответить на несколько вопросов для заполнения поля subject сертификата
+openssl req -new -x509 -days 10000 -key ca.key -out ca.crt
+openssl req -new -x509 -days 10000 -key ca.key -out ca.crt -sha256
+
+6. Создаем приватный ключ (4096 бит) сервера iSMS (server.key)
+openssl genrsa -out server.key 4096
+
+7. Создаем конфигурационный файл для создания запроса на получение сертификата сервера iSMS (openssl-csr.cnf)
+Файл необходим для того, чтобы указать домены и ip-адреса сервера iSMS (subjectAltName)
+Cодержимое файла:
+[ req ]
+default_bits = 4096
+distinguished_name = req_distinguished_name
+req_extensions = req_ext
+
+[ req_distinguished_name ]
+countryName = Country Name (2 letter code)
+countryName_default = RU
+stateOrProvinceName = State or Province Name (full name)
+stateOrProvinceName_default = NSO
+localityName = Locality Name (eg, city)
+localityName_default = NSK
+organizationName = Organization Name (eg, company)
+organizationName_default = EMA
+commonName = Common Name (eg, YOUR name or FQDN)
+commonName_default = ISMS
+commonName_max = 64
+
+[ req_ext ]
+basicConstraints = CA:FALSE
+keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+
+# Прописываем домены и ip-адреса iSMS
+subjectAltName = DNS:wasutp.loc, DNS:www.wasutp.loc, IP:192.168.20.117, IP:127.0.0.4
+
+8. Создаем запрос на получение сертификата сервера iSMS (server.csr) подписанный приватным ключом сервера (server.key) на основании конфига (openssl-csr.cnf)
+openssl req -new -key server.key -config openssl-csr.cnf -reqexts req_ext -out server.csr
+openssl req -new -key server.key -config openssl-csr.cnf -reqexts req_ext -out server.csr -sha256
+
+9. Создаем сертификат сервера iSMS (server.crt) подписанный приватным ключом удостоверительного центра (ca.key) на 10000 дней с указанием того же конфига (openssl-csr.cnf)
+Обращаем внимание на ключик "-set_serial 01" - если потребуется перегенерировать сертификат, серийный номер необходимо изменить
+openssl x509 -req -days 10000 -CA ca.crt -CAkey ca.key -set_serial 01 -extfile openssl-csr.cnf -extensions req_ext -in server.csr -out server.crt
+openssl x509 -req -days 10000 -CA ca.crt -CAkey ca.key -set_serial 01 -extfile openssl-csr.cnf -extensions req_ext -in server.csr -out server.crt -sha256
+
+10. Дописываем в конфиг виртуального хост веб-сервера apache (/etc/apache2/sites-available/wasutp.conf) конфиг для работы по 443 порту (https) с использованием ssl-сертификатов.
+В итоге получаем примерно следующее:
+<VirtualHost *:80>
+
+        Alias /icons/ "/home/www-data/www/htdocs/WASUTP/public/icons/"
+
+        ServerName wasutp.loc
+
+        ServerAdmin webmaster@localhost
+        DocumentRoot /home/www-data/www/htdocs/WASUTP/public/
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+        <Directory /home/www-data/www/htdocs/WASUTP/public/>
+                AllowOverride All
+                Options +FollowSymLinks +Indexes
+                Order deny,allow
+                Allow From all
+        </Directory>
+</VirtualHost>
+<IfModule mod_ssl.c>
+	<VirtualHost *:443>
+		SSLEngine on
+		SSLCertificateFile /etc/apache2/ssl/server.crt
+		SSLCertificateKeyFile /etc/apache2/ssl/server.key
+
+		Alias /icons/ "/home/spendlively/vhosts/WASUTP/HG/iSMS/src/public/icons/"
+
+	        ServerName wasutp.loc
+	        ServerAlias www.wasutp.loc
+
+	        ServerAdmin spendlively@mail.ru
+	        DocumentRoot /home/spendlively/vhosts/WASUTP/HG/iSMS/src/public/
+
+	        ErrorLog ${APACHE_LOG_DIR}/error.log
+	        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+	        <Directory /home/spendlively/vhosts/WASUTP/HG/iSMS/src/public/>
+	                Require all granted
+	                AllowOverride All
+                	Options +FollowSymLinks +Indexes
+        	        Order deny,allow
+	        </directory>
+
+	</VirtualHost>
+</IfModule>
+
+11. После конфигурирования виртуального хоста перезагружаем apache чтобы изменения вступили в силу
+service apache2 restart
+
+12. Для работы https с ssl-шифрованием все готово. Чтобы браузер (google chrome) доверял нашему удостоверительному центру, добавляем его сертификат в список корневых УЦ.
+в linux:
+Настройки -> Показать дополнительные настройки -> HTTPS/SSL -> Настроить сертификаты -> Центры сертификации -> импорт
+в windows:
+Настройки -> Показать дополнительные настройки -> HTTPS/SSL -> Настроить сертификаты -> Доверенные корневые центры сертификации -> импорт
+
+Далее для обоих случаем выбираем файл сертификата удостоверительного центра (ca.crt) и импортируем.
+Для вступления в силу в ОС windows потребуется перезагрузка браузера
+
+Если все выполнено правильно, то при переходе по адресу iSMS (в нашем случае wasutp.loc, www.wasutp.loc, 192.168.20.117, 127.0.0.4) браузер не выдаст предупреждения или ошибки, а "https" будет подсвечено зеленым цветом.
+
+Закрытые ключи должны храниться в безопасном месте!!!
+
+13. Для дополнительной информации можно почитать про:
+- инфраструктуру открытых ключей PKI
+- стандарт x509
+- команду openssl
+
+///////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////КОНЕЦ//////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////

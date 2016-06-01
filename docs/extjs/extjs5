@@ -212,3 +212,4 @@ Ext.create('Child', {
         }
     }
 });
+

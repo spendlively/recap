@@ -40,6 +40,7 @@ $docs = array(
     'apache' => 'docs/webservers/apache',
     'nginx' => 'docs/webservers/nginx',
     'fpm' => 'docs/webservers/fpm',
+    'security' => 'docs/security/security',
 );
 $content = array();
 
