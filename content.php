@@ -549,7 +549,7 @@ return array(
         ),
     ),
     'security' => array(
-        'title' => 'Линукс',
+        'title' => 'Безопасность и криптография',
         'href' => 'doc.php?path=security',
         'style' =>'border: 4px dotted #000000;',
         'img' =>'logo/security.png',

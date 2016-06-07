@@ -1,3 +1,7 @@
+//Включение расширенного лога apache
+#LogLevel warn
+LogLevel debug
+
 //MOD_REWRITE (.htaccess)
 //RewriteRule
 Меняет URL-адрес введенный пользователем на свой собственный
