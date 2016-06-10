@@ -200,3 +200,45 @@ new Rabbit("Name").test();
 1. Вызвать конструктор родителя можно только изнутри конструктора потомка. В частности, super() нельзя вызвать из произвольного метода.
 2. В конструкторе потомка мы обязаны вызвать super() до обращения к this. До вызова super не существует this, так как по спецификации в этом случае именно super инициализует this.
 
+//ПРОМИСЫ
+//Синтаксис
+var p = new Promise(function(resolve, reject){
+    resolve("success");
+    reject(new Error("error"));
+});
+p.then(onFulfilled, onRejected);
+
+//Создание и выполнение промиса, выполняющего асинхронный код
+var p = new Promise((resolve, reject) => {
+
+    setTimeout(() => resolve("success"), 1000);
+
+    //Не выполнится, т.к. resolve выполнится раньше
+    setTimeout(() => reject(new Error("error")), 2000);
+    //Альтернатива reject
+    setTimeout(() => throw new Error("error"), 2000);
+});
+
+//Навешивание обработчиков результата выполнения промиса
+p.then(
+    result => alert(result),
+    error => alert(error),
+);
+
+//Прмиссификация
+function getHttp(url){
+    return new Promise(function(resolve, reject){
+        ....
+    });
+}
+
+httpGet("yandex.ru")
+    .then(
+        ...
+        return(httpGet("google.com"));
+    )
+    .then(
+        ...
+        return(httpGet("mail.ru"));
+    );
+//END ПРОМИСЫ

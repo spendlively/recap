@@ -303,7 +303,7 @@ return array(
     ),
     'c' => array(
         'title' => 'Си++',
-        'href' => '#',
+        'href' => 'doc.php?path=cpp',
         'style' =>'border: 4px dotted #004381;',
         'img' =>'logo/cpp.png',
         'cls' =>'div-logo',

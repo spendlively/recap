@@ -41,6 +41,7 @@ $docs = array(
     'nginx' => 'docs/webservers/nginx',
     'fpm' => 'docs/webservers/fpm',
     'security' => 'docs/security/security',
+    'cpp' => 'docs/cpp/cpp',
 );
 $content = array();
 

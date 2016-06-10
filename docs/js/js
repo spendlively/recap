@@ -179,6 +179,45 @@ function isTargetVisible(el){
 //Спецификация DOM 4
 https://www.w3.org/TR/dom/#introduction-to-dom-events
 
+//RequireJS
+//Подключение библиотеки
+<script data-main="/js/app" src="/js/require.js"></script>
+
+//Экспорт модуля (/js/mymodule.js)
+define(
+    'mymodule',
+    ['jquery'],
+    function($){
+        return {
+            foo: bar
+        };
+    }
+);
+
+//Импорт модуля (/js/app.js)
+require(
+    ['mymodule', 'jquery'],
+    function(Module, $){
+        $('body').append(Module.foo);
+    }
+);
+
+//Импорт модуля не оформленного в стиле AMD
+require.config = {
+    shim: {
+        'oldmodule': {
+            deps: [],
+            exports: 'oldmodule'
+        }
+    }
+};
+
+require(
+    ['mymodule', 'jquery', 'oldmodule'],
+    function(){}
+);
+//END RequireJS
+
 //XMLHttpRequest
 http://xmlhttprequest.ru/#start
 https://learn.javascript.ru/ajax-xmlhttprequest
