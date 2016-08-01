@@ -1,0 +1,89 @@
+//Чтение файла
+var fs = require('fs');
+var cont = fs.readFileSync('file.txt');
+console.log(decodeURIComponent(cont));
+
+//Чтение файла асинхронно
+var fs = require('fs');
+fs.readFile('file.txt', function(err, cont){
+    console.log(decodeURIComponent(cont));
+});
+
+//http сервер app.js
+var http = require('http');
+http.createServer(function (request, response){
+    response.writeHead(200, {
+        'Content-Type': 'text/html; charset=utf-8'
+    });
+    response.write('Hello, world');
+    response.end();
+}).listen(8080);
+console.log('Listening on 8080...');
+//node app.js
+
+//События сервера
+var http = require('http');
+var server = http.createServer();
+server.listen(8989);
+server.on('request', function (request, response){
+    response.writeHead(200);
+    response.write('Hello!');
+    response.end(' The end!');
+});
+server.on('listening', function (request, response){
+    console.log('Listen: 8989...');
+});
+server.on('request', function (request, response){
+    console.log('Request:', request.method, request.url, request.statusCode);
+});
+server.on('connection', function (request, response){
+    console.log('Connection');
+});
+server.on('close', function (request, response){
+    console.log('Close');
+});
+
+//Модуль URL
+console.log(require('url').parse(request.url));
+console.log(require('url').parse(request.url, true)); //С разбором параметров
+
+//Пользовательские события
+var events = require('events');
+var EventEmitter = events.EventEmitter;
+var test = new EventEmitter();
+test.on('myEvent', function(param){
+    console.log(param);
+});
+test.emit('myEvent', 'Test 1');
+
+//Встроенные модули
+//Список модулей
+https://nodejs.org/api/
+//Исходники модулей
+https://github.com/nodejs/node-v0.x-archive/tree/master/lib
+//Поиск модулей
+https://www.npmjs.com/
+https://nodejsmodules.org/
+
+//Поиск сторонних модулей
+Если код был вызван из папки '/var/www/demo', то Node.js попытается найти указанные модули в следующих папках
+/var/www/demo/node_modules
+/var/www/node_modules
+/var/node_modules
+/node_modules
+
+//При глобальной установке модуля (npm install -g MODULE) он будет доступен из любого места
+
+//При вызове ыайла по абсолютному пути (require('../lib/logger')) если файл будет не найден logger
+//Node.js попытается подключить файл добавляя разные расширения: .js, .json, .node
+
+//Если указан каталог, Node.js попытается определить какой из файлов папки представляет собой точку входа для модуля
+//Будет проверено или существует в папке файл package.json в котором в поле main будет указан файл, который надо подключить
+
+//Удаление закешированного файла
+delete require.cache['module'];
+
+//Чтобы получить полный путь, по которому был найден модуль
+var modulePath = require.resolve('express');
+
+

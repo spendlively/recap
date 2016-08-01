@@ -42,6 +42,7 @@ $docs = array(
     'fpm' => 'docs/webservers/fpm',
     'security' => 'docs/security/security',
     'cpp' => 'docs/cpp/cpp',
+    'nodejs' => 'docs/js/nodejs',
 );
 $content = array();
 

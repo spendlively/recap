@@ -557,4 +557,13 @@ return array(
         'activable' => true,
         'items' => array(),
     ),
+    'nodejs' => array(
+        'title' => 'Node.js',
+        'href' => 'doc.php?path=nodejs',
+        'style' =>'border: 4px dotted #78bf33;',
+        'img' =>'logo/nodejs.png',
+        'cls' =>'div-logo',
+        'activable' => true,
+        'items' => array(),
+    ),
 );
