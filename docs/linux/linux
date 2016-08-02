@@ -503,7 +503,7 @@ key -> paste
 Addkey
 
 //Добавляю приватный ключ сгенерированный для github
-ssh_add key
+ssh-add key
 
 //Подключение к github по ssh
 ssh -T spendlively@github.com
