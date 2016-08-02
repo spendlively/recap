@@ -85,3 +85,9 @@ git merge --no-ff feature/desc
 
 //Отмена изменений в файле до состояния последнего коммита
 git checkout -- file.txt
+
+//Запомнить логин/пароль репозитория для push (git --version > 1.7.10)
+//На час
+git config --global credential.helper "cache --timeout=3600"
+//Навсегда
+git config credential.helper store
