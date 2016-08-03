@@ -493,6 +493,8 @@ Port 22222
 //Создание ключей
 ssh-keygen -t rsa -C 'spendlively@mail.ru'
 
+//Сохраняю файлики key и key.pub в каталог ~/.ssh/
+
 //Пересылаем публичный ключ на github
 cat key.pub | pbcopy
 //В браузере
@@ -502,14 +504,9 @@ Title -> title
 key -> paste
 Addkey
 
-//Добавляю приватный ключ сгенерированный для github
-ssh-add key
-
-//Подключение к github по ssh
-ssh -T spendlively@github.com
-
-git init
-git clone https://github.com/spendlively/recap.git
+//Клонируем репозиторий с помощью ссылки git
+//Если склонировать с помощью ссылки https - ключ использоваться не будет
+git clone git@github.com:spendlively/recap.git
 
 //SED
 //Изменить строку в файле
