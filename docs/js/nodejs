@@ -1,3 +1,8 @@
+//Установка node.js и npm
+sudo apt-get update
+sudo apt-get install nodejs
+sudo apt-get install npm
+
 //Чтение файла
 var fs = require('fs');
 var cont = fs.readFileSync('file.txt');
@@ -72,6 +77,9 @@ https://nodejsmodules.org/
 /var/www/node_modules
 /var/node_modules
 /node_modules
+
+//Какие модули установлены в системе
+npm ls
 
 //При глобальной установке модуля (npm install -g MODULE) он будет доступен из любого места
 
@@ -174,4 +182,114 @@ http.createServer(function(req, res){
 
 }).listen(8989);
 ///////////////////////END ПОТОКИ////////////////////////
+
+//////////////Создание своего модуля//////////////////////
+//one.js
+var one = function(){
+    console.log('one');
+}
+module.exports = one;
+
+//two.js
+exports.two = function(){
+    console.log('two');
+}
+
+//three.js
+function Three(){
+    this.test = function(){
+        console.log('three');
+    }
+}
+exports.Three = Three;
+
+//four.js
+function Four(){
+    this.test = function(){
+        console.log('four');
+    }
+}
+module.exports = Four;
+
+//five.json
+{
+    "f": "five"
+}
+
+//all.js
+var one = require('./one');
+var two = require('./two');
+var three = require('./three');
+var obj3 = new three.Three();
+var Four = require('./four');
+var obj4 = new Four();
+var five = require('./five');
+
+one(); //one \n
+two.two(); //two \n
+require('./two').two(); //two \n
+obj3.test(); //three
+obj4.test(); //four
+console.log(five.f); //five
+
+//////////////END Создание своего модуля//////////////////////
+
+//////////////////////////HTTP CLIENT/////////////////////////////
+//client.js
+var http = require('http');
+var request = http.request({
+    host: 'localhost',
+    port: '8989',
+    path: '/',
+    method: 'POST'
+},
+function(response){
+    response.on('data', function(data){
+        console.log(data.toString());
+    });
+});
+request.write('Hello, world!');
+request.end();
+
+//server.js
+var http = require('http');
+http.createServer(function(request, response){
+    response.writeHead(200);
+    request.on('data', function(data){
+        console.log('Request: ',  data.toString());
+        response.write('Write: ' + data.toString());
+    });
+    request.on('end', function(){
+        console.log('The end');
+    });
+}).listen(8989);
+//////////////////////////END HTTP CLIENT/////////////////////////////
+
+/////////////////////////СОЗДАНИЕ NPM МОДУЛЯ/////////////////////////
+//1. Создание package.json вручную
+{
+    "name": "Module-Name",
+    "description": "описание модуля",
+    "version": "1.2.3",
+    "main": "main.js",
+    "dependencies": {}
+}
+
+//2. Либо автоматом в папке модуля
+npm init
+
+//Публикация
+npm adduser
+npm publish
+//npm unpublish
+
+//Инсталляция и использование
+npm install moduleName
+npm update [moduleName]
+npm remove moduleName
+
+//Глобальная инстелляция
+npm install moduleName -g
+
+/////////////////////////END СОЗДАНИЕ NPM МОДУЛЯ/////////////////////
 
