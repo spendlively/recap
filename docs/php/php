@@ -97,3 +97,52 @@ $user = new NS\User;
 $ro = new ReflectionObject($user);
 $ro->getNamespaceName();
 
+//ERROR_REPORTING
+//Выключить все ошибки
+error_reporting 0 //php.ini
+error_reporting(0);
+ini_set('error_reporting', E_ALL);
+
+//Включить все ошибки
+error_reporting E_ALL //php.ini
+error_reporting(E_ALL);
+error_reporting(-1);
+
+//Включить простые описания ошибок + сообщения (notice)
+error_reporting E_ERROR | E_WARNING | E_PARSE | E_NOTICE //php.ini
+error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
+
+//Включить все кроме e_notice
+error_reporting E_ALL & ~E_NOTICE //php.ini
+error_reporting(E_ALL ^ E_NOTICE);
+
+//Включить все кроме deprecated
+error_reporting E_ALL & ~E_DEPRECATED //php.ini
+error_reporting(E_ALL ^ E_DEPRECATED);
+
+//МНОГОПРОЦЕССОВОСТЬ
+//Создание форка
+$pid = pcntl_fork();
+if($pid !== 0){
+    
+    //Приоритет родительского процесса
+    pcntl_setpriority(10);
+    echo "Parent\n";
+}
+else{
+    
+    //Приоритет дочернего процесса
+    pcntl_setpriority(50);
+    echo "Child\n";
+}
+
+//СОКЕТЫ
+//TCP-сервер
+$
+
+
+
+
+
+
+
