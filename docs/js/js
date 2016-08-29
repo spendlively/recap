@@ -238,3 +238,20 @@ https://learn.javascript.ru/dom-console
 //JSONP
 https://learn.javascript.ru/ajax-jsonp
 
+//Полчуние текущей временной зоны
+var d = new Date();
+d.getTimezoneOffset() / 60; //-6
+
+//Получение строки даты/времени в UTC
+var d = new Date();
+d.toUTCString(); //"Fri, 07 Aug 2015 02:34:37 GMT"
+
+//Получение часового пояса в php
+echo date_default_timezone_get();
+
+//Получение сдвига времени в php
+$dateTimeZone = new DateTimeZone(date_default_timezone_get());
+$dateTime = new DateTime("now", $dateTimeZone);
+$timeOffset = $dateTimeZone->getOffset($dateTime);
+var_dump($timeOffset/60/60); //6
+
