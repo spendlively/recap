@@ -1,3 +1,12 @@
+//Документация
+https://facebook.github.io/react/docs/getting-started.html
+
+//Песочница с JSX
+https://jsfiddle.net/reactjs/69z2wepo/
+
+//Песочница без JSX
+https://jsfiddle.net/reactjs/5vjqabv3/
+
 //Подгрузка react
 <script src="https://unpkg.com/react@15.3.1/dist/react.js"></script>
 <script src="https://unpkg.com/react-dom@15.3.1/dist/react-dom.js"></script>
