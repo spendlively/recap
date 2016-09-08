@@ -184,7 +184,7 @@ return array(
             ),
             'react' => array(
                 'title' => 'react',
-                'href' => '#',
+                'href' => 'doc.php?path=react',
                 'style' =>'border: 4px dotted #00dbfb;',
                 'img' =>'logo/react.png',
                 'cls' =>'div-logo',
@@ -196,6 +196,15 @@ return array(
                 'href' => '#',
                 'style' =>'border: 4px dotted #000000;',
                 'img' =>'logo/dojo.png',
+                'cls' =>'div-logo',
+                'activable' => false,
+                'items' => array(),
+            ),
+            'electron' => array(
+                'title' => 'electron',
+                'href' => 'doc.php?path=electron',
+                'style' =>'border: 4px dotted #67595d;',
+                'img' =>'logo/electron.png',
                 'cls' =>'div-logo',
                 'activable' => false,
                 'items' => array(),
@@ -213,7 +222,7 @@ return array(
     ),
     'bootstrap' => array(
         'title' => 'Twitter Bootstrap',
-        'href' => '#',
+        'href' => 'doc.php?path=bootstrap',
         'style' =>'border: 4px dotted #00a7d4;',
         'img' =>'logo/bootstrap.png',
         'cls' =>'div-logo',

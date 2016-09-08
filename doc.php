@@ -43,6 +43,9 @@ $docs = array(
     'security' => 'docs/security/security',
     'cpp' => 'docs/cpp/cpp',
     'nodejs' => 'docs/js/nodejs',
+    'bootstrap' => 'docs/bootstrap/bootstrap',
+    'react' => 'docs/js/react',
+    'electron' => 'docs/js/electron',
 );
 $content = array();
 

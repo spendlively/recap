@@ -1,0 +1,124 @@
+Входной точкой является основной файл определенный в файле package.json
+В нем создаются окна приложения, в которых происходит рендеринг и отображение веб-страниц с дополнительною возможностью взаимодействия с нативным GUI вашей операционной системы.
+Процесс, который запускает основной скрипт, называется основной процесс (main process).
+Каждая веб-страница в Electron запускается в своем собственном процессе, который называется рендер процессом (renderer process)
+Если поле main не будет указано в pakage.json, то по умолчанию Electron будет пытаться загрузить index.js файл
+
+для создания самого простого приложения нам нужно всего три файла:
+package.json
+main.js
+index.html
+
+События  mainWindow.on('closed', function() {...
+ will-finish-launching
+ ready
+ browser-window-created
+ page-title-updated
+ close
+ before-quit
+ will-quit
+ quit
+ window-all-closed
+ closed
+
+ //Запуск приложения
+ npm start
+
+
+ //Cборка electron-packager.
+ npm i -g electron-packager
+ ...
+   "scripts": {
+     "start": "xo && electron .",
+     "test": "xo",
+     //под винду
+     "build": "electron-packager . myApp --platform=win32 --arch=ia32 --version=1.3.4 --app-version=0.0.1 --out=dist --ignore=dist --prune"
+     "build": "electron-packager . myApp --platform=win32 --arch=x64 --version=1.3.4 --app-version=0.0.1 --out=dist --ignore=dist --prune"
+     //под все 3
+     //"build": "electron-packager . myApp --all --version=1.3.4 --app-version=0.0.1 --out=dist --ignore=dist --prune"
+        },
+ ...
+
+//--arch
+ia32, x64, armv7l
+//--platform
+win32,
+
+//electron-packager 7.7.0
+
+npm run build
+
+//или
+electron-packager-interactive
+//https://github.com/Urucas/electron-packager-interactive
+
+//имя публикуемого приложения и версию,
+{
+  ...
+  "publishName": "myApp",
+  "electronVersion": "0.33.3",
+  ...
+}
+После этого в команде станут доступны переменные:
+$npm_package_publishName
+$npm_package_electronVersion
+
+//в итоге
+electron-packager . $npm_package_publishName --all --version=$npm_package_electronVersion --app-version=$npm_package_version --out=dist --ignore=dist --prune
+
+
+//ОБНОВЛЕНИЕ НОДЫ
+sudo npm cache clean -f
+sudo npm install -g n
+sudo n stable
+sudo ln -sf /usr/local/n/versions/node/<VERSION>/bin/node /usr/bin/node
+sudo n latest
+
+//УСТАНОВКА WINE
+sudo apt-get install wine
+//https://ubuntuforums.org/archive/index.php/t-2188107.html
+sudo aptitude --full-resolver -f install wine1.6
+Accept this solution? [Y/n/q/?] 4 //wine1.6 [Not Installed]
+Accept this solution? [Y/n/q/?] r 4
+Accept this solution? [Y/n/q/?] n
+Accept this solution? [Y/n/q/?] Y
+Do you want to continue? [Y/n/?] Y
+
+
+//ИТОГО
+npm install electron
+npm install electron-packager
+npm start
+npm run build
+
+//Параметры build
+Обязательные
+    platform — платформа (all или win32, linux, darwin)
+    arch — разрядность (all или ia32, x64)
+    version — версия Электрона для сборки
+Опциональные
+    all — эквивалент --platform=all --arch=all
+    out — директория, в которую будут помещены сборки
+    icon — иконка приложения (.icns или .ico)
+    app-bundle-id — идентификатор приложения в plist
+    app-version — версия приложения
+    build-version — версия сборки приложения для OS X
+    cache — директория, в которой будет располагаться кэш приложения
+    helper-bundle-id — идентификатор приложения для помощника plist
+    ignore — исключение файлов из сборки
+    prune — запуск команды npm prune --production в приложении
+    overwrite — перезапись уже созданных сборок
+    asar — упаковка исходников приложения в asar-архив
+    asar-unpack — распаковка указанных файлов в директорию app.asar.unpacked
+    sign — идентификатор для входа в codesign (OS X)
+    version-string — ключи для сборки (Windows). Список ключей смотрите в документации пакета
+
+//Ссылки
+//Объёмная статья по созданию приложения на Electron
+https://medium.com/developers-writing/building-a-desktop-application-with-electron-204203eeb658#.fy8yt1ewr
+
+//Доки
+http://electron.atom.io/docs/
+
+//Рус
+http://electronjs.ru/

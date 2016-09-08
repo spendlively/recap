@@ -1,0 +1,118 @@
+//Сетка (12 колонок)
+1. Большой экран (≥1200px)
+     префикс класса .col-lg-
+     ширина контейнера (1170px)
+     ширина колонки (97px)
+2. Средний экран (≥992px)
+     префикс класса .col-md-
+     ширина контейнера (970px)
+     ширина колонки (81px)
+3. Маленький экран (≥768px)
+     префикс класса .col-sm-
+     ширина контейнера (750px)
+     ширина колонки (62px)
+4. Микро экран (<768px)
+     префикс класса .col-xs-
+     ширина контейнера (нет)
+     ширина колонки (авто)
+
+col-md-1 занимает 1 колонку
+col-md-8 занимает 8 колонок
+
+//Пример: блок = 8 колонок на среднем экране:
+<div class="row">
+  <div class="col-md-8"></div>
+</div>
+
+//Пример: блок = 8 колонок на среднем экране, а на микро 12 колонок:
+<div class="row">
+  <div class="col-xs-12 col-md-8"></div>
+</div>
+
+//Желательно задавать для всех экранов
+
+//Отступы
+//блок = 4 колонки с отступом слева в 4 колонки:
+<div class="row">
+  <div class="col-md-4 col-md-offset-4"></div>
+</div>
+
+//Удаление элемента на маленьком экране
+<div class="row">
+  <div class="hidden-xs col-md-4"></div>
+</div>
+
+//Удаление элемента на всех экранах кроме большого
+<div class="row">
+  <div class="visible-ld col-md-4"></div>
+</div>
+
+//Media - указание размеров элемента для различной ширины экрана
+//в отдельном файле media.css
+/* Large Devices, Wide Screens */
+@media only screen and (max-width : 1200px) {}
+
+/* Medium Devices, Desktops */
+@media only screen and (max-width : 992px) {}
+
+/* Small Devices, Tablets */
+@media only screen and (max-width : 768px) {}
+
+/* Extra Small Devices, Phones */
+@media only screen and (max-width : 480px) {}
+
+/* Custom, iPhone Retina */
+@media only screen and (max-width : 320px) {}
+
+/* Custom, iPhone Retina */
+@media only screen and (min-width : 320px) {}
+
+/* Extra Small Devices, Phones */
+@media only screen and (min-width : 480px) {}
+
+/* Small Devices, Tablets */
+@media only screen and (min-width : 768px) {}
+
+/* Medium Devices, Desktops */
+@media only screen and (min-width : 992px) {}
+
+/* Large Devices, Wide Screens */
+@media only screen and (min-width : 1200px) {}
+
+//ПРИМЕР ЛЕВОГО МЕНЮ
+http://bootsnipp.com/snippets/r8Nm6
+
+//CSS http://getbootstrap.com/css/
+//Контейнер
+<div class="container"></div>
+
+//Колонки
+
+
+//Таблица
+
+//Кнопки
+
+//Изображения
+
+//Иконки
+
+//Всплывающее меню dropdowns
+
+//Табы
+
+//Навбар
+
+//JAVASCRIPT  http://getbootstrap.com/javascript/
+//Модальные окна
+
+//Табы
+
+//Аккордион
+
+//Карусель
+
+//Дополнительные штуки
+http://bootsnipp.com/
+https://bootswatch.com/
+http://fontawesome.io/

@@ -746,3 +746,6 @@ User space (printf) -> write -> syscall -> системные вызовы (sys_
 
 
 //END ВНУТРЕННЕЕ УСТРОЙСТВО ЯДРА ЛИНУКС
+
+//10 полезных утилит Linux для повышения производительности системы
+https://tproger.ru/digest/useful-linux-utilities/
