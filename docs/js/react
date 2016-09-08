@@ -1,3 +1,4 @@
+//ССЫЛКИ
 //Документация
 https://facebook.github.io/react/docs/getting-started.html
 
@@ -7,39 +8,163 @@ https://jsfiddle.net/reactjs/69z2wepo/
 //Песочница без JSX
 https://jsfiddle.net/reactjs/5vjqabv3/
 
-//Подгрузка react
+//Синтаксис JSX
+https://facebook.github.io/react/docs/jsx-in-depth.html
+
+//Подгрузка react c CDN
 <script src="https://unpkg.com/react@15.3.1/dist/react.js"></script>
 <script src="https://unpkg.com/react-dom@15.3.1/dist/react-dom.js"></script>
 <script src="https://unpkg.com/babel-core@5.8.38/browser.min.js"></script>
-<script type="text/babel" src="myScript.js"></script>
+<script src="https://unpkg.com/jquery@3.1.0/dist/jquery.min.js"></script>
+<script src="https://unpkg.com/remarkable@1.6.2/dist/remarkable.min.js"></script>
 
-//Рендеринг HTML c JSX (text/babel)
-ReactDOM.render(
+//Рендеринг компонента на лету с JSX в div#example
+<script type="text/babel">
+  ReactDOM.render(
     <h1>Hello, world!</h1>,
     document.getElementById('example')
+  );
+</script>
+
+//Создание компонента CommentBox и рендеринг его в #CommentBox
+var CommentBox = React.createClass({
+  render: function() {
+    return (
+      <div className="commentBox">
+        Hello, world! I am a CommentBox.
+      </div>
+    );
+  }
+});
+ReactDOM.render(
+  <CommentBox />,
+  document.getElementById('content')
 );
 
-//Создание компонента c JSX (text/babel)
-var Hello = React.createClass({
-    render: function() {
-        return <div>Hello {this.props.name}</div>;
-    }
+//Создание компонента CommentBox и рендеринг его в #CommentBox БЕЗ ИСПОЛЬЗОАНИЯ JSX
+var CommentBox = React.createClass({displayName: 'CommentBox',
+  render: function() {
+    return (
+      React.createElement('div', {className: "commentBox"},
+        "Hello, world! I am a CommentBox."
+      )
+    );
+  }
+});
+ReactDOM.render(
+  React.createElement(CommentBox, null),
+  document.getElementById('content')
+);
+
+//ВАЖНЫЕ МОМЕНТЫ
+1. React-компоненты начинаются с заглавной буквы (CommentBox => <CommentBox />)
+2. ReactDOM.render всегда должен вызываться после того, как соответствующий компонент объявлен
+
+//Композиция элементов
+var Child = React.createClass({
+  render: function() {
+    return (<div>Child</div>);
+  }
+});
+var Parent = React.createClass({
+  render: function() {
+    return (<div>Parent<Child /></div>);
+  }
+});
+ReactDOM.render(<Parent />, document.body);
+
+//Передача данных в компонент используя this.props
+var Dollar = React.createClass({
+  render: function() {
+    return (<div>Dollar = {this.props.price} {this.props.children}</div>);
+  }
+});
+ReactDOM.render(<Dollar price="65">RUB</Dollar>, document.body);
+
+//Использование Markdown для форматирования текста
+var Dollar = React.createClass({
+    
+  rawMarkup: function() {
+    var md = new Remarkable();
+    var rawMarkup = md.render(this.props.children.toString());
+    return { __html: rawMarkup };
+  },    
+    
+  render: function() {
+    var md = new Remarkable();
+    return (<div>Dollar = {this.props.price} <strong dangerouslySetInnerHTML={this.rawMarkup()} /></div>); //
+  }
+});
+ReactDOM.render(<Dollar price="65">RUB</Dollar>, document.body);
+
+//СИСТЕМА КОММЕНТАРИЕВ
+var data = [
+  {id: 1, author: "Pete Hunt", text: "This is one comment"},
+  {id: 2, author: "Jordan Walke", text: "This is *another* comment"}
+];        
+        
+var CommentList = React.createClass({
+  render: function() {
+    var commentNodes = this.props.data.map(function(comment) {
+      return (
+        <Comment author={comment.author} key={comment.id}>
+          {comment.text}
+        </Comment>
+      );
+    });
+    return (
+      <div className="commentList">
+        {commentNodes}
+      </div>
+    );
+  }
 });
 
-ReactDOM.render(
-    <Hello name="World" />,
-    document.getElementById('example')
-);
-
-//Создание компонента без JSX
-var Hello = React.createClass({
-  displayName: 'Hello',
+var CommentForm = React.createClass({
   render: function() {
-    return React.createElement("div", null, "Hello ", this.props.name);
+    return (
+      <div className="commentForm">
+        Hello, world! I am a CommentForm.
+      </div>
+    );
+  }
+});
+
+var CommentBox = React.createClass({
+  render: function() {
+    return (
+      <div className="commentBox">
+        <h1>Comments</h1>
+        <CommentList data={this.props.data} />
+        <CommentForm />
+      </div>
+    );
+  }
+});
+
+var Comment = React.createClass({
+  rawMarkup: function() {
+    var md = new Remarkable();
+    var rawMarkup = md.render(this.props.children.toString());
+    return { __html: rawMarkup };
+  },
+
+  render: function() {
+    return (
+      <div className="comment">
+        <h2 className="commentAuthor">
+          {this.props.author}
+        </h2>
+        <span dangerouslySetInnerHTML={this.rawMarkup()} />
+      </div>
+    );
   }
 });
 
 ReactDOM.render(
-  React.createElement(Hello, {name: "World"}),
-  document.getElementById('container')
+  <CommentBox data={data} />,
+  document.getElementById('content')
 );
+//END СИСТЕМА КОММЕНТАРИЕВ
+
+//Fetching from the server
