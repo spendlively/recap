@@ -448,6 +448,14 @@ dpgk --force-overwrite
 //ДОБАВЛЕНИЕ СПИСКОВ ПАКЕТОВ
 ...
 
+//РАЗРЕШЕНИЕ ЗАВИСИМОСТЕЙ НА ПРИМЕРЕ УСТАНОВКИ WINE
+sudo aptitude --full-resolver -f install wine1.6
+Accept this solution? [Y/n/q/?] 4 //wine1.6 [Not Installed]
+Accept this solution? [Y/n/q/?] r 4
+Accept this solution? [Y/n/q/?] n
+Accept this solution? [Y/n/q/?] Y
+Do you want to continue? [Y/n/?] Y
+
 //ПОДКЛЮЧЕНИЕ ПО SSH С ПОМОЩЬЮ RSA КЛЮЧЕЙ
 //Сгенерировать пару ключей RSA 2048
 ssh-keygen //Спросит каталог (.ssh) и пароль
