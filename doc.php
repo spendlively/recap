@@ -46,6 +46,7 @@ $docs = array(
     'bootstrap' => 'docs/bootstrap/bootstrap',
     'react' => 'docs/js/react',
     'electron' => 'docs/js/electron',
+    'emmet' => 'docs/keymaps/emmet',
 );
 $content = array();
 

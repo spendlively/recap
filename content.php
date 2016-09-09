@@ -575,4 +575,14 @@ return array(
         'activable' => true,
         'items' => array(),
     ),
+    'emmet' => array(
+        'title' => 'Emmet',
+        'href' => 'doc.php?path=emmet',
+        'style' =>'border: 4px dotted #000000;',
+        'img' =>'logo/emmet.svg',
+        'cls' =>'div-logo',
+        'activable' => true,
+        'items' => array(),
+    ),    
 );
+

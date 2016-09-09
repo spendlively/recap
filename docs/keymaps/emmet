@@ -1,0 +1,39 @@
+//Автозаполнение EMMET
+// #page>div.logo+ul#navigation>li*5>a{Item $}
+<div id="page">
+    <div class="logo"></div>
+    <ul id="navigation">
+        <li><a href="">Item 1</a></li>
+        <li><a href="">Item 2</a></li>
+        <li><a href="">Item 3</a></li>
+        <li><a href="">Item 4</a></li>
+        <li><a href="">Item 5</a></li>
+    </ul>
+</div>
+
+//Горячие клавиши sublime text 3
+http://sublimetext.ru/documentation/hotkeys/windows
+
+//Удалить строку
+CTRL + SHIFT + k
+
+//Дублировать строку
+CTRL + SHIFT + d
+
+//Клонировать курсор
+CTRL + ЛКМ
+
+//Комментировать
+CTRL + /
+
+//В верхний регистр
+CTRL + k, CTRL + U
+
+//В нижний регистр
+CTRL + k, CTRL + L
+
+//Закрыть тэг
+ALT + .
+
+//Обернуть тегом выделенный текст
+ALT + SHIFT + W

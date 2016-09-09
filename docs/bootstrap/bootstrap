@@ -83,7 +83,9 @@ col-md-8 занимает 8 колонок
 http://bootsnipp.com/snippets/r8Nm6
 
 //CSS http://getbootstrap.com/css/
+
 //Контейнер
+//Класс контейнер создает поля по бокам экрана
 <div class="container"></div>
 
 //Колонки
