@@ -1,0 +1,14 @@
+//Получение значения аттрибута
+//jquery
+$('#my-id').attr('class');
+//javascript
+document.getElementById('my-id').getAttribute('class'));
+
+//Получение значения css-свойства
+//jquery
+var marginTop = parseInt($('#my-id').css('margin-top')); //'20px'
+//javascript
+var el = document.getElementById('my-id'),
+	style = el.currentStyle || window.getComputedStyle(el),
+	marginTop = parseInt(style.marginTop),
+

@@ -47,6 +47,7 @@ $docs = array(
     'react' => 'docs/js/react',
     'electron' => 'docs/js/electron',
     'emmet' => 'docs/keymaps/emmet',
+    'jquery' => 'docs/js/jquery',
 );
 $content = array();
 

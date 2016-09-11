@@ -121,7 +121,7 @@ return array(
             ),
             'jquery' => array(
                 'title' => 'jQuery',
-                'href' => '#',
+                'href' => 'doc.php?path=jquery',
                 'style' =>'border: 4px dotted #0868ab;',
                 'img' =>'logo/jqurery.png',
                 'cls' =>'div-logo',
