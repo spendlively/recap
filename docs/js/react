@@ -167,4 +167,45 @@ ReactDOM.render(
 );
 //END СИСТЕМА КОММЕНТАРИЕВ
 
-//Fetching from the server
+//Получение данных от сервера //{"name": "ivan", "age": "30"}
+//this.state = приватное свойство, при изменении которого (this.setState()) - обновляется DOM
+//getInitialState - Вызывается единажды при инициализации
+//componentDidMount - вызывается автоматически когда компонент отрендерен в первый раз
+//getData.json ==> {"name": "Petrov"}
+var me;
+var User = React.createClass({
+  getInitialState: function() {
+    return {data: {name: 'Ivanov'}};
+  },
+  componentDidMount: function() {
+
+    var me = this;
+
+    $.ajax({
+      url: '/getData.json',
+      dataType: 'json',
+      cache: false,
+      success: function(data) {
+
+        me.setState({data: data});
+
+        setTimeout(function(){
+          me.setState({data: {name: 'Sidorov'}});
+        }, 2000);
+      },
+      error: function(xhr, status, err) {
+        console.error(status, err.toString());
+      }
+    });
+  },
+  render: function() {
+    return (
+      <div><h1>{this.state.data.name}</h1></div>
+    );
+  }
+});
+
+ReactDOM.render(
+  <User />,
+  document.getElementById('content')
+);
