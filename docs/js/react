@@ -209,3 +209,79 @@ ReactDOM.render(
   <User />,
   document.getElementById('content')
 );
+
+//Обновление DOM при изменении поля формы,
+//чтобы данные формы попали в DOM
+var Form = React.createClass({
+  getInitialState: function() {
+    return {name: ''};
+  },
+  handleNameChange: function(e) {
+    console.log(e.target.value);
+    this.setState({name: e.target.value});
+  },
+  render: function() {
+    return (
+      <form>
+        <input
+          type="text"
+          placeholder="Name"
+          value={this.state.name}
+          onChange={this.handleNameChange}
+        />
+        <input type="submit" value="Post" />
+      </form>
+    );
+  }
+});
+
+ReactDOM.render(
+  <Form />,
+  document.getElementById('content')
+);
+
+//Событие отправки формы и очистка поля
+var Form = React.createClass({
+  getInitialState: function() {
+    return {name: ''};
+  },
+  handleNameChange: function(e) {
+    console.log(e.target.value);
+    this.setState({name: e.target.value});
+  },
+  handleSubmit: function(e) {
+    //Предотвращение действия браузера
+    e.preventDefault();
+    var name = this.state.name.trim();
+    if (!name) {
+      return;
+    }
+    // TODO: send request to the server
+    this.setState({name: ''});
+  },
+  render: function() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <input
+          type="text"
+          placeholder="Name"
+          value={this.state.name}
+          onChange={this.handleNameChange}
+        />
+        <input type="submit" value="Post" />
+      </form>
+    );
+  }
+});
+
+ReactDOM.render(
+  <Form />,
+  document.getElementById('content')
+);
+
+//Обработчик события можно передать в свойства дочернему компоненту
+<Form onCommentSubmit={this.handleCommentSubmit} />
+//А в дочернем компоненте вызвать переданный обработчик
+handleSubmit: function(e) {
+  this.props.onCommentSubmit({author: author, text: text});
+}
