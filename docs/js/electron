@@ -122,3 +122,29 @@ http://electron.atom.io/docs/
 
 //Рус
 http://electronjs.ru/
+
+
+//РАСШАРИВАНИЕ ГЛОБАЛЬНОЙ ПЕРЕМЕННОЙ
+//Node js
+var ipcMain = require('electron').ipcMain;
+
+global.data = {
+  name: 'Ivan'
+};
+
+ipcMain.on('show-name', function(event) {
+  console.log(global.data.name);
+});
+
+//Javascript
+var data = require('electron').remote.getGlobal('data'),
+    ipcRenderer = require('electron').ipcRenderer;     
+
+console.log(data.name);
+data.name = "Petr";
+console.log(data.name);
+
+ipcRenderer.send('show-name');
+//END РАСШАРИВАНИЕ ГЛОБАЛЬНОЙ ПЕРЕМЕННОЙ
+
+
