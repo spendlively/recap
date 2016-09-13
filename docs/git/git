@@ -51,7 +51,12 @@ git status
 //Коммит в ветку dev
 git checkout dev
 git pull
+//добавить файл
 git add Ajax.js
+//удалить файл
+git rm test.js
+//удалить gfgre
+git -r path/
 git commit -m 'Сообщение'
 git remote
 git push origin dev
