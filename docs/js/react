@@ -285,3 +285,143 @@ ReactDOM.render(
 handleSubmit: function(e) {
   this.props.onCommentSubmit({author: author, text: text});
 }
+
+//ОБРАБОТКА СОБЫТИЙ DOM В КОМПОНЕНТЕ (Возвращается MouseEvent)
+...
+//When component is mounted and has a DOM representation
+componentDidMount: function(){
+    window.addEventListener('click', function(e){
+        console.log(e) //MouseEvent
+        e.stopPropagation();
+        e.preventDefault();s
+    });
+},
+...
+//ЛИБО (Возвращается SyntheticMouseEvent)
+clickHandler: function(e){
+    console.log(e) //SyntheticMouseEvent
+},
+render: function(){
+    return (<h1 onClick={this.clickHandler}>TEST!</h1>);
+}
+...
+//список событий https://facebook.github.io/react/docs/events.html
+//END ОБРАБОТКА СОБЫТИЙ DOM В КОМПОНЕНТЕ
+
+//ЖИЗНЕННЫЙ ЦИКЛ КОМПОНЕНТА
+var Test = React.createClass({
+    getDefaultProps: function(){
+        console.log('getDefaultProps');
+        return {};
+    },
+    getInitialState: function(){
+        console.log('getInitialState');
+        return {text: 'text'};
+    },
+    componentWillMount: function(){
+        console.log('componentWillMount');
+    },
+    render: function(){
+        console.log('render')
+        return (<h1 onClick={this.click}>{this.state.text}</h1>);
+    },
+    componentDidMount: function(){
+        console.log('componentDidMount');
+    },
+    click: function(){
+        console.log('click');
+        this.setState({text: "new text"});
+    },
+    componentWillUpdate: function(){
+        console.log('componentWillUpdate');
+    },
+    componentDidUpdate: function(){
+        console.log('componentDidUpdate');
+    },
+    componentWillUnmount: function(){
+        console.log('componentWillUnmount');
+    }
+});
+ReactDOM.render(
+    <Test />,
+    document.getElementById('example')
+);
+//getDefaultProps
+//getInitialState
+//componentWillMount
+//render
+//componentDidMount
+//click
+//componentWillUpdate
+//render
+//componentDidUpdate
+
+//END ЖИЗНЕННЫЙ ЦИКЛ КОМПОНЕНТА
+
+//Использование объекта компонента
+var test = ReactDOM.render(
+    <Test />,
+    document.getElementById('example')
+);
+test.foo();
+
+//ДОСТУП К DOM УЗЛУ
+var Test = React.createClass({
+    render: function(){
+        return (<h1 ref="me">HELLO</h1>);
+    },
+
+    componentDidMount: function(){
+        //Доступ по ссылке
+        console.log(this.refs.me); //<h1>HELLO</h1>
+    }
+});
+var test = ReactDOM.render(
+    <Test />,
+    document.getElementById('example')
+);
+//Доступ по объекту
+console.log(ReactDOM.findDOMNode(test)); //<h1>HELLO</h1>
+//END СОЗДАНИЕ СВЫЛКИ НА УЗЕЛ DOM
+
+//СТАТИЧЕСКИЕ СВОЙСТВА
+var Test = React.createClass({
+    statics: {
+        test: function() {console.log('test')}
+    },
+    render: function(){
+        return (<h1>HELLO</h1>);
+    }
+});
+var test = ReactDOM.render(
+    <Test />,
+    document.getElementById('example')
+);
+Test.test();
+
+//PROPS ПО УМОЛЧАНИЮ
+var Test = React.createClass({
+    getDefaultProps: function(){
+        return {text: 'HELP'};
+    },
+    render: function(){
+        return (<h1>{this.props.text}</h1>);
+    }
+});
+//END PROPS ПО УМОЛЧАНИЮ
+
+//ПОЛУЧЕНИЕ КОМПОНЕНТА ИЗ DOM-УЗЛА
+window.FindReact = function(dom) {
+    for (var key in dom)
+        if (key.startsWith("__reactInternalInstance$")) {
+            var compInternals = dom[key]._currentElement;
+            var compWrapper = compInternals._owner;
+            var comp = compWrapper._instance;
+            return comp;
+        }
+    return null;
+};
+var Test = React.createClass({...});
+var el = document.getElementById("qwerty");
+FindReact(el).doSmth();
+//END ПОЛУЧЕНИЕ КОМПОНЕНТА ИЗ DOM-УЗЛА
