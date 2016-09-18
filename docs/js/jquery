@@ -12,3 +12,12 @@ var el = document.getElementById('my-id'),
 	style = el.currentStyle || window.getComputedStyle(el),
 	marginTop = parseInt(style.marginTop),
 
+//AJAX
+$.ajax({
+  	url: url,
+  	dataType: 'json',
+  	type: 'POST',
+  	data: {},
+  	success: function(data){...}.bind(this),
+  	error: function(xhr, status, err){...}.bind(this)
+});

@@ -285,3 +285,18 @@ ReactDOM.render(
 handleSubmit: function(e) {
   this.props.onCommentSubmit({author: author, text: text});
 }
+
+//JSX - правила
+//html - код должен быть объеденен в блок <div>
+React.createClass({
+  render: function(){
+    return <div>...</div>
+  }
+});
+
+//Вместо class используется className
+<div className="settings-block">...</div>
+
+//Вместо for используется htmlFor
+<label htmlFor="exampleInputEmail1">Email</label>
+
