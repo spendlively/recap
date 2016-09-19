@@ -1,0 +1,94 @@
+//Возможности webpack
+- Сборка js, css, ...
+- Динамическая подгрузка
+- Модули AMD, UMD, CommonJs, Es2015
+- Препроцессоры
+- live reload
+
+//Установка webpack
+sudo npm i -g webpack
+
+//webpack.config.js
+//http://webpack.github.io/docs/configuration.html
+module.exports = {
+
+	//Какой модуль собирать
+    entry: "./home",
+    //Куда собирать
+    output: {
+    	path: './',
+        filename: "build.js"
+    }
+
+};
+
+//Запуск
+webpack
+
+//Установка статического сервера
+sudo npm i -g node-static
+//Запуск 127.0.0.1:8080
+static
+
+
+
+
+
+//ВАРИАНТ 1
+//asd.js
+module.exports = function(message){
+	alert('asd');
+}
+
+//qwe.js
+var asd = require('./asd');
+asd();
+
+//webpack.config.js
+module.exports = {
+    entry: "./qwe",
+    output: {
+        filename: "build.js",
+    }
+};
+
+//Сборка
+webpack
+
+//index.html
+<script src="build.js"></script>
+
+//END ВАРИАНТ 1
+
+
+
+
+//ВАРИАНТ 2
+//asd.js
+module.exports.test = function(message){
+	alert('asd');
+}
+
+//qwe.js
+var asd = require('./asd');
+asd.test();
+exports.asd = asd;
+
+//webpack.config.js
+module.exports = {
+    entry: "./qwe",
+    output: {
+        filename: "build.js",
+    }
+};
+
+//Сборка
+webpack
+
+//index.html
+<script src="js/common.js"></script>
+<script>
+    qwe.asd();
+</script>
+
+//END ВАРИАНТ 2

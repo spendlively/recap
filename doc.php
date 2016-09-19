@@ -48,6 +48,7 @@ $docs = array(
     'electron' => 'docs/js/electron',
     'emmet' => 'docs/keymaps/emmet',
     'jquery' => 'docs/js/jquery',
+    'webpack' => 'docs/js/webpack',
 );
 $content = array();
 

@@ -209,6 +209,15 @@ return array(
                 'activable' => false,
                 'items' => array(),
             ),
+            'webpack' => array(
+                'title' => 'webpack',
+                'href' => 'doc.php?path=webpack',
+                'style' =>'border: 4px dotted #67595d;',
+                'img' =>'logo/javascript.png',
+                'cls' =>'div-logo',
+                'activable' => false,
+                'items' => array(),
+            ),
         ),
     ),
     'zf2' => array(
