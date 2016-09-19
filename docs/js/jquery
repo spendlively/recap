@@ -21,3 +21,9 @@ $.ajax({
   	success: function(data){...}.bind(this),
   	error: function(xhr, status, err){...}.bind(this)
 });
+
+//Удалить элемент
+$(".tab-pane").remove();
+
+//Добавить элемент
+$("#tabs-container").append('<div>test</div>');
