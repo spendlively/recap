@@ -27,3 +27,12 @@ $(".tab-pane").remove();
 
 //Добавить элемент
 $("#tabs-container").append('<div>test</div>');
+
+//Создать html, добавить в dom, добавить обработчик для click
+$(
+    '<div>'+
+        '...'+
+    '</div>'
+).appendTo("#target").click(function(el){
+        console.log(el);
+});
