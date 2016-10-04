@@ -1,0 +1,18 @@
+//Установка
+sudo npm install --g gulp-cli
+
+//Инициализация проекта
+npm init
+
+//Установка dev-зависимостей
+npm install --save-dev gulp
+
+//Конфиг gulpfile.js
+var gulp = require('gulp');
+
+gulp.task('default', function() {
+  // place code for your default task here
+});
+
+//Запуск
+gulp <task> <othertask>

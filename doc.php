@@ -49,6 +49,7 @@ $docs = array(
     'emmet' => 'docs/keymaps/emmet',
     'jquery' => 'docs/js/jquery',
     'webpack' => 'docs/js/webpack',
+    'gulp' => 'docs/js/gulp',
 );
 $content = array();
 

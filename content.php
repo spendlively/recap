@@ -218,6 +218,15 @@ return array(
                 'activable' => false,
                 'items' => array(),
             ),
+            'gulp' => array(
+                'title' => 'gulp',
+                'href' => 'doc.php?path=gulp',
+                'style' =>'border: 4px dotted #67595d;',
+                'img' =>'logo/javascript.png',
+                'cls' =>'div-logo',
+                'activable' => false,
+                'items' => array(),
+            ),
         ),
     ),
     'zf2' => array(
