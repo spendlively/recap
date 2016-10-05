@@ -117,7 +117,30 @@ webpack
 /////////////////////////////////////////////////////////////////////////
 ///////////////////////AMD (requirejs) + r.js////////////////////////////
 /////////////////////////////////////////////////////////////////////////
-Потом допишу
+//Hello.js, HelloWorld.js, main.js 
+Из предыдущего примера
+
+//Установка require
+npm install -g requirejs
+
+//Конфиг для сборки config.js
+({
+    baseUrl: ".",
+    paths: {
+        jsAmd: "."
+    },
+    name: "main",
+    out: "bundle.js"
+})
+
+//Сборка
+./node_modules/requirejs/bin/r.js -o config.js
+
+//Сборка без конфига
+./node_modules/requirejs/bin/r.js -o baseUrl=. paths.jsAmd=. name=main out=bundle.js
+
+//Запуск
+<script data-main="js-amd/bundle.js" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.17/require.min.js"></script>
 
 
 /////////////////////////////////////////////////////////////////////////
