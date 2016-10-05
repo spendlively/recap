@@ -1,94 +1,288 @@
-//Возможности webpack
-- Сборка js, css, ...
-- Динамическая подгрузка
-- Модули AMD, UMD, CommonJs, Es2015
-- Препроцессоры
-- live reload
+/////////////////////////////////////////////////////////////////////////
+//////////////////////ГЛОБАЛЬНАЯ ОБЛАСТь ВИДИМОСТИ///////////////////////
+/////////////////////////////////////////////////////////////////////////
+//Преимущества - простота
+//Hello.js
+function Hello(){
+    this.text = "Hello";
+}
 
-//Установка webpack
-sudo npm i -g webpack
+Hello.prototype.getHello = function(){
+    return this.text;
+}
 
-//webpack.config.js
-//http://webpack.github.io/docs/configuration.html
-module.exports = {
+//HelloWorld.js
+function HelloWorld(){
+    this.text = "World";
+}
 
-	//Какой модуль собирать
-    entry: "./home",
-    //Куда собирать
-    output: {
-    	path: './',
-        filename: "build.js"
+HelloWorld.prototype.getHelloWorld = function(){
+
+    var hello = new Hello();
+
+    return hello.getHello() + ', ' + this.text + '!';
+}
+
+//main.js
+var helloWorld = new HelloWorld();
+alert(helloWorld.getHelloWorld());
+
+
+//Запуск
+<script src="js-global/Hello.js"></script>
+<script src="js-global/HelloWorld.js"></script>
+<script src="js-global/main.js"></script>
+
+
+
+
+/////////////////////////////////////////////////////////////////////////
+//////////////////////////AMD (requirejs)////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+//Преимущества - асинхронность
+//Hello.js
+define(function(){
+
+    function Hello(){
+        this.text = "Hello";
     }
 
+    Hello.prototype.getHello = function(){
+        return this.text;
+    }
+
+    return Hello;
+});
+
+//HelloWorld.js
+define(['Hello'], function(Hello){
+
+    function HelloWorld(){
+        this.text = "World";
+    }
+
+    HelloWorld.prototype.getHelloWorld = function(){
+
+        var hello = new Hello();
+
+        return hello.getHello() + ', ' + this.text + '!';
+    }
+
+    return HelloWorld;
+});
+
+//main.js
+require(['HelloWorld'], function(HelloWorld){
+
+    var helloWorld = new HelloWorld();
+    alert(helloWorld.getHelloWorld());
+});
+
+
+//Запуск
+<script data-main="js-amd/main.js" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.17/require.min.js"></script>
+
+
+
+/////////////////////////////////////////////////////////////////////////
+///////////////////////AMD (requirejs) + webpack/////////////////////////
+/////////////////////////////////////////////////////////////////////////
+//Hello.js, HelloWorld.js, main.js 
+Из предыдущего примера
+
+//webpack.config.js
+module.exports = {
+    //где у приложения точка входа
+    entry: "./main",
+    resolve: {
+        //где искать модули
+        modulesDirectories: [
+            "."
+        ]
+    },
+    //как назвать и куда положить файл бандла на выходе
+    output: {
+        //Также откуда подгружать 1.bundle.js
+        publicPath: "js-amd/",
+        filename: "bundle.js"
+    }
+};
+
+//Сборка
+webpack
+
+//Запуск
+<script src="js-amd/bundle.js"></script>
+
+/////////////////////////////////////////////////////////////////////////
+///////////////////////AMD (requirejs) + r.js////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+Потом допишу
+
+
+/////////////////////////////////////////////////////////////////////////
+//////////////////////////CommonJS (browserify)//////////////////////////
+/////////////////////////////////////////////////////////////////////////
+//Преимущества - использование модулей nodejs
+
+//Hello.js
+function Hello(){
+    this.text = "Hello";
+}
+
+Hello.prototype.getHello = function(){
+    return this.text;
+}
+
+module.exports = Hello;
+
+
+//HelloWorld.js
+function HelloWorld(){
+    this.text = "World";
+}
+
+HelloWorld.prototype.getHelloWorld = function(){
+
+    var Hello = require('./Hello');
+    var hello = new Hello();
+
+    return hello.getHello() + ', ' + this.text + '!';
+}
+
+module.exports = HelloWorld;
+
+
+//main.js
+var HelloWorld = require('./HelloWorld');
+var helloWorld = new HelloWorld();
+alert(helloWorld.getHelloWorld());
+
+//Сборка
+sudo npm install -g browserify
+browserify main.js > bundle.js
+
+//Запуск
+<script src="js-common/bundle.js"></script>
+
+
+/////////////////////////////////////////////////////////////////////////
+////////////////////CommonJS (browserify) + webpack//////////////////////
+/////////////////////////////////////////////////////////////////////////
+//Hello.js, HelloWorld.js, main.js 
+Из предыдущего примера
+
+//webpack.config.js (такой же как и у AMD)
+module.exports = {
+    //где у приложения точка входа
+    entry: "./main",
+    resolve: {
+        //где искать модули
+        modulesDirectories: [
+            "."
+        ]
+    },
+    //как назвать и куда положить файл бандла на выходе
+    output: {
+        publicPath: "js-amd/",
+        filename: "bundle.js"
+    }
 };
 
 //Запуск
-webpack
-
-//Установка статического сервера
-sudo npm i -g node-static
-//Запуск 127.0.0.1:8080
-static
+<script src="js-common/bundle.js"></script>
 
 
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////ES6 + webpack///////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+//Hello.js
+class Hello {
 
+    constructor() {
+        this.text = "Hello";
+    }
 
-
-//ВАРИАНТ 1
-//asd.js
-module.exports = function(message){
-	alert('asd');
+    getHello() {
+        return this.text;
+    }
 }
 
-//qwe.js
-var asd = require('./asd');
-asd();
+export default Hello;
+
+
+//HelloWorld.js
+import Hello from "./Hello";
+
+class HelloWorld {
+
+    constructor() {
+        this.text = "World";
+    }
+
+    getHelloWorld() {
+
+        let hello = new Hello();
+
+        return hello.getHello() + ', ' + this.text + '!';
+    }
+}
+
+export default HelloWorld;
+
+
+//main.js
+import HelloWorld from "./HelloWorld";
+
+let helloWorld = new HelloWorld();
+alert(helloWorld.getHelloWorld());
+
+
+//package.json для установки Babel для es6
+{
+  "name": "webpack-example-07",
+  "version": "0.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "BSD-2-Clause",
+  "devDependencies": {
+    "babel-core": "~5.1.10",
+    "webpack": "~1.8.4",
+    "babel-loader": "~5.0.0"
+  }
+}
+
+//Установка Babel для es6
+npm install
 
 //webpack.config.js
 module.exports = {
-    entry: "./qwe",
+    entry: "./main",
+    resolve: {
+        modulesDirectories: [
+            "."
+        ]
+    },
     output: {
-        filename: "build.js",
+        publicPath: "js-common/",
+        filename: "bundle.js"
+    },
+    module: {
+        loaders: [
+            {
+                test: /\.js$/,
+                loader: "babel-loader"
+            }
+        ]
     }
 };
 
 //Сборка
 webpack
 
-//index.html
-<script src="build.js"></script>
-
-//END ВАРИАНТ 1
-
-
-
-
-//ВАРИАНТ 2
-//asd.js
-module.exports.test = function(message){
-	alert('asd');
-}
-
-//qwe.js
-var asd = require('./asd');
-asd.test();
-exports.asd = asd;
-
-//webpack.config.js
-module.exports = {
-    entry: "./qwe",
-    output: {
-        filename: "build.js",
-    }
-};
-
-//Сборка
-webpack
-
-//index.html
-<script src="js/common.js"></script>
-<script>
-    qwe.asd();
-</script>
-
-//END ВАРИАНТ 2
+//Запуск
+<script src="js-es6/bundle.js"></script>
