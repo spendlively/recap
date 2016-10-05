@@ -130,8 +130,11 @@ npm install -g requirejs
         jsAmd: "."
     },
     name: "main",
-    out: "bundle.js"
+    out: "bundle.js",
+    //Без сжатия и обфускации
+    optimize: 'none'
 })
+
 
 //Сборка
 ./node_modules/requirejs/bin/r.js -o config.js
