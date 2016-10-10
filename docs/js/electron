@@ -148,3 +148,37 @@ ipcRenderer.send('show-name');
 //END РАСШАРИВАНИЕ ГЛОБАЛЬНОЙ ПЕРЕМЕННОЙ
 
 
+//События webview
+var wv = document.getElementById('wv-id');
+wv.addEventListener('load-commit', function(){console.log('load-commit');});
+wv.addEventListener('did-finish-load', function(){console.log('did-finish-load');});
+wv.addEventListener('did-fail-load', function(){console.log('did-fail-load');});
+wv.addEventListener('did-frame-finish-load', function(){console.log('did-frame-finish-load');});
+wv.addEventListener('did-start-loading', function(){console.log('did-start-loading');});
+wv.addEventListener('did-stop-loading', function(){console.log('did-stop-loading');});
+wv.addEventListener('did-get-response-details', function(){console.log('did-get-response-details');});
+wv.addEventListener('did-get-redirect-request', function(){console.log('did-get-redirect-request');});
+wv.addEventListener('dom-ready', function(){console.log('dom-ready');});
+wv.addEventListener('page-title-updated', function(){console.log('page-title-updated');});
+wv.addEventListener('page-favicon-updated', function(){console.log('page-favicon-updated');});
+wv.addEventListener('enter-html-full-screen', function(){console.log('enter-html-full-screen');});
+wv.addEventListener('leave-html-full-screen', function(){console.log('leave-html-full-screen');});
+wv.addEventListener('console-message', function(){console.log('console-message');});
+wv.addEventListener('found-in-page', function(){console.log('found-in-page');});
+wv.addEventListener('new-window', function(){console.log('new-window');});
+wv.addEventListener('will-navigate', function(){console.log('will-navigate');});
+wv.addEventListener('did-navigate', function(){console.log('did-navigate');});
+wv.addEventListener('did-navigate-in-page', function(){console.log('did-navigate-in-page');});
+wv.addEventListener('close', function(){console.log('close');});
+wv.addEventListener('ipc-message', function(){console.log('ipc-message');});
+wv.addEventListener('crashed', function(){console.log('crashed');});
+wv.addEventListener('gpu-crashed', function(){console.log('gpu-crashed');});
+wv.addEventListener('plugin-crashed', function(){console.log('plugin-crashed');});
+wv.addEventListener('destroyed', function(){console.log('destroyed');});
+wv.addEventListener('media-started-playing', function(){console.log('media-started-playing');});
+wv.addEventListener('media-paused', function(){console.log('media-paused');});
+wv.addEventListener('did-change-theme-color', function(){console.log('did-change-theme-color');});
+wv.addEventListener('update-target-url', function(){console.log('update-target-url');});
+wv.addEventListener('devtools-opened', function(){console.log('devtools-opened');});
+wv.addEventListener('devtools-closed', function(){console.log('devtools-closed');});
+wv.addEventListener('devtools-focused', function(){console.log('devtools-focused');});
