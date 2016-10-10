@@ -255,3 +255,5 @@ $dateTime = new DateTime("now", $dateTimeZone);
 $timeOffset = $dateTimeZone->getOffset($dateTime);
 var_dump($timeOffset/60/60); //6
 
+//Замена подстроки sprintf fprintf ///
+'abc'.replace("b", "d");
