@@ -1,0 +1,6 @@
+//Комманды selenium
+
+//Простой поиск текста на странице
+Command verifyTextPresent
+Target "text"
+Value

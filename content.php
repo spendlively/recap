@@ -536,6 +536,15 @@ return array(
                 'activable' => true,
                 'items' => array(),
             ),
+            'selenium' => array(
+                'title' => 'Selenium',
+                'href' => 'doc.php?path=selenium',
+                'style' =>'border: 4px dotted #000000;',
+                'img' =>'logo/selenium.png',
+                'cls' =>'div-logo',
+                'activable' => true,
+                'items' => array(),
+            ),
         ),
     ),
     'webservers' => array(
@@ -601,6 +610,6 @@ return array(
         'cls' =>'div-logo',
         'activable' => true,
         'items' => array(),
-    ),    
+    ),
 );
 

@@ -50,6 +50,7 @@ $docs = array(
     'jquery' => 'docs/js/jquery',
     'webpack' => 'docs/js/webpack',
     'gulp' => 'docs/js/gulp',
+    'selenium' => 'docs/selenium/selenium',
 );
 $content = array();
 
