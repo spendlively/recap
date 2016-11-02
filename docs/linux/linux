@@ -760,3 +760,6 @@ User space (printf) -> write -> syscall -> системные вызовы (sys_
 
 //10 полезных утилит Linux для повышения производительности системы
 https://tproger.ru/digest/useful-linux-utilities/
+
+//Разрешить sudo-пользователю совершать действия без ввода пароля (/etc/sudoers)
+%sudo ALL=NOPASSWD: ALL

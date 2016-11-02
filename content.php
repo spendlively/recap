@@ -227,6 +227,15 @@ return array(
                 'activable' => false,
                 'items' => array(),
             ),
+            'redux' => array(
+                'title' => 'redux',
+                'href' => 'doc.php?path=redux',
+                'style' =>'border: 4px dotted #764abc;',
+                'img' =>'logo/redux.png',
+                'cls' =>'div-logo',
+                'activable' => false,
+                'items' => array(),
+            ),
         ),
     ),
     'zf2' => array(

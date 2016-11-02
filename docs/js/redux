@@ -1,0 +1,125 @@
+//Модель взаимодействия store и view по FLUX
+
+View			Store
+-----------------------------
+	Dispatcher
+	--------->
+
+	  Notify
+	<---------
+
+//Редьюсер - функция которая меняет состояние Store.
+//Принимает исходное состояние и экшн (действие пользователя)
+//и в результате возвращает новое состояние
+
+//Редьюсер
+//state.js
+
+/**
+ * state = {
+ * 	issues: [],
+ * 	repository: '',
+ * 	counter: 0
+ * }
+**/
+function reducer (state, action){
+    switch(state.type){
+        case 'ENCREASE_COUNTER':
+            return {...state, ...{counter: (state.counter + 1)}}
+            //return Object.assign({counter: state.counter + 1}, state);
+            //state в конце, чтобы не повредить его
+        case 'RESET_COUNTER':
+            return Object.assign({counter: 0}, state);
+        case 'LOAD_ISSUES':
+            return Object.assign({issues: action.payload}, state);
+        default:
+            return state;
+    }
+}
+
+//FLUX standart action - стандартное содержимое экшна
+{
+	type = 'INCREASE_COUNTER', //строка или символ (должны быть глаголами)
+	payload = ..., //хоть что
+	error = true //Ошибка
+}
+
+//FLUX требование к редьюсеру
+1. Если редьюсер смог обработать Action, то он должен возвращать новое состояние.
+2. Если редьюсер не смог обработать Action, то он должен возвращать исходный state.
+3. Редьюсер должен быть строгой чистой функцией
+
+//Store
+//Имеет 3 метода:
+1. dispatch - позволяет вызвать Action (каждый раз будет вызываться функция reducer 
+с начальным состоянием переданным в createStore).
+2. subscribe - вызовется, когда значение Store изменилось.
+3. getState - позволяет получить данные, которые лежат внутри Store.
+
+//Создание Store
+//npm install --save redux
+import {createStore} from 'redux';
+
+//Принимает reducer и начальное состояние
+const store = createStore(reducer, {
+    issues: [],
+    repository: '',
+    counter: 0
+});
+
+export default store;
+
+//Подключение store во View
+import store from './state';
+
+//store.subscribe( () => console.log(store.getState()));
+//Вызывается всегда, когда вызывается store.dispatch
+store.subscribe(function(){
+    console.log(store.getState());
+});
+
+store.dispatch({
+    type: 'ENCREASE_COUNTER',
+});
+//state = {...conter: 1}
+
+store.dispatch({
+    type: 'RESET_COUNTER',
+});
+//state = {...conter: 0}
+
+store.dispatch({
+    type: 'LOAD_ISSUES',
+    payload: [{id: 1, text: 'issue 1'}, {id: 2, text: 'issue 2'}]
+});
+//state = {...conter: 0, issues: [...]}
+
+//Чтобы редьюсер не разрастался - применим композицию
+import counterReducer from './reducers/counterReducer';
+import issuesReducer from './reducers/issuesReducer';
+
+function reducer(state, action){
+    return {
+        repository: state.repository,
+        counter: counterReducer(state, action),
+        issues: issuesReducer(state, action),
+    };
+}
+
+//REDUX комбинирование редьюсеров
+import {combineReducers} from 'redux';
+
+const reducer = combineReducers({
+    counter: counterReducer,
+    issues: issuesReducer
+});
+
+//Асинхронная работа
+
+
+
+
+
+
+
+

@@ -51,6 +51,7 @@ $docs = array(
     'webpack' => 'docs/js/webpack',
     'gulp' => 'docs/js/gulp',
     'selenium' => 'docs/selenium/selenium',
+    'redux' => 'docs/js/redux',
 );
 $content = array();
 
