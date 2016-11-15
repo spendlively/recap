@@ -96,3 +96,6 @@ git checkout -- file.txt
 git config --global credential.helper "cache --timeout=3600"
 //Навсегда
 git config credential.helper store
+
+//Посмотреть адрес удаленного репозитория
+git remote -v
