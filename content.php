@@ -119,6 +119,15 @@ return array(
                 'activable' => true,
                 'items' => array(),
             ),
+            'jshelp' => array(
+                'title' => 'JavaScript',
+                'href' => 'doc.php?path=jshelp',
+                'style' =>'border: 4px dotted #e23237;',
+                'img' =>'logo/help.png',
+                'cls' =>'div-logo',
+                'activable' => true,
+                'items' => array(),
+            ),            
             'jquery' => array(
                 'title' => 'jQuery',
                 'href' => 'doc.php?path=jquery',

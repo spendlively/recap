@@ -1,0 +1,38 @@
+//npm install redux
+Ошибка: Refusing to install redux as a dependency of itself
+Решение: В поле "name" в package.json было "redux"
+
+
+
+
+//Ошибка при создании store с несколькими редьюсерами
+Ошибка:
+Unexpected keys "name", "age" found in preloadedState argument passed to createStore. 
+Expected to find one of the known reducer keys instead: "nameReducer", "ageReducer". 
+Unexpected keys will be ignored.
+
+Решение:
+Если передаешь state по умолчанию и разделяешь редьюсеры вот так:
+let reducers = combineReducers({
+  nameState: nameReducer,
+  ageState: ageReducer
+});
+
+То исходное состояние тоже нужно разделять, вот так:
+let initialState = {
+    nameState: {name: 'user'},
+    ageState: {age: 30}
+};
+
+
+
+
+//Ошибка при создании store с несколькими редьюсерами
+Ошибка:
+Uncaught Error: Reducer "nameState" returned undefined during initialization. 
+If the state passed to the reducer is undefined, you must explicitly return the initial state. 
+The initial state may not be undefined.
+
+Решение:
+Нужно передавать в редьюсер state по умолчанию
+

@@ -52,6 +52,7 @@ $docs = array(
     'gulp' => 'docs/js/gulp',
     'selenium' => 'docs/selenium/selenium',
     'redux' => 'docs/js/redux',
+    'jshelp' => 'docs/js/help',
 );
 $content = array();
 
