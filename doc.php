@@ -53,6 +53,7 @@ $docs = array(
     'selenium' => 'docs/selenium/selenium',
     'redux' => 'docs/js/redux',
     'jshelp' => 'docs/js/help',
+    'wireshark' => 'docs/wireshark/wireshark',
 );
 $content = array();
 

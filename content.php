@@ -629,5 +629,14 @@ return array(
         'activable' => true,
         'items' => array(),
     ),
+    'wireshark' => array(
+        'title' => 'Wireshark',
+        'href' => 'doc.php?path=wireshark',
+        'style' =>'border: 4px dotted #269bd2;',
+        'img' =>'logo/wireshark.png',
+        'cls' =>'div-logo',
+        'activable' => true,
+        'items' => array(),
+    ),
 );
 
