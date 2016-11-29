@@ -54,6 +54,8 @@ $docs = array(
     'redux' => 'docs/js/redux',
     'jshelp' => 'docs/js/help',
     'wireshark' => 'docs/wireshark/wireshark',
+    'battery' => 'docs/lifehacks/battery',
+    'chemicals' => 'docs/lifehacks/chemicals',
 );
 $content = array();
 

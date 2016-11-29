@@ -638,5 +638,33 @@ return array(
         'activable' => true,
         'items' => array(),
     ),
+    'lifehacks' => array(
+        'title' => 'Wireshark',
+        'href' => 'lifehacks.php',
+        'style' =>'border: 4px dotted #2bd8f9;',
+        'img' =>'logo/lifehacks.png',
+        'cls' =>'div-logo',
+        'activable' => true,
+        'items' => array(
+            'battery' => array(
+                'title' => 'battery',
+                'href' => 'doc.php?path=battery',
+                'style' =>'border: 4px dotted #333333;',
+                'img' =>'logo/battery.png',
+                'cls' =>'div-logo',
+                'activable' => true,
+                'items' => array(),
+            ),
+            'chemicals' => array(
+                'title' => 'battery',
+                'href' => 'doc.php?path=chemicals',
+                'style' =>'border: 4px dotted #888888;',
+                'img' =>'logo/chemicals.png',
+                'cls' =>'div-logo',
+                'activable' => true,
+                'items' => array(),
+            ),
+        ),
+    ),
 );
 
