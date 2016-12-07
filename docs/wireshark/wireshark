@@ -49,3 +49,8 @@ http.host matches "(?i)web\.site\.name"
 Hypertext transfer protocol
     GET (ПКМ)
         Follow TCP Stream
+
+//Запись лога tcpdump
+tcpdump host 192.168.20.130 -w /tmp/log
+
+
