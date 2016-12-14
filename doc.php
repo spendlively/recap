@@ -56,6 +56,15 @@ $docs = array(
     'wireshark' => 'docs/wireshark/wireshark',
     'battery' => 'docs/lifehacks/battery',
     'chemicals' => 'docs/lifehacks/chemicals',
+    'finance' => 'docs/finance/finance',
+    'akcii' => 'docs/finance/akcii',
+    'bank' => 'docs/finance/bank',
+    'biznes' => 'docs/finance/biznes',
+    'gold' => 'docs/finance/gold',
+    'money' => 'docs/finance/money',
+    'nedv' => 'docs/finance/nedv',
+    'chart' => 'docs/finance/chart',
+    'lekcii' => 'docs/finance/lekcii',
 );
 $content = array();
 
