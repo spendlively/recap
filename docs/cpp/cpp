@@ -219,3 +219,72 @@ gdb main
 //Вывести 4 байта памяти начиная с адреса переменной i
 (gdb) x/12xb &i
 
+
+///////////////////////////////////////////////////
+////////////////////5. MySQL///////////////////////
+///////////////////////////////////////////////////
+//Установка необходимых пакетов для заголовочный файлов и библиотек
+apt-get install libmysqlclient-dev
+
+//Компиляция программы с библиотекой mysqlclient
+gcc -I/usr/include/mysql main.c -L/usr/lib/mysql -lmysqlclient -o main
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "mysql.h"
+
+int main(){
+
+	//Инициализация дескриптора
+	MYSQL *connection;
+	connection = mysql_init(NULL);
+	if(!connection){
+		fprintf(stderr, "mysql_init failed!\n");
+		return EXIT_FAILURE;
+	}
+
+	//Подключение к субд
+	connection = mysql_real_connect(connection, "localhost", "rick", "passme", "foo", 0, NULL, 0);
+	if(connection){
+		printf("Connection success!\n");
+	}
+	else{
+		printf("Connection failed!\n");
+	}
+
+	int res;
+
+	//Выполнение комманды
+	res = mysql_query(connection, "INSERT INTO test (id, name) VALUES (NULL, 'Kostya');");
+	if(res){
+		fprintf(stderr, "Insert error %d: %s!\n", mysql_errno(connection), mysql_error(connection));
+	}
+
+	//Вывод данных
+	MYSQL_RES *res_ptr;
+	MYSQL_ROW sqlrow;
+	unsigned int field_count;
+	res = mysql_query(connection, "SELECT name FROM test");
+	if(res){
+		printf("Select error: %s\n", mysql_error(connection));
+	}
+	else{
+		res_ptr = mysql_use_result(connection);
+		if(res_ptr){
+			while((sqlrow = mysql_fetch_row(res_ptr))){
+				field_count = 0;
+				while(field_count < mysql_field_count(connection)){
+					printf("%s \n", sqlrow[field_count]);
+					field_count++;
+				}
+			}
+			mysql_free_result(res_ptr);
+		}
+	}
+
+	//Закрытие дескриптора
+	mysql_close(connection);
+
+	return EXIT_SUCCESS;
+}
+
