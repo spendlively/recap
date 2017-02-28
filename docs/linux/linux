@@ -555,6 +555,9 @@ Addkey
 git clone git@github.com:spendlively/recap.git
 
 //SED
+//Заменить ВСЕ вхождения : (.g)
+sed "s/://g"
+
 //Изменить строку в файле
 sed -i.bak -e 's/string1/string2/' file
 

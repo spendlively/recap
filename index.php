@@ -5,6 +5,8 @@
 
     $reminder = new \vendor\Reminder();
     $activeItem = $reminder->getActiveItem();
+
+    session_start();
 ?>
 <!DOCTYPE html>
 <html>

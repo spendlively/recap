@@ -53,4 +53,4 @@ Hypertext transfer protocol
 //Запись лога tcpdump
 tcpdump host 192.168.20.130 -w /tmp/log
 
-
+-i interface
