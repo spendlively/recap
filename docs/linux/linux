@@ -1,3 +1,16 @@
+//LS
+- ls
+- lspci 
+- lsusb 
+- lsblk
+- lshw
+- lshw-gtk
+- lsmod
+- lscpu
+- lsof
+- lsattr
+
+
 //GUI программи ubuntu
 //Форматирование
 GParted
